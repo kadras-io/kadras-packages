@@ -1,0 +1,16 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  creationTimestamp: null
+  name: argo-cd.packages.kadras.io
+spec:
+  categories:
+  - ci/cd
+  - gitops
+  displayName: argo-cd
+  longDescription: Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes.
+  maintainers:
+  - name: Thomas Vitale
+  providerName: Arktonix
+  shortDescription: Argo CD is a declarative, GitOps continuous delivery tool for
+    Kubernetes.

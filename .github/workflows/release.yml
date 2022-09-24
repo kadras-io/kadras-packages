@@ -1,0 +1,140 @@
+name: Release
+on:
+  - workflow_dispatch
+
+env:
+  COSIGN_EXPERIMENTAL: 1
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  VERSION: 0.0.1
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+      packages: write
+    outputs:
+      image-release: ${{ steps.image-info.outputs.release }}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3.0.2
+
+      - name: Set up Carvel
+        uses: vmware-tanzu/carvel-setup-action@v1.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Log into container registry
+        uses: redhat-actions/podman-login@v1.4
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ${{ env.REGISTRY }}
+      
+      - name: Create kind cluster
+        uses: helm/kind-action@v1.4.0
+        with:
+          cluster_name: carvel-test
+          kubectl_version: v1.25.2
+
+      - name: Package and publish OCI bundle
+        run: |
+          kctrl package repo release -y --chdir repo -v ${{ env.VERSION }}
+      
+      - name: Get released OCI image name with digest
+        id: image-info
+        run: |
+          package_file=repo/package-repository.yml
+          image_release=$(yq '.spec.fetch.imgpkgBundle.image' ${package_file})
+          echo "IMAGE_RELEASE=${image_release}" >> $GITHUB_ENV
+          echo "::set-output name=release::${image_release}"
+      
+      - name: Add additional tags to OCI image
+        run: |
+          podman pull ${IMAGE_RELEASE}
+          podman tag ${IMAGE_RELEASE} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          podman push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+      
+      - name: Create a release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create v${{ env.VERSION }} \
+                --generate-notes \
+                ./repo/package-repository.yml \
+                ./README.md
+
+  sign:
+    name: Sign
+    runs-on: ubuntu-22.04
+    needs: [build]
+    permissions:
+      packages: write
+      id-token: write
+    env:
+      IMAGE_RELEASE: ${{ needs.build.outputs.image-release }}
+    steps:
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v2.7.0
+        with:
+          cosign-release: 'v1.12.1'
+
+      - name: Log into container registry
+        uses: redhat-actions/podman-login@v1.4
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ${{ env.REGISTRY }}
+
+      - name: Sign image
+        run: |
+          cosign sign "${IMAGE_RELEASE}"
+  
+  provenance:
+    name: Provenance
+    runs-on: ubuntu-22.04
+    needs: [build,sign]
+    permissions:
+      packages: write
+      id-token: write
+    env:
+      IMAGE_RELEASE: ${{ needs.build.outputs.image-release }}
+      PROVENANCE_FILE: provenance.att
+    steps:
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v2.7.0
+        with:
+          cosign-release: 'v1.12.1'
+      
+      - name: Log into container registry
+        uses: redhat-actions/podman-login@v1.4
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ${{ env.REGISTRY }}
+      
+      - name: Extract digest
+        run: |
+          digest=$(echo ${IMAGE_RELEASE} | cut -d "@" -f2)
+          echo "IMAGE_DIGEST=${digest}" >> $GITHUB_ENV
+
+      - name: Generate provenance
+        uses: philips-labs/slsa-provenance-action@v0.7.2
+        with:
+          command: generate
+          subcommand: container
+          arguments: --repository ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --tags ${{ env.VERSION }} --digest ${{ env.IMAGE_DIGEST }} --output-path ${{ env.PROVENANCE_FILE }}
+        env:
+          COSIGN_EXPERIMENTAL: 0
+
+      - name: Attach provenance
+        run: |
+          jq '.predicate' "${PROVENANCE_FILE}" > provenance-predicate.att
+          cosign attest --predicate provenance-predicate.att --type slsaprovenance "${IMAGE_RELEASE}"
+
+      - uses: actions/upload-artifact@v3.1.0
+        with:
+          name: provenance.att
+          path: ${{ env.PROVENANCE_FILE }}
