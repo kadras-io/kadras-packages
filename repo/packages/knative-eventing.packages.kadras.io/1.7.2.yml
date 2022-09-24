@@ -1,0 +1,42 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: knative-eventing.packages.kadras.io.1.7.2
+spec:
+  refName: knative-eventing.packages.kadras.io
+  releasedAt: "2022-09-24T22:30:10Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/arktonix/package-for-knative-eventing@sha256:f44a70521d587f13bf24292cd869579e2a50609b6c03f87c087f7c43fe2e33f0
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        default_broker:
+          additionalProperties: false
+          description: Configuration for the default in-memory broker
+          properties:
+            enabled:
+              default: false
+              description: Whether to install the default in-memory broker
+              type: boolean
+            namespace:
+              default: default
+              description: The namespace where to install the default broker
+              type: string
+          type: object
+      type: object
+  version: 1.7.2

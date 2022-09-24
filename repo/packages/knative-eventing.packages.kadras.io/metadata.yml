@@ -1,0 +1,16 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  creationTimestamp: null
+  name: knative-eventing.packages.kadras.io
+spec:
+  categories:
+  - eventing
+  - cloudevents
+  displayName: knative-eventing
+  longDescription: Knative Eventing provides tools for routing events from event producers
+    to sinks, enabling developers to use an event-driven architecture with their applications.
+  maintainers:
+  - name: Thomas Vitale
+  providerName: Arktonix
+  shortDescription: Toolkit to build event-driven architectures on Kubernetes.
