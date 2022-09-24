@@ -1,0 +1,19 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  name: contour.packages.kadras.io
+spec:
+  displayName: contour
+  shortDescription: "An ingress controller"
+  longDescription: "An Envoy-based ingress controller that supports dynamic configuration updates and multi-team ingress delegation. See https://projectcontour.io for more information."
+  providerName: VMware
+  maintainers:
+    - name: Steve Kriss
+    - name: Nick Young
+    - name: Sunjay Bhatia
+    - name: Nicholas Seemiller
+  categories:
+    - "ingress"
+    - "envoy"
+    - "contour"
+  supportDescription: "Go to https://projectcontour.io for documentation or the #contour channel on Kubernetes slack"

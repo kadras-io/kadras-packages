@@ -1,0 +1,16 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  name: cert-manager.packages.kadras.io
+spec:
+  displayName: "cert-manager"
+  longDescription: "Provides certificate management provisioning within the cluster"
+  shortDescription: "Certificate management"
+  providerName: VMware
+  maintainers:
+    - name: Nicholas Seemiller
+  categories:
+    - "security"
+    - "tls"
+    - "certificate"
+  supportDescription: "Go to https://cert-manager.io/ for documentation or the #cert-manager channel on Kubernetes slack"

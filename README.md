@@ -1,13 +1,23 @@
 # Kadras Packages
 
-A repository of [Carvel](https://carvel.dev) packages that can be installed on Kubernetes.
+A collection of Kubernetes-native packages based on [Carvel](https://carvel.dev) and part of the Kadras project.
 
 ## Components
 
-This repository contains the Carvel packages part of the Kadras project. The following packages are
-maintained by the [Arktonix](https://github.com/arktonix) organization:
+This repository contains the Carvel packages part of the Kadras project.
 
-* [Argo CD](https://github.com/arktonix/package-for-argo-cd)
+The following packages are maintained by the [Arktonix](https://github.com/arktonix) organization:
+
+* [argo-cd](https://github.com/arktonix/package-for-argo-cd)
+
+It also includes the following open-source packages maintained by the [VMware Tanzu](https://github.com/vmware-tanzu) organization:
+
+* [cartographer](https://github.com/vmware-tanzu/package-for-cartographer)
+* [cert-manager](https://github.com/vmware-tanzu/community-edition/tree/main/addons/packages/cert-manager)
+* [contour](https://github.com/vmware-tanzu/community-edition/tree/main/addons/packages/contour)
+* [kpack](https://github.com/vmware-tanzu/package-for-kpack)
+* [metrics-server](https://github.com/vmware-tanzu/community-edition/tree/main/addons/packages/metrics-server)
+* [secretgen-controller](https://github.com/vmware-tanzu/carvel-secretgen-controller)
 
 ## Prerequisites
 
@@ -27,7 +37,7 @@ You can install the Kadras package repository in a dedicated namespace using `kc
 ```shell
 kubectl create namespace carvel-packages
 kctrl package repository add -r kadras-repo \
-    --url ghcr.io/arktonix/kadras-packages:0.0.1 \
+    --url ghcr.io/arktonix/kadras-packages:0.1.0 \
     -n carvel-packages
 ```
 
