@@ -1,0 +1,14 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  creationTimestamp: null
+  name: tekton-pipelines.packages.kadras.io
+spec:
+  categories:
+  - ci/cd
+  displayName: tekton-pipelines
+  longDescription: A cloud native solution for building CI/CD pipelines.
+  maintainers:
+  - name: Thomas Vitale
+  providerName: Arktonix
+  shortDescription: A cloud native solution for building CI/CD pipelines.
