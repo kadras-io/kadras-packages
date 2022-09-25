@@ -12,6 +12,7 @@ The following packages are maintained by the [Arktonix](https://github.com/arkto
 * [fluxcd-source-controller](https://github.com/arktonix/package-for-fluxcd-source-controller)
 * [knative-eventing](https://github.com/arktonix/package-for-knative-eventing)
 * [knative-serving](https://github.com/arktonix/package-for-knative-serving)
+* [tekton-pipelines](https://github.com/arktonix/package-for-tekton-pipelines)
 
 It also includes the following open-source packages maintained by the [VMware Tanzu](https://github.com/vmware-tanzu) organization:
 
@@ -40,7 +41,7 @@ You can install the Kadras package repository in a dedicated namespace using `kc
 ```shell
 kubectl create namespace carvel-packages
 kctrl package repository add -r kadras-repo \
-    --url ghcr.io/arktonix/kadras-packages:0.1.3 \
+    --url ghcr.io/arktonix/kadras-packages:0.1.4 \
     -n carvel-packages
 ```
 
