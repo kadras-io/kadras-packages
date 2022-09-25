@@ -1,0 +1,72 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: fluxcd-source-controller.packages.kadras.io.0.29.0
+spec:
+  licenses:
+  - Apache 2.0
+  refName: fluxcd-source-controller.packages.kadras.io
+  releaseNotes: https://github.com/fluxcd/source-controller/releases
+  releasedAt: "2022-09-25T10:29:36Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/arktonix/package-for-fluxcd-source-controller@sha256:1409bd8e11136785d76ce5b05ad2fc6bae7b00b18e081370f53fa4233b444406
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        namespace:
+          default: source-system
+          description: The namespace where to install FluxCD Source Controller
+          type: string
+        proxy:
+          additionalProperties: false
+          description: Configure proxy support
+          properties:
+            http_proxy:
+              default: ""
+              description: The HTTP proxy URL
+              type: string
+            https_proxy:
+              default: ""
+              description: The HTTPS proxy URL
+              type: string
+            no_proxy:
+              default: ""
+              description: For which domains the proxy should not be used
+              type: string
+          type: object
+        resources:
+          additionalProperties: false
+          description: Resource configuration for the source-controller Deployment
+          properties:
+            limits:
+              additionalProperties: false
+              properties:
+                cpu:
+                  default: 1000m
+                  type: string
+                memory:
+                  default: 1Gi
+                  type: string
+              type: object
+          type: object
+        service_port:
+          default: 80
+          description: Port configuration for the source-controller Service
+          type: integer
+      type: object
+  version: 0.29.0

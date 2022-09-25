@@ -1,0 +1,19 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  creationTimestamp: null
+  name: fluxcd-source-controller.packages.kadras.io
+spec:
+  categories:
+  - gitops
+  displayName: fluxcd-source-controller
+  longDescription: The FluxCD Source Controller is a Kubernetes operator, specialised
+    in artifacts acquisition from external sources such as Git, Helm repositories
+    and S3 buckets. It implements the source.toolkit.fluxcd.io API and is a core component
+    of the GitOps toolkit.
+  maintainers:
+  - name: Thomas Vitale
+  providerName: Arktonix
+  shortDescription: The FluxCD Source Controller is a Kubernetes operator, specialised
+    in artifacts acquisition from external sources such as Git, Helm repositories
+    and S3 buckets.
