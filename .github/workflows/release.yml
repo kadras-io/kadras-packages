@@ -6,7 +6,7 @@ env:
   COSIGN_EXPERIMENTAL: 1
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  VERSION: 0.1.1
+  VERSION: 0.1.2
 
 jobs:
   build:
@@ -33,11 +33,15 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ${{ env.REGISTRY }}
       
-      - name: Create kind cluster
-        uses: helm/kind-action@v1.4.0
-        with:
-          cluster_name: carvel-test
-          kubectl_version: v1.25.2
+      - name: Create k3d cluster
+        run: |
+          brew install k3d
+          k3d cluster create test-cluster
+
+          # Wait for the generation of a token for the Service Account
+          while [ $(kubectl get configmap kube-root-ca.crt --no-headers | wc -l) -eq 0 ] ; do
+            sleep 3
+          done
 
       - name: Package and publish OCI bundle
         run: |

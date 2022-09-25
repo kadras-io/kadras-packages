@@ -10,6 +10,7 @@ The following packages are maintained by the [Arktonix](https://github.com/arkto
 
 * [argo-cd](https://github.com/arktonix/package-for-argo-cd)
 * [knative-eventing](https://github.com/arktonix/package-for-knative-eventing)
+* [knative-serving](https://github.com/arktonix/package-for-knative-serving)
 
 It also includes the following open-source packages maintained by the [VMware Tanzu](https://github.com/vmware-tanzu) organization:
 
@@ -38,7 +39,7 @@ You can install the Kadras package repository in a dedicated namespace using `kc
 ```shell
 kubectl create namespace carvel-packages
 kctrl package repository add -r kadras-repo \
-    --url ghcr.io/arktonix/kadras-packages:0.1.1 \
+    --url ghcr.io/arktonix/kadras-packages:0.1.2 \
     -n carvel-packages
 ```
 
@@ -78,11 +79,13 @@ kctrl package repository update -r kadras-repo \
 
 You can find more documentation about Carvel package management at [carvel.dev](https://carvel.dev/kapp-controller/docs/latest/packaging).
 
-## References and inspiration
+## References
+
+This package repository is based on and inspired by the work done by the Carvel team and the
+Tanzu Community Edition project.
 
 * [Kubernetes native package management with Carvel](https://carvel.dev/kapp-controller/docs/latest/packaging)
 * [Tanzu Community Edition, an open-source Kubernetes platform](https://tanzucommunityedition.io)
-* [An example of package repository for installing the Tanzu Application Platform OSS stack](https://github.com/vrabbi/tap-oss)
 
 ## Supply Chain Security
 
