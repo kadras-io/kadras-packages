@@ -1,0 +1,16 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  creationTimestamp: null
+  name: kpack-dependencies.packages.kadras.io
+spec:
+  categories:
+  - build
+  displayName: kpack-dependencies
+  longDescription: A set of buildpacks, stacks, and builders to use with kpack, a
+    Kubernetes-native implementation of Cloud Native Buildpacks. It supports multiple
+    languages and frameworks.
+  maintainers:
+  - name: Thomas Vitale
+  providerName: Arktonix
+  shortDescription: A set of buildpacks, stacks, and builders to use with kpack.
