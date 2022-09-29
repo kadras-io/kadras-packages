@@ -1,0 +1,17 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  creationTimestamp: null
+  name: cartographer-blueprints.packages.kadras.io
+spec:
+  categories:
+  - developer experience
+  - ci/cd
+  - platform engineering
+  displayName: cartographer-blueprints
+  longDescription: A set of reusable blueprints for Cartographer, a Kubernetes-native
+    framework to build paved paths to production.
+  maintainers:
+  - name: Thomas Vitale
+  providerName: Arktonix
+  shortDescription: A set of reusable blueprints for Cartographer.
