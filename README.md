@@ -14,6 +14,7 @@ The following packages are maintained by the [Arktonix](https://github.com/arkto
 * [knative-eventing](https://github.com/arktonix/package-for-knative-eventing)
 * [knative-serving](https://github.com/arktonix/package-for-knative-serving)
 * [kpack-dependencies](https://github.com/arktonix/kpack-dependencies)
+* [spring-boot-conventions](https://github.com/arktonix/package-for-spring-boot-conventions)
 * [tekton-pipelines](https://github.com/arktonix/package-for-tekton-pipelines)
 
 It also includes the following open-source packages maintained by the [VMware Tanzu](https://github.com/vmware-tanzu) organization:
@@ -43,7 +44,7 @@ You can install the Kadras package repository in a dedicated namespace using `kc
 ```shell
 kubectl create namespace carvel-packages
 kctrl package repository add -r kadras-repo \
-    --url ghcr.io/arktonix/kadras-packages:0.1.6 \
+    --url ghcr.io/arktonix/kadras-packages:0.1.7 \
     -n carvel-packages
 ```
 
