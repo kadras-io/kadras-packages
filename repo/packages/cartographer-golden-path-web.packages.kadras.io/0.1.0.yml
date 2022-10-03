@@ -1,0 +1,128 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: cartographer-golden-path-web.packages.kadras.io.0.1.0
+spec:
+  refName: cartographer-golden-path-web.packages.kadras.io
+  releasedAt: "2022-10-03T12:35:56Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/arktonix/artographer-golden-path-web@sha256:21270578f2c96717aed21091372ef3c65966d2bd3798a769222578088b31ad99
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        cluster_builder:
+          default: default
+          description: The ClusterBuilder used by kpack
+          type: string
+        git_implementation:
+          default: go-git
+          description: The Git implementation used by Flux
+          type: string
+        gitops:
+          additionalProperties: false
+          description: Configuration for the GitOps steps in the supply chain
+          properties:
+            access_secret:
+              default: git-secret
+              description: The Secret containing credentials to access the specified
+                Git repository
+              type: string
+            branch:
+              default: main
+              description: The branch to use for GitOps activities
+              type: string
+            commit_message:
+              default: Update from Cartographer
+              description: The commit message to use when pushing configuration changes
+                to Git
+              type: string
+            commit_strategy:
+              default: direct
+              description: Whether to commit configuration changes to Git directly
+                or via a pull request
+              type: string
+            pull_request:
+              additionalProperties: false
+              properties:
+                commit_branch:
+                  default: ""
+                  description: The branch to use to open a pull request. If empty,
+                    a random name is generated
+                  type: string
+                pull_request_body:
+                  default: ""
+                  description: The body of the pull request
+                  type: string
+                pull_request_title:
+                  default: ""
+                  description: The title of the pull request
+                  type: string
+                server_kind:
+                  default: ""
+                  description: The type of Git server where to open the pull request
+                  example: github
+                  type: string
+                  x-example-description: Open a pull request on GitHub
+              type: object
+            repository_name:
+              default: ""
+              description: The name of the Git repository to use for GitOps
+              type: string
+            repository_owner:
+              default: ""
+              description: The owner of the specified Git repository
+              type: string
+            server_address:
+              default: ""
+              description: The server hosting the specified Git repository
+              type: string
+            user_email:
+              default: cartographer@kadras.io
+              description: The email of the user interacting with the Git repository
+              type: string
+            user_name:
+              default: cartographer
+              description: The name of the user interacting with the Git repository
+              type: string
+          type: object
+        registry:
+          additionalProperties: false
+          description: Configuration for the OCI Registry where to store the application
+            images
+          properties:
+            repository:
+              default: ""
+              description: The repository under an OCI Registry where to store the
+                application images
+              type: string
+            server:
+              default: ""
+              description: The server of the OCI Registry where to store the application
+                images
+              type: string
+          type: object
+        service_account:
+          default: default
+          description: The ServiceAccount used by the supply chain
+          type: string
+        supply_chain:
+          default: basic
+          description: The type of supply chain to use for this golden path
+          type: string
+      type: object
+  version: 0.1.0
