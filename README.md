@@ -10,6 +10,8 @@ The following packages are maintained by the [Arktonix](https://github.com/arkto
 
 * [argo-cd](https://github.com/arktonix/package-for-argo-cd)
 * [cartographer-blueprints](https://github.com/arktonix/cartographer-blueprints)
+* [cartographer-delivery](https://github.com/arktonix/cartographer-delivery)
+* [cartographer-golden-path-web](https://github.com/arktonix/cartographer-golden-path-web)
 * [fluxcd-source-controller](https://github.com/arktonix/package-for-fluxcd-source-controller)
 * [knative-eventing](https://github.com/arktonix/package-for-knative-eventing)
 * [knative-serving](https://github.com/arktonix/package-for-knative-serving)
@@ -44,7 +46,7 @@ You can install the Kadras package repository in a dedicated namespace using `kc
 ```shell
 kubectl create namespace carvel-packages
 kctrl package repository add -r kadras-repo \
-    --url ghcr.io/arktonix/kadras-packages:0.1.7 \
+    --url ghcr.io/arktonix/kadras-packages:0.1.8 \
     -n carvel-packages
 ```
 
