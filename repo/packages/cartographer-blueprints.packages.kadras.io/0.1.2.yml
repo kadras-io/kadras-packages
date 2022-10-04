@@ -1,0 +1,36 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: cartographer-blueprints.packages.kadras.io.0.1.2
+spec:
+  refName: cartographer-blueprints.packages.kadras.io
+  releasedAt: "2022-10-04T09:54:25Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/arktonix/cartographer-blueprints@sha256:2fcbe662755bcee390a7dca89752ab130a40cc3b6eb36adcd3d84078c9049abf
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        excluded_blueprints:
+          default: []
+          description: A list of blueprints and manifests to esclude from being applied.
+          items:
+            default: ""
+            type: string
+          type: array
+      type: object
+  version: 0.1.2
