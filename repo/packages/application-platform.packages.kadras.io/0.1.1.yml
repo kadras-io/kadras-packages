@@ -1,0 +1,28 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: application-platform.packages.kadras.io.0.1.1
+spec:
+  refName: application-platform.packages.kadras.io
+  releasedAt: "2022-10-04T13:17:59Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/arktonix/kadras-application-platform@sha256:76bfafcaa8dc685e4aa93533d291833c95d3091eaeb9bf1501e27527e61ad1b8
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      default: null
+      nullable: true
+  version: 0.1.1
