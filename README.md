@@ -8,6 +8,7 @@ This repository contains the Carvel packages part of the Kadras project.
 
 The following packages are maintained by the [Arktonix](https://github.com/arktonix) organization:
 
+* [application-platform](https://github.com/arktonix/kadras-application-platform)
 * [argo-cd](https://github.com/arktonix/package-for-argo-cd)
 * [cartographer-blueprints](https://github.com/arktonix/cartographer-blueprints)
 * [cartographer-delivery](https://github.com/arktonix/cartographer-delivery)
@@ -16,6 +17,7 @@ The following packages are maintained by the [Arktonix](https://github.com/arkto
 * [knative-eventing](https://github.com/arktonix/package-for-knative-eventing)
 * [knative-serving](https://github.com/arktonix/package-for-knative-serving)
 * [kpack-dependencies](https://github.com/arktonix/kpack-dependencies)
+* [namespace-setup](https://github.com/arktonix/namespace-setup)
 * [spring-boot-conventions](https://github.com/arktonix/package-for-spring-boot-conventions)
 * [tekton-pipelines](https://github.com/arktonix/package-for-tekton-pipelines)
 
@@ -46,7 +48,7 @@ You can install the Kadras package repository in a dedicated namespace using `kc
 ```shell
 kubectl create namespace carvel-packages
 kctrl package repository add -r kadras-repo \
-    --url ghcr.io/arktonix/kadras-packages:0.1.9 \
+    --url ghcr.io/arktonix/kadras-packages:0.2.0 \
     -n carvel-packages
 ```
 
