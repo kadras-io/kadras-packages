@@ -1,0 +1,9 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  creationTimestamp: null
+  name: namespace-setup.packages.kadras.io
+spec:
+  displayName: namespace-setup
+  longDescription: namespace-setup.packages.kadras.io
+  shortDescription: namespace-setup.packages.kadras.io
