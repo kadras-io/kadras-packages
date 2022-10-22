@@ -13,6 +13,7 @@ The following packages are maintained by the [Arktonix](https://github.com/arkto
 * [cartographer-blueprints](https://github.com/arktonix/cartographer-blueprints)
 * [cartographer-delivery](https://github.com/arktonix/cartographer-delivery)
 * [cartographer-golden-path-web](https://github.com/arktonix/cartographer-golden-path-web)
+* [contour](https://github.com/arktonix/package-for-contour)
 * [fluxcd-source-controller](https://github.com/arktonix/package-for-fluxcd-source-controller)
 * [knative-eventing](https://github.com/arktonix/package-for-knative-eventing)
 * [knative-serving](https://github.com/arktonix/package-for-knative-serving)
@@ -25,7 +26,6 @@ It also includes the following open-source packages maintained by the [VMware Ta
 
 * [cartographer](https://github.com/vmware-tanzu/package-for-cartographer)
 * [cert-manager](https://github.com/vmware-tanzu/community-edition/tree/main/addons/packages/cert-manager)
-* [contour](https://github.com/vmware-tanzu/community-edition/tree/main/addons/packages/contour)
 * [kpack](https://github.com/vmware-tanzu/package-for-kpack)
 * [metrics-server](https://github.com/vmware-tanzu/community-edition/tree/main/addons/packages/metrics-server)
 * [secretgen-controller](https://github.com/vmware-tanzu/carvel-secretgen-controller)
@@ -48,7 +48,7 @@ You can install the Kadras package repository in a dedicated namespace using `kc
 ```shell
 kubectl create namespace carvel-packages
 kctrl package repository add -r kadras-repo \
-    --url ghcr.io/arktonix/kadras-packages:0.2.2 \
+    --url ghcr.io/arktonix/kadras-packages:0.2.3 \
     -n carvel-packages
 ```
 
