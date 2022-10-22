@@ -18,6 +18,7 @@ The following packages are maintained by the [Arktonix](https://github.com/arkto
 * [knative-eventing](https://github.com/arktonix/package-for-knative-eventing)
 * [knative-serving](https://github.com/arktonix/package-for-knative-serving)
 * [kpack-dependencies](https://github.com/arktonix/kpack-dependencies)
+* [metrics-server](https://github.com/arktonix/package-for-metrics-server)
 * [namespace-setup](https://github.com/arktonix/namespace-setup)
 * [spring-boot-conventions](https://github.com/arktonix/package-for-spring-boot-conventions)
 * [tekton-pipelines](https://github.com/arktonix/package-for-tekton-pipelines)
@@ -27,7 +28,6 @@ It also includes the following open-source packages maintained by the [VMware Ta
 * [cartographer](https://github.com/vmware-tanzu/package-for-cartographer)
 * [cert-manager](https://github.com/vmware-tanzu/community-edition/tree/main/addons/packages/cert-manager)
 * [kpack](https://github.com/vmware-tanzu/package-for-kpack)
-* [metrics-server](https://github.com/vmware-tanzu/community-edition/tree/main/addons/packages/metrics-server)
 * [secretgen-controller](https://github.com/vmware-tanzu/carvel-secretgen-controller)
 
 ## Prerequisites
