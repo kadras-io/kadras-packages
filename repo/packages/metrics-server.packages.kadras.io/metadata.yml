@@ -1,16 +1,18 @@
 apiVersion: data.packaging.carvel.dev/v1alpha1
 kind: PackageMetadata
 metadata:
+  creationTimestamp: null
   name: metrics-server.packages.kadras.io
 spec:
-  displayName: "metrics-server"
-  longDescription: "Metrics Server is a scalable, efficient source of container resource metrics for Kubernetes built-in autoscaling pipelines."
-  shortDescription: "Metrics Server is a scalable, efficient source of container resource metrics for Kubernetes built-in autoscaling pipelines."
-  providerName: VMware
-  maintainers:
-    - name: Guanpeng Gao
   categories:
-    - "observability"
-    - "metrics-server"
-    - "cluster"
-    - "metrics"
+  - monitoring
+  - metrics
+  - observability
+  displayName: metrics-server
+  longDescription: Metrics Server is a scalable and efficient source of container
+    resource metrics for Kubernetes built-in autoscaling pipelines.
+  maintainers:
+  - name: Thomas Vitale
+  providerName: Arktonix
+  shortDescription: Scalable and efficient source of container resource metrics for
+    Kubernetes built-in autoscaling pipelines.
