@@ -19,7 +19,7 @@ This repository contains the Carvel packages part of the [Kadras](https://kadras
 | [fluxcd-source-controller](https://github.com/arktonix/package-for-fluxcd-source-controller) | A source management component from the Flux GitOps Toolkit to provide a common interface for artifacts acquisition. |
 | [knative-eventing](https://github.com/arktonix/package-for-knative-eventing) | A solution for routing events from event producers to sinks, enabling developers to use an event-driven architecture with their applications. |
 | [knative-serving](https://github.com/arktonix/package-for-knative-serving) | A solution built on Kubernetes to support deploying and serving of applications and functions as serverless containers. |
-| [kpack](https://github.com/vmware-tanzu/package-for-kpack) | Kubernetes-native container build service based on Cloud Native Buildpacks. Maintained by [VMware Tanzu](https://github.com/vmware-tanzu). |
+| [kpack](https://github.com/arktonix/package-for-kpack) | Kubernetes-native container build service based on Cloud Native Buildpacks. |
 | [kpack-dependencies](https://github.com/arktonix/kpack-dependencies) | A set of buildpacks, stacks, and builders to use with kpack. |
 | [metrics-server](https://github.com/arktonix/package-for-metrics-server) | A scalable and efficient source of container resource metrics for Kubernetes built-in autoscaling pipelines. |
 | [namespace-setup](https://github.com/arktonix/namespace-setup) | Sets up up namespaces with the necessary RBAC and Secrets to work with the Kadras platform. |
@@ -45,7 +45,7 @@ You can install the Kadras package repository in a dedicated namespace using `kc
 ```shell
 kubectl create namespace carvel-packages
 kctrl package repository add -r kadras-repo \
-    --url ghcr.io/arktonix/kadras-packages:0.2.3 \
+    --url ghcr.io/arktonix/kadras-packages:0.2.4 \
     -n carvel-packages
 ```
 
