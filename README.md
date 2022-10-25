@@ -1,10 +1,10 @@
 # Kadras Packages
 
-A collection of Kubernetes-native packages based on [Carvel](https://carvel.dev) and part of the Kadras project.
+A collection of Kubernetes-native packages built with [Carvel](https://carvel.dev) and part of the Kadras project.
 
 ## Package Repository
 
-This repository contains the Carvel packages part of the [Kadras](https://kadras.io) project.
+This repository contains the following Carvel packages part of the [Kadras](https://kadras.io) project.
 
 | Package | Description |
 |---------|-------------|
@@ -45,7 +45,7 @@ You can install the Kadras package repository in a dedicated namespace using `kc
 ```shell
 kubectl create namespace carvel-packages
 kctrl package repository add -r kadras-repo \
-    --url ghcr.io/arktonix/kadras-packages:0.2.4 \
+    --url ghcr.io/arktonix/kadras-packages:0.3.0 \
     -n carvel-packages
 ```
 
@@ -87,11 +87,10 @@ You can find more documentation about Carvel package management at [carvel.dev](
 
 ## References
 
-This package repository is based on and inspired by the work done by the Carvel team and the
-Tanzu Community Edition project.
+This package repository is inspired by the work done by the Carvel team and the
+[Tanzu Community Edition](https://github.com/vmware-tanzu/community-edition) project (now retired).
 
-* [Kubernetes native package management with Carvel](https://carvel.dev/kapp-controller/docs/latest/packaging)
-* [Tanzu Community Edition, an open-source Kubernetes platform](https://tanzucommunityedition.io)
+Learn more about [Kubernetes-native package management with Carvel](https://carvel.dev/kapp-controller/docs/latest/packaging).
 
 ## Supply Chain Security
 
