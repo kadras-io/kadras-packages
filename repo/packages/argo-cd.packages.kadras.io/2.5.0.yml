@@ -1,0 +1,45 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: argo-cd.packages.kadras.io.2.5.0
+spec:
+  licenses:
+  - Apache 2.0
+  refName: argo-cd.packages.kadras.io
+  releaseNotes: https://github.com/argoproj/argo-cd/releases
+  releasedAt: "2022-10-25T21:03:56Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/arktonix/package-for-argo-cd@sha256:0176f9b204f1801e8790d9311e11cacbf597e572e77fad7aaa1f1bb07a91be30
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        namespace:
+          default: argocd
+          description: The namespace where to install Argo CD
+          type: string
+        service:
+          additionalProperties: false
+          description: Service configuration for the Argo CD Server
+          properties:
+            type:
+              default: ClusterIP
+              description: The Service type for the Argo CD Server
+              type: string
+          type: object
+      type: object
+  version: 2.5.0
