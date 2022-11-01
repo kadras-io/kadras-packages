@@ -6,7 +6,7 @@ env:
   COSIGN_EXPERIMENTAL: 1
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  VERSION: 0.3.1
+  VERSION: 0.3.2
 
 jobs:
   build:
@@ -84,8 +84,6 @@ jobs:
     steps:
       - name: Install Cosign
         uses: sigstore/cosign-installer@v2.8.1
-        with:
-          cosign-release: 'v1.13.0'
 
       - name: Log into container registry
         uses: redhat-actions/podman-login@v1.4
@@ -111,8 +109,6 @@ jobs:
     steps:
       - name: Install Cosign
         uses: sigstore/cosign-installer@v2.8.1
-        with:
-          cosign-release: 'v1.13.0'
       
       - name: Log into container registry
         uses: redhat-actions/podman-login@v1.4
