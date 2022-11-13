@@ -45,7 +45,7 @@ You can install the Kadras package repository in a dedicated namespace using `kc
 ```shell
 kubectl create namespace carvel-packages
 kctrl package repository add -r kadras-repo \
-    --url ghcr.io/arktonix/kadras-packages:0.3.2 \
+    --url ghcr.io/arktonix/kadras-packages:0.4.0 \
     -n carvel-packages
 ```
 
