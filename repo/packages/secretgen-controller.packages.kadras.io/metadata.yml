@@ -3,11 +3,12 @@ kind: PackageMetadata
 metadata:
   name: secretgen-controller.packages.kadras.io
 spec:
-  displayName: "secretgen-controller"
-  longDescription: "Provide CRDs to specify what secrets need to be on cluster (generated or not)."
-  shortDescription: "Secret generation and sharing"
-  providerName: carvel.dev
-  maintainers:
-    - name: Carvel team (see www.carvel.dev for team members)
   categories:
-    - "package management"
+  - package management
+  displayName: secretgen-controller
+  longDescription: Provide CRDs to specify what secrets need to be on cluster (generated
+    or not).
+  maintainers:
+  - name: Carvel team (see www.carvel.dev for team members)
+  providerName: carvel.dev
+  shortDescription: Secret generation and sharing
