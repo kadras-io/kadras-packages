@@ -16,3 +16,4 @@ spec:
     get to an environment. Requires cert-manager to be installed.
   maintainers:
   - name: VMware
+  iconSVGBase64: PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNIDEwIDEwIEggOTAgViA5MCBIIDEwIEwgMTAgMTAiLz48L3N2Zz4K
