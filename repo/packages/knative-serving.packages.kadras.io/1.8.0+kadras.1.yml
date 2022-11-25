@@ -1,0 +1,122 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: knative-serving.packages.kadras.io.1.8.0+kadras.1
+spec:
+  licenses:
+  - Apache 2.0
+  refName: knative-serving.packages.kadras.io
+  releaseNotes: https://github.com/knative/serving/releases
+  releasedAt: "2022-11-25T23:23:56Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/arktonix/package-for-knative-serving@sha256:a4fb26462934be081544939ecf78716f2048c9ded6b1f660e9183cace87d001f
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        domain:
+          additionalProperties: false
+          description: DNS configuration
+          properties:
+            name:
+              default: ""
+              description: Your own domain name if type real or empty if type sslip.io
+                or nip.io
+              type: string
+            type:
+              default: nip.io
+              description: Type of DNS configuration
+              type: string
+            url_template:
+              default: '{{.Name}}.{{.Namespace}}.{{.Domain}}'
+              description: The domain template to use when creating new services
+              type: string
+          type: object
+        ingress:
+          additionalProperties: false
+          description: Ingress configuration
+          properties:
+            external:
+              additionalProperties: false
+              description: Configuration for the external Ingress controller
+              properties:
+                namespace:
+                  default: projectcontour
+                  description: The namespace where the external Ingress controller
+                    is installed
+                  type: string
+              type: object
+            internal:
+              additionalProperties: false
+              description: Configuration for the internale Ingress controller
+              properties:
+                namespace:
+                  default: projectcontour
+                  description: The namespace where the internal Ingress controller
+                    is installed
+                  type: string
+              type: object
+          type: object
+        namespace:
+          default: knative-serving
+          description: The namespace where to install Knative Serving
+          type: string
+        scaling:
+          additionalProperties: false
+          description: Configuration for the Knative autoscaler
+          properties:
+            allow_zero_initial_scale:
+              default: "true"
+              description: Whether either the initial_scale config or the 'autoscaling.knative.dev/initial-scale'
+                annotation can be set to 0
+              type: string
+            initial_scale:
+              default: "1"
+              description: The initial target scale of a revision after creation
+              type: string
+            max_scale:
+              default: "0"
+              description: The maximum scale of a revision. If set to 0, the revision
+                has no maximum scale.
+              type: string
+            min_scale:
+              default: "0"
+              description: The minimum scale of a revision
+              type: string
+            scale_down_delay:
+              default: 0s
+              description: The amount of time that must pass at reduced concurrency
+                before a scale down decision is applied. If 0s, no delay.
+              type: string
+          type: object
+        tls:
+          additionalProperties: false
+          description: Configuration for automatic TLS certificates
+          properties:
+            certmanager:
+              additionalProperties: false
+              description: Configuration for integrating with cert-manager for certificate
+                issuing
+              properties:
+                clusterissuer:
+                  default: ""
+                  description: Provide a cluster issuer if you want to enable auto-TLS
+                  type: string
+              type: object
+          type: object
+      type: object
+  version: 1.8.0+kadras.1
