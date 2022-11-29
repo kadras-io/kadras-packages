@@ -29,68 +29,69 @@ This repository contains the following Carvel packages part of the [Kadras](http
 
 ## Prerequisites
 
-* Install the [`kctrl`](https://carvel.dev/kapp-controller/docs/latest/install/#installing-kapp-controller-cli-kctrl) CLI to manage Carvel packages in a convenient way.
-* Ensure [kapp-controller](https://carvel.dev/kapp-controller) is deployed in your Kubernetes cluster. You can do that with Carvel
-[`kapp`](https://carvel.dev/kapp/docs/latest/install) (recommended choice) or `kubectl`.
+* Kubernetes 1.24+
+* Carvel [`kctrl`](https://carvel.dev/kapp-controller/docs/latest/install/#installing-kapp-controller-cli-kctrl) CLI.
+* Carvel [kapp-controller](https://carvel.dev/kapp-controller) deployed in your Kubernetes cluster. You can install it with Carvel [`kapp`](https://carvel.dev/kapp/docs/latest/install) (recommended choice) or `kubectl`.
 
-```shell
-kapp deploy -a kapp-controller -y \
-  -f https://github.com/vmware-tanzu/carvel-kapp-controller/releases/latest/download/release.yml
-```
+  ```shell
+  kapp deploy -a kapp-controller -y \
+    -f https://github.com/vmware-tanzu/carvel-kapp-controller/releases/latest/download/release.yml
+  ```
 
 ## Installation
 
 You can install the Kadras package repository in a dedicated namespace using `kctrl`:
 
-```shell
-kubectl create namespace carvel-packages
-kctrl package repository add -r kadras-repo \
-    --url ghcr.io/arktonix/kadras-packages:0.4.0 \
-    -n carvel-packages
-```
+    ```shell
+    kubectl create namespace kadras-packages
+    kctrl package repository add -r kadras-repo \
+        --url ghcr.io/arktonix/kadras-packages:0.5.0 \
+        -n kadras-packages
+    ```
 
-Alternatively, you can add the repository by applying the `PackageRepository` manifest:
+### Verification
 
-```shell
-kubectl create namespace carvel-packages
-kapp deploy -a kadras-repo -n carvel-packages -y \
-    -f https://github.com/arktonix/kadras-packages/releases/latest/download/package-repository.yml
-```
+You can verify the list of available Carvel package repositories and their status.
 
-After the installation, you can retrieve the list of available Carvel package repositories in your cluster
-with the following command.
+  ```shell
+  kctrl package repository list -n kadras-packages
+  ```
 
-```shell
-kctrl package repository list -n carvel-packages
-```
+### Packages
 
-The Kadras package repository provides a collection of Carvel packages that you can list as follows.
+The Kadras package repository provides a collection of Carvel packages that you can list.
 
-```shell
-kctrl package available list -n carvel-packages
-```
+    ```shell
+    kctrl package available list -p kpack.packages.kadras.io -n kadras-packages
+    ```
 
-## Update
+## Upgrading
 
-You can update the repository by applying the `PackageRepository` manifest from the newest release, similar
-to the process described in the "Installation" section. Alternatively, you can use the `kctrl` CLI.
+You can upgrade an existing repository to a newer version using `kctrl`.
 
-```shell
-kctrl package repository update -r kadras-repo \
+  ```shell
+  kctrl package repository update -r kadras-repo \
     --url ghcr.io/arktonix/kadras-packages:<new-version> \
-    -n carvel-packages
-```
+    -n kadras-packages
+  ```
 
-## Documentation
+## Other
 
-You can find more documentation about Carvel package management at [carvel.dev](https://carvel.dev/kapp-controller/docs/latest/packaging).
+Instead of installing the Kadras package repository with `kctrl`, you can apply the necessary Carvel `PackageMetadata` and `Package` resources directly using [`kapp`](https://carvel.dev/kapp/docs/latest/install) or `kubectl`.
+
+  ```shell
+  kubectl create namespace kadras-packages
+  kapp deploy -a kadras-repo -n kadras-packages -y \
+    -f https://github.com/arktonix/kadras-packages/releases/latest/download/package-repository.yml
+  ```
+
+## Support and Documentation
+
+For support and documentation about Carvel package management, check out [carvel.dev](https://carvel.dev/kapp-controller/docs/latest/packaging).
 
 ## References
 
-This package repository is inspired by the work done by the Carvel team and the
-[Tanzu Community Edition](https://github.com/vmware-tanzu/community-edition) project (now retired).
-
-Learn more about [Kubernetes-native package management with Carvel](https://carvel.dev/kapp-controller/docs/latest/packaging).
+This package repository is inspired by the work done by the Carvel team and the [Tanzu Community Edition](https://github.com/vmware-tanzu/community-edition) project (now retired). Learn more about [Kubernetes-native package management with Carvel](https://carvel.dev/kapp-controller/docs/latest/packaging).
 
 ## Supply Chain Security
 
