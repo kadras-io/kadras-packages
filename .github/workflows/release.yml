@@ -6,7 +6,7 @@ env:
   COSIGN_EXPERIMENTAL: 1
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  VERSION: 0.5.0
+  VERSION: 0.5.1
 
 jobs:
   build:
@@ -35,9 +35,10 @@ jobs:
       
       - name: Create k3d cluster
         run: |
-          # Workaround for https://github.com/actions/runner-images/issues/6283
-          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          brew install k3d
+          # Install k3d
+          curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+          
+          # Create a Kubernetes cluster
           k3d cluster create test-cluster
 
           # Wait for the generation of a token for the Service Account
