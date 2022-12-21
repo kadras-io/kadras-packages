@@ -111,7 +111,7 @@ jobs:
     with:
       image: ${{ needs.build.outputs.image-name }}
       digest: ${{ needs.build.outputs.image-digest }}
-      registry-username: ${{ inputs.registry-username }}
+      registry-username: ${{ github.actor }}
     secrets:
       registry-password: ${{ secrets.GITHUB_TOKEN }}
   
