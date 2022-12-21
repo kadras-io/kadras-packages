@@ -1,0 +1,131 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: cartographer.packages.kadras.io.0.6.2
+spec:
+  refName: cartographer.packages.kadras.io
+  version: 0.6.2
+  releaseNotes: https://github.com/vmware-tanzu/package-for-cartographer/releases/tag/0.6.2
+  releasedAt: "2022-12-16T01:55:13Z"
+  valuesSchema:
+    openAPIv3:
+      title: cartographer.packages.kadras.io.0.6.2 values schema
+      properties:
+        ca_cert_data:
+          type: string
+          description: 'Optional: PEM Encoded certificate data for image registries with private CA.'
+          default: ""
+        excluded_components:
+          type: array
+          items:
+            type: string
+          default: []
+          description: 'Optional: List of components to exclude from installation (e.g. [conventions])'
+        aws_iam_role_arn:
+          type: string
+          description: 'Optional: Arn role that has access to pull images from ECR container registry'
+          default: ""
+        cartographer:
+          type: object
+          properties:
+            resources:
+              type: object
+              properties:
+                limits:
+                  type: object
+                  properties:
+                    cpu:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                      description: 'Optional: maximum amount of cpu resources to allow the controller to use'
+                      default: 1000m
+                    memory:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                      description: 'Optional: maxium amount of memory to allow the controller to use'
+                      default: 128Mi
+                requests:
+                  type: object
+                  properties:
+                    cpu:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                      description: 'Optional: minimum amount of cpu to reserve'
+                      default: 250m
+                    memory:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                      description: 'Optional: minimum amount of memory to reserve'
+                      default: 128Mi
+        conventions:
+          type: object
+          properties:
+            resources:
+              type: object
+              properties:
+                limits:
+                  type: object
+                  properties:
+                    cpu:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                      description: 'Optional: maximum amount of cpu resources to allow the controller to use'
+                      default: 1000m
+                    memory:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                      description: 'Optional: maxium amount of memory to allow the controller to use'
+                      default: 128Mi
+                requests:
+                  type: object
+                  properties:
+                    cpu:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                      description: 'Optional: minimum amount of cpu to reserve'
+                      default: 250m
+                    memory:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                      description: 'Optional: minimum amount of memory to reserve'
+                      default: 128Mi
+  template:
+    spec:
+      fetch:
+      - imgpkgBundle:
+          image: index.docker.io/projectcartographer/package-for-cartographer@sha256:b8af2f836e67c21bba28f64f9aa024b7cff1faf65fc89e2fcfc97636484d9f95
+      template:
+      - ytt:
+          ignoreUnknownComments: true
+          paths:
+          - config
+      - kbld:
+          paths:
+          - .imgpkg/images.yml
+          - '-'
+      deploy:
+      - kapp: {}
