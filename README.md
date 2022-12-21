@@ -1,5 +1,7 @@
 # Kadras Packages
 
+<a href="https://slsa.dev/spec/v0.1/levels"><img src="https://slsa.dev/images/gh-badge-level3.svg" alt="The SLSA Level 3 badge"></a>
+
 A collection of Kubernetes-native packages built with [Carvel](https://carvel.dev) and part of the Kadras project.
 
 ## Package Repository
@@ -95,6 +97,6 @@ This package repository is inspired by the work done by the Carvel team and the 
 
 ## Supply Chain Security
 
-This project is compliant with level 2 of the [SLSA Framework](https://slsa.dev).
+This project is compliant with level 3 of the [SLSA Framework](https://slsa.dev).
 
-<img src="https://slsa.dev/images/SLSA-Badge-full-level2.svg" alt="The SLSA Level 2 badge" width=200>
+<img src="https://slsa.dev/images/SLSA-Badge-full-level3.svg" alt="The SLSA Level 3 badge" width=200>
