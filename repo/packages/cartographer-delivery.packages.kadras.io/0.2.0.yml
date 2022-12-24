@@ -1,0 +1,51 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: cartographer-delivery.packages.kadras.io.0.2.0
+spec:
+  refName: cartographer-delivery.packages.kadras.io
+  releasedAt: "2022-12-24T16:25:17Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/arktonix/cartographer-delivery@sha256:b9e01583113ccd1b0cb21b790093b26c03fa89e966c6c0a7307d014bfba4e1ec
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        delivery_chain:
+          default: basic
+          description: The type of delivery chain to use when deploying workloads
+          type: string
+        git_implementation:
+          default: go-git
+          description: The Git implementation used by Flux
+          type: string
+        gitops:
+          additionalProperties: false
+          description: Configuration for the GitOps steps in the delivery chain
+          properties:
+            access_secret:
+              default: git-secret
+              description: The Secret containing credentials to access the specified
+                Git repository
+              type: string
+          type: object
+        service_account:
+          default: default
+          description: The ServiceAccount used by the supply chain
+          type: string
+      type: object
+  version: 0.2.0
