@@ -15,7 +15,7 @@ This repository contains the following Carvel packages part of the [Kadras](http
 | [cartographer](https://github.com/vmware-tanzu/package-for-cartographer) | A framework to build paved paths to production using your favourite cloud-native tools. Maintained by [VMware Tanzu](https://github.com/vmware-tanzu). |
 | [cartographer-blueprints](https://github.com/arktonix/cartographer-blueprints) | A curated set of reusable blueprints for Cartographer, a Kubernetes-native framework to build paved paths to production. |
 | [cartographer-delivery](https://github.com/arktonix/cartographer-delivery) | A curated set of Cartographer delivery chains to deploy workloads to Kubernetes based on GitOps or RegistryOps. |
-| [cartographer-golden-path-web](https://github.com/arktonix/cartographer-golden-path-web) | A curated set of Cartographer supply chains to build golden paths to production for web applications and functions, from source code to delivery in a Kubernetes cluster. |
+| [cartographer-supply-chains](https://github.com/arktonix/cartographer-supply-chains) | A curated set of Cartographer supply chains to build golden paths to production for applications and functions, from source code to delivery in a Kubernetes cluster. |
 | [cert-manager](https://github.com/arktonix/package-for-cert-manager) | Cloud-native solution to automatically provision and manage TLS certificates in Kubernetes. |
 | [contour](https://github.com/arktonix/package-for-contour) | An Envoy-based ingress controller that supports dynamic configuration updates and multi-team ingress delegation. |
 | [fluxcd-source-controller](https://github.com/arktonix/package-for-fluxcd-source-controller) | A source management component from the Flux GitOps Toolkit to provide a common interface for artifacts acquisition. |
@@ -47,7 +47,7 @@ You can install the Kadras package repository in a dedicated namespace using `kc
     ```shell
     kubectl create namespace kadras-packages
     kctrl package repository add -r kadras-repo \
-        --url ghcr.io/arktonix/kadras-packages:0.6.1 \
+        --url ghcr.io/arktonix/kadras-packages:0.7.0 \
         -n kadras-packages
     ```
 
