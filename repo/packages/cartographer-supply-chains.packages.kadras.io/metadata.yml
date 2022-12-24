@@ -1,0 +1,17 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  creationTimestamp: null
+  name: cartographer-supply-chains.packages.kadras.io
+spec:
+  categories:
+  - ci/cd
+  - golden paths
+  - platform engineering
+  displayName: cartographer-supply-chains
+  longDescription: Cartographer supply chains used to build golden paths to production
+    for applications and functions.
+  maintainers:
+  - name: Thomas Vitale
+  providerName: Arktonix
+  shortDescription: Supply chains for applications and functions.
