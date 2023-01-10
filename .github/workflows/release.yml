@@ -6,7 +6,7 @@ env:
   COSIGN_EXPERIMENTAL: 1
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  VERSION: 0.7.0
+  VERSION: 0.7.1
 
 jobs:
   build:
@@ -20,7 +20,7 @@ jobs:
       image-digest: ${{ steps.image-info.outputs.image_digest }}
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v3.3.0
 
       - name: Set up Carvel
         uses: vmware-tanzu/carvel-setup-action@v1.2.0
@@ -28,7 +28,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Log into container registry
-        uses: redhat-actions/podman-login@v1.4
+        uses: redhat-actions/podman-login@v1.5
         with:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -91,7 +91,7 @@ jobs:
         uses: sigstore/cosign-installer@v2.8.1
 
       - name: Log into container registry
-        uses: redhat-actions/podman-login@v1.4
+        uses: redhat-actions/podman-login@v1.5
         with:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -114,48 +114,3 @@ jobs:
       registry-username: ${{ github.actor }}
     secrets:
       registry-password: ${{ secrets.GITHUB_TOKEN }}
-  
-  # provenance:
-  #   name: Provenance
-  #   runs-on: ubuntu-22.04
-  #   needs: [build,sign]
-  #   permissions:
-  #     packages: write
-  #     id-token: write
-  #   env:
-  #     IMAGE_RELEASE: ${{ needs.build.outputs.image-release }}
-  #     PROVENANCE_FILE: provenance.att
-  #   steps:
-  #     - name: Install Cosign
-  #       uses: sigstore/cosign-installer@v2.8.1
-      
-  #     - name: Log into container registry
-  #       uses: redhat-actions/podman-login@v1.4
-  #       with:
-  #         username: ${{ github.actor }}
-  #         password: ${{ secrets.GITHUB_TOKEN }}
-  #         registry: ${{ env.REGISTRY }}
-      
-  #     - name: Extract digest
-  #       run: |
-  #         digest=$(echo ${IMAGE_RELEASE} | cut -d "@" -f2)
-  #         echo "IMAGE_DIGEST=${digest}" >> $GITHUB_ENV
-
-  #     - name: Generate provenance
-  #       uses: philips-labs/slsa-provenance-action@v0.7.2
-  #       with:
-  #         command: generate
-  #         subcommand: container
-  #         arguments: --repository ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --tags ${{ env.VERSION }} --digest ${{ env.IMAGE_DIGEST }} --output-path ${{ env.PROVENANCE_FILE }}
-  #       env:
-  #         COSIGN_EXPERIMENTAL: 0
-
-  #     - name: Attach provenance
-  #       run: |
-  #         jq '.predicate' "${PROVENANCE_FILE}" > provenance-predicate.att
-  #         cosign attest --predicate provenance-predicate.att --type slsaprovenance "${IMAGE_RELEASE}"
-
-  #     - uses: actions/upload-artifact@v3.1.1
-  #       with:
-  #         name: provenance.att
-  #         path: ${{ env.PROVENANCE_FILE }}
