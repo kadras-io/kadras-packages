@@ -1,0 +1,67 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: secretgen-controller.packages.kadras.io.0.13.0
+spec:
+  licenses:
+  - Apache 2.0
+  refName: secretgen-controller.packages.kadras.io
+  releasedAt: "2022-12-12T22:04:28Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/vmware-tanzu/carvel-secretgen-controller-package-bundle@sha256:e9fc8cf560dde1dd29ee4cb4fc7cc70e81d389ca9c8299e05d75564aff135f1f
+      template:
+      - ytt:
+          paths:
+          - config/package-bundle/config
+          - config/release-config.yml
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        create_namespace:
+          default: true
+          description: Whether to create namespace specified for secretgen-controller
+          type: boolean
+        deployment:
+          additionalProperties: false
+          description: Configuration for secretgen-controller deployment
+          properties:
+            nodeSelector:
+              default: null
+              description: NodeSelector configuration applied to all the deployments
+              nullable: true
+            rollingUpdate:
+              additionalProperties: false
+              properties:
+                maxSurge:
+                  default: 0
+                  description: The maxSurge of rollingUpdate. Applied only if RollingUpdate
+                    is used as updateStrategy
+                  type: integer
+                maxUnavailable:
+                  default: 1
+                  description: The maxUnavailable of rollingUpdate. Applied only if
+                    RollingUpdate is used as updateStrategy
+                  type: integer
+              type: object
+            updateStrategy:
+              default: ""
+              description: Update strategy of deployments, empty uses default strategy
+              type: string
+          type: object
+        namespace:
+          default: secretgen-controller
+          description: The namespace in which to deploy secretgen-controller
+          type: string
+      type: object
+  version: 0.13.0
