@@ -13,6 +13,6 @@ spec:
     resource metrics for Kubernetes built-in autoscaling pipelines.
   maintainers:
   - name: Thomas Vitale
-  providerName: Arktonix
+  providerName: Kadras
   shortDescription: Scalable and efficient source of container resource metrics for
     Kubernetes built-in autoscaling pipelines.
