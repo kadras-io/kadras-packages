@@ -12,6 +12,6 @@ spec:
     (CNB)
   maintainers:
   - name: Thomas Vitale
-  providerName: Arktonix
+  providerName: Kadras
   shortDescription: kpack builds application source code into OCI compliant images
     using Cloud Native Buildpacks
