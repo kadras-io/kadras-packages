@@ -13,5 +13,5 @@ spec:
     developer's intent.
   maintainers:
   - name: Thomas Vitale
-  providerName: Arktonix
+  providerName: Kadras
   shortDescription: Spring Boot Convention Server for Cartographer.
