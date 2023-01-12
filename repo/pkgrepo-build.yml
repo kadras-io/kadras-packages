@@ -1,9 +1,9 @@
 apiVersion: kctrl.carvel.dev/v1alpha1
 kind: PackageRepositoryBuild
 metadata:
-  creationTimestamp: "2022-09-24T20:15:30Z"
+  creationTimestamp: "2023-01-12T21:36:30Z"
   name: repository.packages.kadras.io
 spec:
   export:
     imgpkgBundle:
-      image: ghcr.io/arktonix/kadras-packages
+      image: ghcr.io/kadras-io/kadras-packages
