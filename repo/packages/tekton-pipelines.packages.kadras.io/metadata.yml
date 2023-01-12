@@ -10,5 +10,5 @@ spec:
   longDescription: A cloud native solution for building CI/CD pipelines.
   maintainers:
   - name: Thomas Vitale
-  providerName: Arktonix
+  providerName: Kadras
   shortDescription: A cloud native solution for building CI/CD pipelines.
