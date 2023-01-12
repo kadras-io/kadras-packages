@@ -12,5 +12,5 @@ spec:
     to sinks, enabling developers to use an event-driven architecture with their applications.
   maintainers:
   - name: Thomas Vitale
-  providerName: Arktonix
+  providerName: Kadras
   shortDescription: Toolkit to build event-driven architectures on Kubernetes.
