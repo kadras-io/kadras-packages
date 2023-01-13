@@ -13,5 +13,5 @@ spec:
   longDescription: Automatically provision and manage TLS certificates in Kubernetes
   maintainers:
   - name: Thomas Vitale
-  providerName: Arktonix
+  providerName: Kadras
   shortDescription: Cloud native certificate management
