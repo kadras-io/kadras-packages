@@ -4,6 +4,11 @@ metadata:
   creationTimestamp: null
   name: namespace-setup.packages.kadras.io
 spec:
+  categories:
+  - environment provisioning
   displayName: namespace-setup
   longDescription: namespace-setup.packages.kadras.io
+  maintainers:
+  - name: Thomas Vitale
+  providerName: Kadras
   shortDescription: namespace-setup.packages.kadras.io
