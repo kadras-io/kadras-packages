@@ -47,7 +47,7 @@ You can install the Kadras package repository in a dedicated namespace using `kc
     ```shell
     kubectl create namespace kadras-packages
     kctrl package repository add -r kadras-repo \
-        --url ghcr.io/kadras-io/kadras-packages:0.7.2 \
+        --url ghcr.io/kadras-io/kadras-packages:0.7.3 \
         -n kadras-packages
     ```
 
