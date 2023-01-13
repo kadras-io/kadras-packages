@@ -12,5 +12,5 @@ spec:
     languages and frameworks.
   maintainers:
   - name: Thomas Vitale
-  providerName: Arktonix
+  providerName: Kadras
   shortDescription: A set of buildpacks, stacks, and builders to use with kpack.

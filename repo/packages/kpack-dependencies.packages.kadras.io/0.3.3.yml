@@ -1,0 +1,34 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: kpack-dependencies.packages.kadras.io.0.3.3
+spec:
+  refName: kpack-dependencies.packages.kadras.io
+  releasedAt: "2023-01-13T19:43:23Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/kpack-dependencies@sha256:24a7b479c1b9d84f0e1da9708b85bc7d095997b582c8ad269765c0815a480bc3
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        kp_default_repository:
+          default: ""
+          description: The OCI registry where to publish builder images. The same
+            as configured in kpack.
+          type: string
+      type: object
+  version: 0.3.3
