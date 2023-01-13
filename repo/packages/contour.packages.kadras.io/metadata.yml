@@ -14,5 +14,5 @@ spec:
     updates and multi-team ingress delegation.
   maintainers:
   - name: Thomas Vitale
-  providerName: Arktonix
+  providerName: Kadras
   shortDescription: An Envoy-based ingress controller
