@@ -13,5 +13,5 @@ spec:
     framework to build paved paths to production.
   maintainers:
   - name: Thomas Vitale
-  providerName: Arktonix
+  providerName: Kadras
   shortDescription: A set of reusable blueprints for Cartographer.
