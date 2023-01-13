@@ -13,5 +13,5 @@ spec:
     using a GitOps or RegistryOps approach.
   maintainers:
   - name: Thomas Vitale
-  providerName: Arktonix
+  providerName: Kadras
   shortDescription: Deployment with GitOps/RegistryOps.
