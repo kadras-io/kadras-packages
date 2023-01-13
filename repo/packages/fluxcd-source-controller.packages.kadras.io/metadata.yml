@@ -13,7 +13,7 @@ spec:
     of the GitOps toolkit.
   maintainers:
   - name: Thomas Vitale
-  providerName: Arktonix
+  providerName: Kadras
   shortDescription: The FluxCD Source Controller is a Kubernetes operator, specialised
     in artifacts acquisition from external sources such as Git, Helm repositories
     and S3 buckets.
