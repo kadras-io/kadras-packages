@@ -12,5 +12,5 @@ spec:
     or internal developer platform (IDP) on Kubernetes.
   maintainers:
   - name: Thomas Vitale
-  providerName: Arktonix
+  providerName: Kadras
   shortDescription: Application platform on Kubernetes.
