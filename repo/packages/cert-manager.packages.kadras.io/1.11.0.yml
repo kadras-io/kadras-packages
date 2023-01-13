@@ -1,0 +1,40 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: cert-manager.packages.kadras.io.1.11.0
+spec:
+  licenses:
+  - Apache 2.0
+  refName: cert-manager.packages.kadras.io
+  releaseNotes: https://github.com/jetstack/cert-manager/releases
+  releasedAt: "2023-01-13T19:10:08Z"
+  template:
+    spec:
+      deploy:
+      - kapp:
+          rawOptions:
+          - --wait-timeout=5m
+          - --kube-api-qps=50
+          - --kube-api-burst=100
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-cert-manager@sha256:76d5d060d8a864933699715d29ef3fdc805378ed47600e029b03aadad020e77e
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        namespace:
+          default: cert-manager
+          description: The namespace in which to deploy Cert Manager
+          type: string
+      type: object
+  version: 1.11.0
