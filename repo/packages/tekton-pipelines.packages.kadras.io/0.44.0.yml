@@ -1,0 +1,521 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: tekton-pipelines.packages.kadras.io.0.44.0
+spec:
+  licenses:
+  - Apache 2.0
+  refName: tekton-pipelines.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-tekton-pipelines/releases
+  releasedAt: "2023-02-07T23:06:02Z"
+  template:
+    spec:
+      deploy:
+      - kapp:
+          rawOptions:
+          - --wait-timeout=5m
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-tekton-pipelines@sha256:11437acd8c3b5ed4a0c296657e0412297bb384c2d7bfbb15ed41deee1275d339
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        ca_cert_data:
+          default: ""
+          description: Self-signed certificate for the private container registry
+            storing the images used in Tekton Tasks (PEM-encoded format).
+          type: string
+        controllers:
+          additionalProperties: false
+          description: Settings for the Tekton Pipelines controllers.
+          properties:
+            pipelines:
+              additionalProperties: false
+              description: Settings for the `tekton-pipelines-controller` Deployment.
+              properties:
+                replicas:
+                  default: 1
+                  description: The number of replicas for the `tekton-pipelines-controller`
+                    Deployment. In order to enable high availability, it should be
+                    greater than 1.
+                  type: integer
+              type: object
+            resolvers:
+              additionalProperties: false
+              description: Settings for the `tekton-pipelines-remote-resolvers` Deployment.
+              properties:
+                replicas:
+                  default: 1
+                  description: The number of replicas. In order to enable high availability,
+                    it should be greater than 1.
+                  type: integer
+              type: object
+          type: object
+        defaults:
+          additionalProperties: false
+          description: Default configuration stored in the `config-defaults` ConfigMap.
+          properties:
+            affinity_assistant_pod_template:
+              default: ""
+              description: Pod template to use for affinity assistant Pods.
+              type: string
+            cloud_events_sink:
+              default: ""
+              description: CloudEvents sink to be used for TaskRun, PipelineRun, CustomRun,
+                and Run lifeycle events. If no sink is specified, no CloudEvent is
+                generated.
+              type: string
+            forbidden_env:
+              default: ""
+              description: Comma seperated environment variables that cannot be overridden
+                by PodTemplate.
+              type: string
+            managed_by_label_value:
+              default: tekton-pipelines
+              description: Value given to the `app.kubernetes.io/managed-by` label
+                applied to all Pods created for TaskRuns.
+              type: string
+            max_matrix_combinations_count:
+              default: "256"
+              description: Maximum number of combinations from a Matrix, if none is
+                specified.
+              type: string
+            pod_template:
+              default: ""
+              description: Pod template to use for TaskRun and PipelineRun.
+              type: string
+            service_account:
+              default: default
+              description: Service account name to use for TaskRun and PipelineRun,
+                if none is specified.
+              type: string
+            task_run_workspace_binding:
+              default: |
+                emptyDir: {}
+              description: Workspace configuration provided for any Workspaces that
+                a Task declares but that a TaskRun does not explicitly provide.
+              type: string
+            timeout_minutes:
+              default: "60"
+              description: Number of minutes to use for TaskRun and PipelineRun, if
+                none is specified.
+              type: string
+          type: object
+        feature_flags:
+          additionalProperties: false
+          description: Feature flags configuration stored in the `feature-flags` ConfigMap.
+          properties:
+            await_sidecar_readiness:
+              default: "true"
+              description: Setting this flag to `false` will stop Tekton from waiting
+                for a TaskRun's sidecar containers to be running before starting the
+                first step. This will allow Tasks to be run in environments that don't
+                support the DownwardAPI volume type, but may lead to unintended behaviour
+                if sidecars are used.
+              type: string
+            custom_task_version:
+              default: v1beta1
+              description: Setting this flag will determine the version for custom
+                tasks created by PipelineRuns.
+              type: string
+            disable_affinity_assistant:
+              default: "false"
+              description: Setting this flag to `true` will prevent Tekton to create
+                an Affinity Assistant for every TaskRun sharing a PVC workspace.
+              type: string
+            disable_creds_init:
+              default: "false"
+              description: Setting this flag to `true` will prevent Tekton scanning
+                attached service accounts and injecting any credentials it finds into
+                your Steps.
+              type: string
+            embedded_status:
+              default: minimal
+              description: Setting this flag to `full` to enable full embedding of
+                `TaskRun` and `Run` statuses in the `PipelineRun` status. Set it to
+                `minimal` to populate the `ChildReferences` field in the `PipelineRun`
+                status with name, kind, and API version information for each `TaskRun`
+                and `Run` in the `PipelineRun` instead. Set it to `both` to do both.
+              type: string
+            enable_api_fields:
+              default: stable
+              description: Setting this flag will determine which gated features are
+                enabled.
+              type: string
+            enable_provenance_in_status:
+              default: "false"
+              description: Setting this flag to `true` enables populating the `provenance`
+                field in TaskRun and PipelineRun status. This field contains metadata
+                about resources used in the TaskRun/PipelineRun such as the source
+                from where a remote Task/Pipeline definition was fetched.
+              type: string
+            enable_tekton_oci_bundles:
+              default: "false"
+              description: Setting this flag to `true` enables the use of Tekton OCI
+                bundle. This is an experimental feature and thus should still be considered
+                an alpha feature.
+              type: string
+            require_git_ssh_secret_known_hosts:
+              default: "false"
+              description: Setting this flag to `true` will require that any Git SSH
+                Secret offered to Tekton must have `known_hosts` included.
+              type: string
+            resource_verification_mode:
+              default: skip
+              description: Setting this flag to `enforce` will enforce verification
+                of tasks/pipelines. Failing to verify will fail the TaskRun/PipelineRun.
+                `warn` will only log the err message and `skip` will skip the whole
+                verification.
+              type: string
+            running_in_environment_with_injected_sidecars:
+              default: "true"
+              description: This option should be set to `false` when Pipelines is
+                running in a cluster that does not use injected sidecars such as Istio.
+                Setting it to false should decrease the time it takes for a TaskRun
+                to start running. For clusters that use injected sidecars, setting
+                this option to false can lead to unexpected behavior.
+              type: string
+            send_cloudevents_for_runs:
+              default: "false"
+              description: Setting this flag to `true` enables CloudEvents for CustomRuns
+                and Runs, as long as a CloudEvents sink is configured in the `config-defaults`
+                ConfigMap.
+              type: string
+          type: object
+        leader_election:
+          additionalProperties: false
+          description: Leader election configuration stored in the `config-leader-election`
+            ConfigMaps and used in both Tekton Pipelines and Tekton Pipelines Resolvers.
+          properties:
+            buckets:
+              default: "1"
+              description: The number of buckets used to partition key space of each
+                Reconciler. If this number is M and the replica number of the controller
+                is N, the N replicas will compete for the M buckets. The owner of
+                a bucket will take care of the reconciling for the keys partitioned
+                into that bucket. The maximum value of at this time is 10.
+              type: string
+            lease_duration:
+              default: 60s
+              description: How long non-leaders will wait to try to acquire the lock;
+                15 seconds is the value used by core Kubernetes controllers.
+              type: string
+            renew_deadline:
+              default: 40s
+              description: How long a leader will try to renew the lease before giving
+                up; 10 seconds is the value used by core Kubernetes controllers.
+              type: string
+            retry_period:
+              default: 10s
+              description: How long the leader election client waits between tries
+                of actions; 2 seconds is the value used by core Kubernetes controllers.
+              type: string
+          type: object
+        logging:
+          additionalProperties: false
+          description: Logging configuration stored in the `config-logging` ConfigMaps
+            and used in both Tekton Pipelines and Tekton Pipelines Resolvers.
+          properties:
+            loglevel:
+              additionalProperties: false
+              description: Configuration of the log level for each Deployment.
+              properties:
+                controller:
+                  default: info
+                  description: Log level for the `tekton-pipelines-controller` and
+                    `tekton-pipelines-resolvers` Deployments.
+                  type: string
+                webhook:
+                  default: info
+                  description: Log level for the `tekton-pipelines-webhook` Deployment.
+                  type: string
+              type: object
+            zap_logger_config:
+              default: ""
+              description: Configuration for the zap logger used by all Tekton containers.
+              type: string
+          type: object
+        observability:
+          additionalProperties: false
+          description: Observability configuration stored in the `config-observability`
+            ConfigMaps and used in both Tekton Pipelines and Tekton Pipelines Resolvers.
+          properties:
+            metrics:
+              additionalProperties: false
+              description: Configuration for the metrics produced by the Tekton components.
+              properties:
+                allow_stackdriver_custom_metrics:
+                  default: "false"
+                  description: Whether it is allowed to send metrics to Stackdriver
+                    using 'global' resource type and custom metric type. Ignore if
+                    `backend_destination` is not `stackdriver`.
+                  type: string
+                backend_destination:
+                  default: prometheus
+                  description: The system metrics destination.
+                  type: string
+                pipelinerun:
+                  additionalProperties: false
+                  description: Configuration for the PipelineRun metrics.
+                  properties:
+                    duration_type:
+                      default: histogram
+                      description: Duration type for the PipelineRun metrics. Histogram
+                        value isn’t available when the `pipelinerun` level is selected.
+                      type: string
+                    level:
+                      default: pipeline
+                      description: 'Level for the PipelineRun metrics controlling
+                        which labels are included: (pipelinerun, pipeline, namespace),
+                        (pipeline, namespace), (namespace).'
+                      type: string
+                  type: object
+                stackdriver_project_id:
+                  default: ""
+                  description: The Stackdriver project ID. When running on GCE, application
+                    default credentials will be used and metrics will be sent to the
+                    cluster's project if this field is not provided.
+                  type: string
+                taskrun:
+                  additionalProperties: false
+                  description: Configuration for the TaskRun metrics.
+                  properties:
+                    duration_type:
+                      default: histogram
+                      description: Duration type for the TaskRun metrics. Histogram
+                        value isn’t available when the `taskrun` level is selected.
+                      type: string
+                    level:
+                      default: task
+                      description: 'Level for the TaskRun metrics controlling which
+                        labels are included: (taskrun, task, namespace), (task, namespace),
+                        (namespace).'
+                      type: string
+                  type: object
+              type: object
+          type: object
+        opentelemetry:
+          additionalProperties: false
+          description: Settings for the OpenTelemetry support.
+          properties:
+            enable:
+              default: false
+              description: Setting this flag to `true` enables the trace exporter.
+              type: boolean
+            exporter:
+              additionalProperties: false
+              description: Settings for the OpenTelemetry exporter
+              properties:
+                jaeger:
+                  additionalProperties: false
+                  description: Configuration for the OpenTelemetry exporter based
+                    on the Jaeger protocol.
+                  properties:
+                    endpoint:
+                      default: ""
+                      description: The endpoint where the distributed tracing backend
+                        accepts OpenTelemetry traces using the Jaeger protocol.
+                      type: string
+                    password:
+                      default: ""
+                      description: The password/token to authenticate with the distributed
+                        tracing backend.
+                      type: string
+                    username:
+                      default: ""
+                      description: The username to access the distributed tracing
+                        backend.
+                      type: string
+                  type: object
+              type: object
+          type: object
+        policies:
+          additionalProperties: false
+          description: Settings for the Kyverno policies.
+          properties:
+            include:
+              default: false
+              description: Whether to include the out-of-the-box Kyverno policies
+                to validate and secure the package installation.
+              type: boolean
+          type: object
+        resolvers:
+          additionalProperties: false
+          description: Configuration for the Tekton Resolvers, responsible for resolving
+            requests for Tasks and Pipelines from remote locations.
+          properties:
+            bundle:
+              additionalProperties: false
+              description: Configuration for the bundle resolver stored in the `bundleresolver-config`
+                ConfigMap.
+              properties:
+                default_kind:
+                  default: task
+                  description: The default resource kind to pull out of the bundle.
+                  type: string
+                default_service_account:
+                  default: default
+                  description: The default name of the service account to use when
+                    constructing registry credentials.
+                  type: string
+              type: object
+            cluster:
+              additionalProperties: false
+              description: Configuration for the cluster resolver stored in the `cluster-resolver-config`
+                ConfigMap.
+              properties:
+                allowed_namespaces:
+                  default: ""
+                  description: A comma-separated list of namespaces which the resolver
+                    is allowed to access. Defaults to empty, meaning all namespaces
+                    are allowed.
+                  type: string
+                blocked_namespaces:
+                  default: ""
+                  description: A comma-separated list of namespaces which the resolver
+                    is blocked from accessing. Defaults to empty, meaning all namespaces
+                    are allowed.
+                  type: string
+                default_kind:
+                  default: task
+                  description: The default resource kind to fetch.
+                  type: string
+                default_namespace:
+                  default: ""
+                  description: The default namespace to fetch resources from.
+                  type: string
+              type: object
+            feature_flags:
+              additionalProperties: false
+              description: Feature flags configuration stored in the `resolvers-feature-flags`
+                ConfigMap.
+              properties:
+                enable_bundles_resolver:
+                  default: "true"
+                  description: Setting this flag to `true` enables remote resolution
+                    of Tekton OCI bundles.
+                  type: string
+                enable_cluster_resolver:
+                  default: "true"
+                  description: Setting this flag to `true` enables remote resolution
+                    of tasks and pipelines from other namespaces within the cluster.
+                  type: string
+                enable_git_resolver:
+                  default: "true"
+                  description: Setting this flag to `true` enables remote resolution
+                    of tasks and pipelines from Git repositories.
+                  type: string
+                enable_hub_resolver:
+                  default: "true"
+                  description: Setting this flag to `true` enables remote resolution
+                    of tasks and pipelines via the Tekton Hub.
+                  type: string
+              type: object
+            git:
+              additionalProperties: false
+              description: Configuration for the git resolver stored in the `git-resolver-config`
+                ConfigMap.
+              properties:
+                api_token_secret_key:
+                  default: ""
+                  description: The key in the API token secret containing the actual
+                    token. Required when using the authenticated API.
+                  type: string
+                api_token_secret_name:
+                  default: ""
+                  description: The Kubernetes secret containing the API token for
+                    the SCM provider. Required when using the authenticated API.
+                  type: string
+                api_token_secret_namespace:
+                  default: default
+                  description: The namespace containing the API token secret.
+                  type: string
+                default_org:
+                  default: ""
+                  description: The default organization to look for repositories under
+                    when using the authenticated API.
+                  type: string
+                default_revision:
+                  default: main
+                  description: The git revision to fetch the remote resource from
+                    with either anonymous cloning or the authenticated API.
+                  type: string
+                default_url:
+                  default: https://github.com/tektoncd/catalog.git
+                  description: The git url to fetch the remote resource from when
+                    using anonymous cloning.
+                  type: string
+                fetch_timeout:
+                  default: 1m
+                  description: The maximum amount of time a single anonymous cloning
+                    resolution may take.
+                  type: string
+                scm_type:
+                  default: github
+                  description: The SCM type to use with the authenticated API.
+                  type: string
+                server_url:
+                  default: ""
+                  description: The SCM server URL to use with the authenticated API.
+                    Not needed when using github.com, gitlab.com, or BitBucket Cloud.
+                  type: string
+              type: object
+            hub:
+              additionalProperties: false
+              description: Configuration for the hub resolver stored in the `hubresolver-config`
+                ConfigMap.
+              properties:
+                default_artifact_hub_pipeline_catalog:
+                  default: tekton-catalog-pipelines
+                  description: The default Artifact Hub Pipeline catalog from where
+                    to pull the resource.
+                  type: string
+                default_artifact_hub_task_catalog:
+                  default: tekton-catalog-tasks
+                  description: The default Artifact Hub Task catalog from where to
+                    pull the resource.
+                  type: string
+                default_kind:
+                  default: task
+                  description: The default resource kind to fetch.
+                  type: string
+                default_tekton_hub_catalog:
+                  default: Tekton
+                  description: The default Tekton Hub catalog from where to pull the
+                    resource.
+                  type: string
+                default_type:
+                  default: artifact
+                  description: The default hub from where to pull the resource.
+                  type: string
+              type: object
+          type: object
+        webhook:
+          additionalProperties: false
+          description: Settings for the `tekton-pipelines-webhook` Deployment.
+          properties:
+            pdb:
+              additionalProperties: false
+              description: PodDisruptionBudget configuration for the `tekton-pipelines-webhook`
+                Deployment.
+              properties:
+                enable:
+                  default: false
+                  description: Setting this flag to `true` enables a PodDisruptionBudget
+                    for the `tekton-pipelines-webhook` Deployment and ensures high
+                    availability.
+                  type: boolean
+              type: object
+          type: object
+      type: object
+  version: 0.44.0
