@@ -4,7 +4,7 @@ metadata:
   name: secretgen-controller.packages.kadras.io
 spec:
   categories:
-  - package management
+  - secret management
   displayName: secretgen-controller
   longDescription: Provide CRDs to specify what secrets need to be on cluster (generated
     or not).
