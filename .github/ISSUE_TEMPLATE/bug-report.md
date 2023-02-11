@@ -2,7 +2,7 @@
 name: Bug report
 about: Tell us about a problem you are experiencing
 title: ''
-labels: bug
+labels: bug, triage
 assignees: ''
 
 ---
@@ -19,10 +19,8 @@ assignees: ''
 **Anything else you would like to add:**
 [Additional information that will assist in solving the issue.]
 
-**Additional context:**
-Add any other context about the problem here.
-
 **Environment:**
 
-- Kubernetes version (execute `kubectl version`): 
-- kapp-controller version (execute `kubectl get deployment -n kapp-controller kapp-controller -o yaml` and the annotation is `kbld.k14s.io/images`): 
+* Kubernetes version (execute `kubectl version`):
+* kctrl version (execute `kctrl version`):
+* kapp-controller version (execute `kubectl get deployment -n kapp-controller kapp-controller -o yaml` and the annotation is `kbld.k14s.io/images`):

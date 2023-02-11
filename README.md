@@ -1,10 +1,13 @@
 # Kadras Packages
 
-<a href="https://slsa.dev/spec/v0.1/levels"><img src="https://slsa.dev/images/gh-badge-level3.svg" alt="The SLSA Level 3 badge"></a>
+![Release Workflow](https://github.com/kadras-io/kadras-packages/actions/workflows/release.yml/badge.svg)
+[![The SLSA Level 3 badge](https://slsa.dev/images/gh-badge-level3.svg)](https://slsa.dev/spec/v0.1/levels)
+[![The Apache 2.0 license badge](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Follow us on Twitter](https://img.shields.io/static/v1?label=Twitter&message=Follow&color=1DA1F2)](https://twitter.com/kadrasIO)
 
-A collection of Kubernetes-native packages built with [Carvel](https://carvel.dev) and used in the [Kadras](https://kadras.io) project.
+The [Kadras](https://kadras.io) collection of Kubernetes-native packages built with [Carvel](https://carvel.dev).
 
-## Package Repository
+## 📦&nbsp; Package Repository
 
 This repository contains the following Carvel packages.
 
@@ -16,7 +19,7 @@ This repository contains the following Carvel packages.
 | [cartographer-blueprints](https://github.com/kadras-io/cartographer-blueprints) | A curated set of reusable blueprints for Cartographer, a Kubernetes-native framework to build paved paths to production. |
 | [cartographer-delivery](https://github.com/kadras-io/cartographer-delivery) | A curated set of Cartographer delivery chains to deploy workloads to Kubernetes based on GitOps or RegistryOps. |
 | [cartographer-supply-chains](https://github.com/kadras-io/cartographer-supply-chains) | A curated set of Cartographer supply chains to build golden paths to production for applications and functions, from source code to delivery in a Kubernetes cluster. |
-| [cert-manager](https://github.com/kadras-io/package-for-cert-manager) | Cloud-native solution to automatically provision and manage TLS certificates in Kubernetes. |
+| [cert-manager](https://github.com/kadras-io/package-for-cert-manager) | A cloud-native solution to automatically provision and manage X.509 certificates in Kubernetes. |
 | [contour](https://github.com/kadras-io/package-for-contour) | An Envoy-based ingress controller that supports dynamic configuration updates and multi-team ingress delegation. |
 | [fluxcd-source-controller](https://github.com/kadras-io/package-for-fluxcd-source-controller) | A source management component from the Flux GitOps Toolkit to provide a common interface for artifacts acquisition. |
 | [knative-eventing](https://github.com/kadras-io/package-for-knative-eventing) | A solution for routing events from event producers to sinks, enabling developers to use an event-driven architecture with their applications. |
@@ -29,7 +32,9 @@ This repository contains the following Carvel packages.
 | [spring-boot-conventions](https://github.com/kadras-io/package-for-spring-boot-conventions) | Defines conventions for Spring Boot workloads that will be applied by the Cartographer Convention Controller. |
 | [tekton-pipelines](https://github.com/kadras-io/package-for-tekton-pipelines) | A cloud-native solution for building CI/CD systems. |
 
-## Prerequisites
+## 🚀&nbsp; Getting Started
+
+### Prerequisites
 
 * Kubernetes 1.24+
 * Carvel [`kctrl`](https://carvel.dev/kapp-controller/docs/latest/install/#installing-kapp-controller-cli-kctrl) CLI.
@@ -37,66 +42,56 @@ This repository contains the following Carvel packages.
 
   ```shell
   kapp deploy -a kapp-controller -y \
-    -f https://github.com/vmware-tanzu/carvel-kapp-controller/releases/latest/download/release.yml
+    -f https://github.com/carvel-dev/kapp-controller/releases/latest/download/release.yml
   ```
 
-## Installation
+### Installation
 
-You can install the Kadras package repository in a dedicated namespace using `kctrl`:
-
-    ```shell
-    kubectl create namespace kadras-packages
-    kctrl package repository add -r kadras-repo \
-        --url ghcr.io/kadras-io/kadras-packages:0.7.3 \
-        -n kadras-packages
-    ```
-
-### Verification
-
-You can verify the list of available Carvel package repositories and their status.
+Install the Kadras package repository in a dedicated namespace using `kctrl`:
 
   ```shell
-  kctrl package repository list -n kadras-packages
-  ```
-
-### Packages
-
-The Kadras package repository provides a collection of Carvel packages that you can list.
-
-    ```shell
-    kctrl package available list -p kpack.packages.kadras.io -n kadras-packages
-    ```
-
-## Upgrading
-
-You can upgrade an existing repository to a newer version using `kctrl`.
-
-  ```shell
-  kctrl package repository update -r kadras-repo \
-    --url ghcr.io/kadras-io/kadras-packages:<new-version> \
+  kubectl create namespace kadras-packages
+  kctrl package repository add -r kadras-repo \
+    --url ghcr.io/kadras-io/kadras-packages \
     -n kadras-packages
   ```
 
-## Other
+<details><summary>Installation via CRDs</summary>
+The recommended way of installing the Cert Manager package is via the Kadras <a href="https://github.com/kadras-io/kadras-packages">package repository</a>. Instead of installing the , you can add the package definition directly using <a href="https://carvel.dev/kapp/docs/latest/install"><code>kapp</code></a> or <code>kubectl</code>.
 
-Instead of installing the Kadras package repository with `kctrl`, you can apply the necessary Carvel `PackageMetadata` and `Package` resources directly using [`kapp`](https://carvel.dev/kapp/docs/latest/install) or `kubectl`.
+Instead of installing the Kadras package repository with `kctrl`, you can apply the necessary Carvel CRDs directly using [`kapp`](https://carvel.dev/kapp/docs/latest/install), `kubectl` or a GitOps operator.
 
   ```shell
   kubectl create namespace kadras-packages
   kapp deploy -a kadras-repo -n kadras-packages -y \
     -f https://github.com/kadras-io/kadras-packages/releases/latest/download/package-repository.yml
   ```
+</details>
 
-## Support and Documentation
+Verify the list of available Carvel package repositories and their status.
 
-For support and documentation about Carvel package management, check out [carvel.dev](https://carvel.dev/kapp-controller/docs/latest/packaging).
+  ```shell
+  kctrl package repository list -n kadras-packages
+  ```
 
-## References
+List all the Carvel packages available in the Kadras package repository.
 
-This package repository is inspired by the work done by the Carvel team and the [Tanzu Community Edition](https://github.com/vmware-tanzu/community-edition) project (now retired). Learn more about [Kubernetes-native package management with Carvel](https://carvel.dev/kapp-controller/docs/latest/packaging).
+  ```shell
+  kctrl package available list -n kadras-packages
+  ```
 
-## Supply Chain Security
+## 📙&nbsp; Documentation
 
-This project is compliant with level 3 of the [SLSA Framework](https://slsa.dev).
+For documentation specific to Carvel package management, check out [carvel.dev](https://carvel.dev/kapp-controller/docs/latest/packaging).
 
-<img src="https://slsa.dev/images/SLSA-Badge-full-level3.svg" alt="The SLSA Level 3 badge" width=200>
+## 🛡️&nbsp; Security
+
+The security process for reporting vulnerabilities is described in [SECURITY.md](SECURITY.md).
+
+## 🖊️&nbsp; License
+
+This project is licensed under the **Apache License 2.0**. See [LICENSE](LICENSE) for more information.
+
+## 🙏&nbsp; Acknowledgments
+
+This package repository is inspired by the one used in the [Tanzu Community Edition](https://github.com/vmware-tanzu/community-edition) project before its retirement.
