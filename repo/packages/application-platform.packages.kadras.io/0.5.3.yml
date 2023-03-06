@@ -1,0 +1,116 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: application-platform.packages.kadras.io.0.5.3
+spec:
+  licenses:
+  - Apache 2.0
+  refName: application-platform.packages.kadras.io
+  releasedAt: "2023-03-06T20:17:26Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/kadras-application-platform@sha256:be16d0c9bf7238e991fd7082e4e22707d8969b7904266c2d4476d45fc043555a
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        cartographer:
+          additionalProperties: false
+          description: Configuration for Cartographer related packages
+          properties:
+            blueprints:
+              default: {}
+              description: Configuration for the Cartographer Blueprints package
+              nullable: true
+            delivery:
+              default: {}
+              description: Configuration for the Cartographer Delivery package
+              nullable: true
+            supply_chains:
+              default: {}
+              description: Configuration for the Cartographer Supply Chains package
+              nullable: true
+          type: object
+        cert_manager:
+          default: {}
+          description: Configuration for the Cert Manager package
+          nullable: true
+        contour:
+          default: {}
+          description: Configuration for the Contour package
+          nullable: true
+        conventions:
+          additionalProperties: false
+          description: Configuration for Cartographer Conventions related packages
+          properties:
+            spring_boot:
+              default: {}
+              description: Configuration for the Spring Boot Conventions package
+              nullable: true
+          type: object
+        knative:
+          additionalProperties: false
+          description: Configuration for Knative related packages
+          properties:
+            serving:
+              default: {}
+              description: Configuration for the Knative Serving package
+              nullable: true
+          type: object
+        kpack:
+          default:
+            kp_default_repository: ""
+          description: Configuration for the Kpack package
+          nullable: true
+        metrics_server:
+          default: {}
+          description: Configuration for the Metrics Server package
+          nullable: true
+        namespace_setup:
+          default: {}
+          description: Configuration for the Namespace Setup package
+          nullable: true
+        packages:
+          additionalProperties: false
+          description: Configuration for the platform packages
+          properties:
+            exclusions:
+              default: []
+              description: A list of packages to exclude from being installed
+              items:
+                default: ""
+                type: string
+              type: array
+            namespace:
+              default: ""
+              description: The namespace where to install the platform
+              type: string
+          type: object
+        secretgen_controller:
+          default: {}
+          description: Configuration for the Secretgen Controller package
+          nullable: true
+        tekton:
+          additionalProperties: false
+          description: Configuration for Tekton related packages
+          properties:
+            pipelines:
+              default: {}
+              description: Configuration for the Tekton Pipelines package
+              nullable: true
+          type: object
+      type: object
+  version: 0.5.3
