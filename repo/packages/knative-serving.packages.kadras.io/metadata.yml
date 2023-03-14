@@ -8,9 +8,11 @@ spec:
   - serverless
   - deployment
   displayName: knative-serving
-  longDescription: Knative Serving builds on Kubernetes to support deploying and serving
-    of applications and functions as serverless containers
+  longDescription: Knative Serving builds on Kubernetes to define and control the
+    deployment of applications and functions as serverless containers.
   maintainers:
   - name: Thomas Vitale
   providerName: Kadras
-  shortDescription: Serverless platform on Kubernetes
+  shortDescription: Solution for running serverless deployments on Kubernetes.
+  supportDescription: Go to https://kadras.io for documentation and https://github.com/kadras-io/package-for-knative-serving
+    for community support.
