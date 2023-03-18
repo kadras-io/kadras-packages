@@ -7,11 +7,13 @@ spec:
   categories:
   - build
   displayName: kpack
-  longDescription: kpack extends Kubernetes and utilizes unprivileged Kubernetes primitives
+  longDescription: kpack extends Kubernetes and utilizes unprivileged kubernetes primitives
     to provide builds of OCI images as a platform implementation of Cloud Native Buildpacks
-    (CNB)
+    (CNB).
   maintainers:
   - name: Thomas Vitale
   providerName: Kadras
   shortDescription: kpack builds application source code into OCI compliant images
-    using Cloud Native Buildpacks
+    using Cloud Native Buildpacks.
+  supportDescription: Go to https://kadras.io for documentation and https://github.com/kadras-io/package-for-kpack
+    for community support.
