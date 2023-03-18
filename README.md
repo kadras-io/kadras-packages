@@ -57,8 +57,6 @@ Install the Kadras package repository in a dedicated namespace using `kctrl`:
   ```
 
 <details><summary>Installation via CRDs</summary>
-The recommended way of installing the Cert Manager package is via the Kadras <a href="https://github.com/kadras-io/kadras-packages">package repository</a>. Instead of installing the , you can add the package definition directly using <a href="https://carvel.dev/kapp/docs/latest/install"><code>kapp</code></a> or <code>kubectl</code>.
-
 Instead of installing the Kadras package repository with `kctrl`, you can apply the necessary Carvel CRDs directly using [`kapp`](https://carvel.dev/kapp/docs/latest/install), `kubectl` or a GitOps operator.
 
   ```shell
