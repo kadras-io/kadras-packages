@@ -13,7 +13,7 @@ This repository contains the following Carvel packages.
 
 | Package | Description |
 |---------|-------------|
-| [application-platform](https://github.com/kadras-io/kadras-application-platform) | A curated collection of packages to build an application platform or internal developer platform (IDP) on Kubernetes. |
+| [application-platform](https://github.com/kadras-io/kadras-application-platform) | A curated set of Carvel packages to build an engineering platform supporting application developers with paved paths to production on Kubernetes. |
 | [argo-cd](https://github.com/kadras-io/package-for-argo-cd) | A declarative and GitOps continuous delivery tool for Kubernetes. |
 | [cartographer](https://github.com/vmware-tanzu/package-for-cartographer) | A framework to build paved paths to production using your favourite cloud-native tools. Maintained by [VMware Tanzu](https://github.com/vmware-tanzu). |
 | [cartographer-blueprints](https://github.com/kadras-io/cartographer-blueprints) | A curated set of reusable blueprints for Cartographer, a Kubernetes-native framework to build paved paths to production. |

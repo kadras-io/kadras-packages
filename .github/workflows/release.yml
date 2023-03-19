@@ -3,10 +3,9 @@ on:
   - workflow_dispatch
 
 env:
-  COSIGN_EXPERIMENTAL: 1
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  VERSION: 0.7.5
+  VERSION: 0.8.0-RC1
 
 jobs:
   build:
@@ -28,7 +27,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Log into container registry
-        uses: redhat-actions/podman-login@v1.5
+        uses: redhat-actions/podman-login@v1.6
         with:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -88,10 +87,10 @@ jobs:
       IMAGE_DIGEST: ${{ needs.build.outputs.image-digest }}
     steps:
       - name: Install Cosign
-        uses: sigstore/cosign-installer@v2.8.1
+        uses: sigstore/cosign-installer@v3.0.1
 
       - name: Log into container registry
-        uses: redhat-actions/podman-login@v1.5
+        uses: redhat-actions/podman-login@v1.6
         with:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -99,7 +98,7 @@ jobs:
 
       - name: Sign image
         run: |
-          cosign sign "${IMAGE_NAME}@${IMAGE_DIGEST}"
+          cosign sign --yes "${IMAGE_NAME}@${IMAGE_DIGEST}"
   
   provenance:
     needs: [build,sign]
@@ -107,7 +106,7 @@ jobs:
       actions: read
       id-token: write
       packages: write
-    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.4.0
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.5.0
     with:
       image: ${{ needs.build.outputs.image-name }}
       digest: ${{ needs.build.outputs.image-digest }}
