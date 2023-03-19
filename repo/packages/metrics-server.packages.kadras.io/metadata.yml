@@ -16,3 +16,5 @@ spec:
   providerName: Kadras
   shortDescription: Scalable and efficient source of container resource metrics for
     Kubernetes built-in autoscaling pipelines.
+  supportDescription: Go to https://kadras.io for documentation and https://github.com/kadras-io/package-for-metrics-server
+    for community support.
