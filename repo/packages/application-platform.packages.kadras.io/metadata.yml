@@ -8,9 +8,11 @@ spec:
   - internal developer platform
   - application platform
   displayName: application-platform
-  longDescription: A curated set of Carvel packages to build an application platform
-    or internal developer platform (IDP) on Kubernetes.
+  longDescription: A curated set of Carvel packages to build an engineering platform
+    supporting application developers with paved paths to production on Kubernetes.
   maintainers:
   - name: Thomas Vitale
   providerName: Kadras
-  shortDescription: Application platform on Kubernetes.
+  shortDescription: Cloud native application platform on Kubernetes.
+  supportDescription: Go to https://kadras.io for documentation and https://github.com/kadras-io/kadras-application-platform
+    for community support.
