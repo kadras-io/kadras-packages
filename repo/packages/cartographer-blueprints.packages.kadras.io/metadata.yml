@@ -5,13 +5,15 @@ metadata:
   name: cartographer-blueprints.packages.kadras.io
 spec:
   categories:
-  - developer experience
   - ci/cd
-  - platform engineering
+  - golden paths
+  - developer experience
   displayName: cartographer-blueprints
-  longDescription: A set of reusable blueprints for Cartographer, a Kubernetes-native
-    framework to build paved paths to production.
+  longDescription: A set of reusable blueprints to build paved paths to production
+    on Kubernetes using Cartographer.
   maintainers:
   - name: Thomas Vitale
   providerName: Kadras
   shortDescription: A set of reusable blueprints for Cartographer.
+  supportDescription: Go to https://kadras.io for documentation and https://github.com/kadras-io/cartographer-blueprints
+    for community support.
