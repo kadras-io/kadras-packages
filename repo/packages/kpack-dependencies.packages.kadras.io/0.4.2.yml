@@ -1,0 +1,46 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: kpack-dependencies.packages.kadras.io.0.4.2
+spec:
+  capacityRequirementsDescription: Container registry with > 1GB available space
+  licenses:
+  - Apache 2.0
+  refName: kpack-dependencies.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/kpack-dependencies/releases
+  releasedAt: "2023-03-19T10:39:03Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/kpack-dependencies@sha256:fe733f97826ae37d6540546e2110f1c5bd3a5151093b1a6023cb637be94e636b
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        kp_default_repository:
+          additionalProperties: false
+          description: Settings for the default container repository used by kpack.
+            Same as configured in the kpack package.
+          properties:
+            name:
+              default: ""
+              description: The default repository where to publish builder images
+                and dependencies.
+              example: ghcr.io/thomasvitale/kpack
+              type: string
+              x-example-description: Repository on GitHub Container Registry
+          type: object
+      type: object
+  version: 0.4.2
