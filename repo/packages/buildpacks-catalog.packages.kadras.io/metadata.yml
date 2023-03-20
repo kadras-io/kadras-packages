@@ -1,0 +1,18 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  creationTimestamp: null
+  name: buildpacks-catalog.packages.kadras.io
+spec:
+  categories:
+  - build
+  displayName: buildpacks-catalog
+  longDescription: A set of buildpacks, stacks, and builders to use with kpack, a
+    Kubernetes-native implementation of Cloud Native Buildpacks. It supports multiple
+    languages and frameworks.
+  maintainers:
+  - name: Thomas Vitale
+  providerName: Kadras
+  shortDescription: A set of buildpacks, stacks, and builders to use with kpack.
+  supportDescription: Go to https://kadras.io for documentation and https://github.com/kadras-io/buildpacks-catalog
+    for community support.
