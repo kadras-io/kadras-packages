@@ -13,22 +13,22 @@ This repository contains the following Carvel packages.
 
 | Package | Description |
 |---------|-------------|
-| [application-platform](https://github.com/kadras-io/kadras-application-platform) | A curated set of Carvel packages to build an engineering platform supporting application developers with paved paths to production on Kubernetes. |
 | [argo-cd](https://github.com/kadras-io/package-for-argo-cd) | A declarative and GitOps continuous delivery tool for Kubernetes. |
+| [buildpacks-catalog](https://github.com/kadras-io/buildpacks-catalog) | A curated set of buildpacks, stacks, and builders to use with kpack, a Kubernetes-native implementation of Cloud Native Buildpacks. |
 | [cartographer](https://github.com/vmware-tanzu/package-for-cartographer) | A framework to build paved paths to production using your favourite cloud-native tools. Maintained by [VMware Tanzu](https://github.com/vmware-tanzu). |
-| [cartographer-blueprints](https://github.com/kadras-io/cartographer-blueprints) | A curated set of reusable blueprints for Cartographer, a Kubernetes-native framework to build paved paths to production. |
-| [cartographer-delivery](https://github.com/kadras-io/cartographer-delivery) | A curated set of Cartographer delivery chains to deploy workloads to Kubernetes based on GitOps or RegistryOps. |
-| [cartographer-supply-chains](https://github.com/kadras-io/cartographer-supply-chains) | A curated set of Cartographer supply chains to build golden paths to production for applications and functions, from source code to delivery in a Kubernetes cluster. |
-| [cert-manager](https://github.com/kadras-io/package-for-cert-manager) | A cloud-native solution to automatically provision and manage X.509 certificates in Kubernetes. |
+| [cartographer-blueprints](https://github.com/kadras-io/cartographer-blueprints) | Cartographer reusable blueprints to build Kubernetes-native paved paths to production. |
+| [cartographer-delivery](https://github.com/kadras-io/cartographer-delivery) | Cartographer delivery chains to deploy workloads to a Kubernetes cluster based on GitOps or RegistryOps. |
+| [cartographer-supply-chains](https://github.com/kadras-io/cartographer-supply-chains) | Cartographer supply chains to build golden paths to production for applications and functions, from source code to delivery in a Kubernetes cluster. |
+| [cert-manager](https://github.com/kadras-io/package-for-cert-manager) | A cloud-native solution to automatically provision and manage X.509 certificates. |
 | [contour](https://github.com/kadras-io/package-for-contour) | An Envoy-based ingress controller that supports dynamic configuration updates and multi-team ingress delegation. |
+| [engineering-platform](https://github.com/kadras-io/engineering-platform) | A curated set of Carvel packages to build an engineering platform supporting application developers with paved paths to production on Kubernetes. |
 | [fluxcd-source-controller](https://github.com/kadras-io/package-for-fluxcd-source-controller) | A source management component from the Flux GitOps Toolkit to provide a common interface for artifacts acquisition. |
 | [knative-eventing](https://github.com/kadras-io/package-for-knative-eventing) | A solution for routing events from event producers to sinks, enabling developers to use an event-driven architecture with their applications. |
 | [knative-serving](https://github.com/kadras-io/package-for-knative-serving) | A solution built on Kubernetes to support deploying and serving of applications and functions as serverless containers. |
-| [kpack](https://github.com/kadras-io/package-for-kpack) | Kubernetes-native container build service based on Cloud Native Buildpacks. |
-| [kpack-dependencies](https://github.com/kadras-io/kpack-dependencies) | A set of buildpacks, stacks, and builders to use with kpack. |
+| [kpack](https://github.com/kadras-io/package-for-kpack) | A Kubernetes-native implementation of Cloud Native Buildpacks to build source code into OCI images from within your cluster. |
 | [metrics-server](https://github.com/kadras-io/package-for-metrics-server) | A scalable and efficient source of container resource metrics for Kubernetes built-in autoscaling pipelines. |
 | [namespace-setup](https://github.com/kadras-io/namespace-setup) | Sets up up namespaces with the necessary RBAC and Secrets to work with the Kadras platform. |
-| [secretgen-controller](https://github.com/vmware-tanzu/carvel-secretgen-controller) | Generates various types of Secrets in-cluster as well as export and import Secrets across namespaces. Maintained by [VMware Tanzu](https://github.com/vmware-tanzu). |
+| [secretgen-controller](https://github.com/carvel-dev/secretgen-controller) | Generates various types of Secrets in-cluster as well as export and import Secrets across namespaces. Maintained by [Carvel](https://github.com/carvel-dev). |
 | [spring-boot-conventions](https://github.com/kadras-io/package-for-spring-boot-conventions) | Defines conventions for Spring Boot workloads that will be applied by the Cartographer Convention Controller. |
 | [tekton-pipelines](https://github.com/kadras-io/package-for-tekton-pipelines) | A cloud-native solution for building CI/CD systems. |
 
