@@ -1,0 +1,44 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: cartographer-blueprints.packages.kadras.io.0.5.0
+spec:
+  licenses:
+  - Apache 2.0
+  refName: cartographer-blueprints.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/cartographer-blueprints/releases
+  releasedAt: "2023-03-26T20:14:47Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/cartographer-blueprints@sha256:ca24f226558ced8a8dcac1335a80d70465fda9e3a0936103098a8349825bb83d
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        excluded_blueprints:
+          default: []
+          description: A list of blueprints and manifests to esclude from being created
+            in the cluster.
+          items:
+            default: ""
+            type: string
+          type: array
+        tekton_catalog_namespace:
+          default: tekton-catalog
+          description: The namespace where the Tekton Catalog package has been installed.
+          type: string
+      type: object
+  version: 0.5.0
