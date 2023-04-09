@@ -7,7 +7,7 @@ metadata:
 spec:
   displayName: Cartographer
   providerName: VMware
-  shortDescription: Kubernetes native Supply Chain Choreographer.
+  shortDescription: Kubernetes Native Supply Chain Choreographer.
   supportDescription: https://github.com/vmware-tanzu/cartographer
   longDescription: |-
     Cartographer is a Kubernetes native Choreographer. It allows users to
