@@ -1,0 +1,19 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  creationTimestamp: null
+  name: cert-manager-issuers.packages.kadras.io
+spec:
+  categories:
+  - certificate-management
+  - security
+  - tls
+  displayName: cert-manager-issuers
+  longDescription: A collection of ClusterIssuers to use with cert-manager, including
+    a private CA and optional Let's Encrypt support.
+  maintainers:
+  - name: Thomas Vitale
+  providerName: Kadras
+  shortDescription: A collection of ClusterIssuers to use with cert-manager.
+  supportDescription: Go to https://kadras.io for documentation and https://github.com/kadras-io/cert-manager-issuers
+    for community support.
