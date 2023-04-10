@@ -20,6 +20,7 @@ This repository contains the following Carvel packages.
 | [cartographer-delivery](https://github.com/kadras-io/cartographer-delivery) | Cartographer delivery chains to deploy workloads to a Kubernetes cluster based on GitOps or RegistryOps. |
 | [cartographer-supply-chains](https://github.com/kadras-io/cartographer-supply-chains) | Cartographer supply chains to build golden paths to production for applications and functions, from source code to delivery in a Kubernetes cluster. |
 | [cert-manager](https://github.com/kadras-io/package-for-cert-manager) | A cloud-native solution to automatically provision and manage X.509 certificates. |
+| [cert-manager-issuers](https://github.com/kadras-io/cert-manager-issuers) | A collection of issuers for Cert Manager, used by the Kadras platform to support TLS via a private CA or Let's Encrypt. |
 | [contour](https://github.com/kadras-io/package-for-contour) | An Envoy-based ingress controller that supports dynamic configuration updates and multi-team ingress delegation. |
 | [engineering-platform](https://github.com/kadras-io/engineering-platform) | A curated set of Carvel packages to build an engineering platform supporting application developers with paved paths to production on Kubernetes. |
 | [fluxcd-source-controller](https://github.com/kadras-io/package-for-fluxcd-source-controller) | A source management component from the Flux GitOps Toolkit to provide a common interface for artifacts acquisition. |
