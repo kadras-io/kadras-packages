@@ -14,3 +14,5 @@ spec:
   - name: Thomas Vitale
   providerName: Kadras
   shortDescription: Toolkit to build event-driven architectures on Kubernetes.
+  supportDescription: Go to https://kadras.io for documentation and https://github.com/kadras-io/package-for-knative-eventing
+    for community support.
