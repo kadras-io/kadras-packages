@@ -14,3 +14,5 @@ spec:
   providerName: Kadras
   shortDescription: Argo CD is a declarative, GitOps continuous delivery tool for
     Kubernetes.
+  supportDescription: Go to https://kadras.io for documentation and https://github.com/kadras-io/package-for-argo-cd
+    for community support.
