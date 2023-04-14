@@ -1,0 +1,18 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  creationTimestamp: null
+  name: kyverno.packages.kadras.io
+spec:
+  categories:
+  - policy-management
+  - policies
+  displayName: kyverno
+  longDescription: Kyverno is a policy engine designed for Kubernetes. It can validate,
+    mutate, and generate configurations using admission controls and background scans.
+  maintainers:
+  - name: Thomas Vitale
+  providerName: Kadras
+  shortDescription: A Kubernetes-native policy engine.
+  supportDescription: Go to https://kadras.io for documentation and https://github.com/kadras-io/package-for-kyverno
+    for community support.

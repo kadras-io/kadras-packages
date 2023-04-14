@@ -1,0 +1,31 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: kyverno.packages.kadras.io.1.9.2
+spec:
+  licenses:
+  - Apache 2.0
+  refName: kyverno.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-kyverno/releases
+  releasedAt: "2023-04-14T22:19:01Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-kyverno@sha256:d0cded82b9bed8ccf4cdede857cbe57d19503dd1c57d90375f84273698cfcb8a
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      default: null
+      nullable: true
+  version: 1.9.2
