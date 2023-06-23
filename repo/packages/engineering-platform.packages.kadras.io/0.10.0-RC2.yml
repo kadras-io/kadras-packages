@@ -1,0 +1,258 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: engineering-platform.packages.kadras.io.0.10.0-RC2
+spec:
+  licenses:
+  - Apache 2.0
+  refName: engineering-platform.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/engineering-platform/releases
+  releasedAt: "2023-06-23T11:04:54Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/engineering-platform@sha256:04ece1fb894c7c55f10ad4231fc769254f4ba2dc4aa73abc4d84351973cae070
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        buildpacks:
+          additionalProperties: false
+          description: Configuration for Buildpacks related packages.
+          properties:
+            catalog:
+              default: {}
+              description: Configuration for the Buildpacks Catalog package.
+              nullable: true
+            kpack:
+              default: {}
+              description: Configuration for the Kpack package.
+              nullable: true
+          type: object
+        cartographer:
+          additionalProperties: false
+          description: Configuration for Cartographer related packages.
+          properties:
+            blueprints:
+              default: {}
+              description: Configuration for the Cartographer Blueprints package.
+              nullable: true
+            core:
+              default: {}
+              description: Configuration for the Cartographer Core package including
+                Cartographer and Cartographer Conventions.
+              nullable: true
+            delivery:
+              default: {}
+              description: Configuration for the Cartographer Delivery package.
+              nullable: true
+            supply_chains:
+              default: {}
+              description: Configuration for the Cartographer Supply Chains package.
+              nullable: true
+          type: object
+        cert_manager:
+          additionalProperties: false
+          description: Configuration for the Cert Manager related packages.
+          properties:
+            core:
+              default: {}
+              description: Configuration for the Cert Manager package.
+              nullable: true
+            issuers:
+              default: {}
+              description: Configuration for the Cert Manager Issuers package.
+              nullable: true
+          type: object
+        contour:
+          default: {}
+          description: Configuration for the Contour package.
+          nullable: true
+        conventions:
+          additionalProperties: false
+          description: Configuration for Cartographer Conventions related packages.
+          properties:
+            spring_boot:
+              default: {}
+              description: Configuration for the Spring Boot Conventions package.
+              nullable: true
+          type: object
+        flux:
+          additionalProperties: false
+          description: Configuration for Flux related packages.
+          properties:
+            source_controller:
+              default: {}
+              description: Configuration for the FluxCD Source Controller package.
+              nullable: true
+          type: object
+        knative:
+          additionalProperties: false
+          description: Configuration for Knative related packages.
+          properties:
+            serving:
+              default: {}
+              description: Configuration for the Knative Serving package.
+              nullable: true
+          type: object
+        metrics_server:
+          default: {}
+          description: Configuration for the Metrics Server package.
+          nullable: true
+        platform:
+          additionalProperties: false
+          description: Configuration for the platform packages.
+          properties:
+            ca_cert_data:
+              default: ""
+              description: PEM-encoded certificate data to trust TLS connections with
+                a custom CA.
+              type: string
+            cosign:
+              additionalProperties: false
+              description: Settings for Cosign, used for signing and verifying OCI
+                artifacts.
+              properties:
+                secret:
+                  additionalProperties: false
+                  description: Configuration for the Secret holding the Cosign key
+                    pair.
+                  properties:
+                    name:
+                      default: ""
+                      description: The name of the Secret holding the Cosign key pair.
+                      type: string
+                    namespace:
+                      default: ""
+                      description: The namespace of the Secret holding the Cosign
+                        key pair.
+                      type: string
+                  type: object
+              type: object
+            excluded_packages:
+              default: []
+              description: A list of packages to exclude from being installed.
+              items:
+                default: ""
+                type: string
+              type: array
+            ingress:
+              additionalProperties: false
+              description: Setting for the Ingress controller that the platform will
+                use.
+              properties:
+                domain:
+                  default: ""
+                  description: The base domain name the platform will use to configure
+                    the Ingress controller. It must be a valid DNS name.
+                  type: string
+                issuer:
+                  additionalProperties: false
+                  description: A reference to the ClusterIssuer the platform will
+                    use to enable TLS communications.
+                  properties:
+                    name:
+                      default: ""
+                      description: A reference to a custom ClusterIssuer previously
+                        created on the cluster where the platform will be installed.
+                        Required when the type is `custom`.
+                      type: string
+                    type:
+                      default: private
+                      description: 'The type of ClusterIssuer the platform will use
+                        to enable TLS communications. Options: `private`, `letsencrypt_staging`,
+                        `letsencrypt`, `custom`.'
+                      type: string
+                  type: object
+              type: object
+            namespace:
+              default: kadras-packages
+              description: The namespace where to install the platform.
+              type: string
+            oci_registry:
+              additionalProperties: false
+              description: Settings for the OCI registry that the platform will use.
+              properties:
+                credentials:
+                  additionalProperties: false
+                  description: Credentials to access the OCI registry.
+                  nullable: true
+                  properties:
+                    password:
+                      default: ""
+                      description: 'Token to access the OCI registry. Note: Use contents
+                        of service account key json for GCR.'
+                      type: string
+                    username:
+                      default: ""
+                      description: 'Username to access the OCI registry. Note: Use
+                        `_json_key` for GCR.'
+                      type: string
+                  type: object
+                repository:
+                  default: ""
+                  description: The repository in the OCI Registry where the platform
+                    will publish and consume OCI images.
+                  example: my-org
+                  type: string
+                  x-example-description: Repository on GitHub Container Registry
+                secret:
+                  additionalProperties: false
+                  description: Configuration for the Secret holding the credentials
+                    to access the OCI registry.
+                  properties:
+                    name:
+                      default: supply-chain-registry-credentials
+                      description: The name of the Secret holding the credentials
+                        to access the OCI registry.
+                      type: string
+                    namespace:
+                      default: kadras-packages
+                      description: The namespace of the Secret holding the credentials
+                        to access the OCI registry.
+                      type: string
+                  type: object
+                server:
+                  default: ""
+                  description: The server of the OCI Registry where the platform will
+                    publish and consume OCI images.
+                  example: ghcr.io
+                  type: string
+                  x-example-description: GitHub Container Registry
+              type: object
+          type: object
+        secretgen_controller:
+          default: {}
+          description: Configuration for the Secretgen Controller package.
+          nullable: true
+        tekton:
+          additionalProperties: false
+          description: Configuration for Tekton related packages.
+          properties:
+            catalog:
+              default: {}
+              description: Configuration for the Tekton Catalog package.
+              nullable: true
+            pipelines:
+              default: {}
+              description: Configuration for the Tekton Pipelines package.
+              nullable: true
+          type: object
+        workspace_provisioner:
+          default: {}
+          description: Configuration for the Workspace Provisioner package.
+          nullable: true
+      type: object
+  version: 0.10.0-RC2
