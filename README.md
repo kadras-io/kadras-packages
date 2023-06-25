@@ -1,7 +1,7 @@
 # Kadras Packages
 
 ![Release Workflow](https://github.com/kadras-io/kadras-packages/actions/workflows/release.yml/badge.svg)
-[![The SLSA Level 3 badge](https://slsa.dev/images/gh-badge-level3.svg)](https://slsa.dev/spec/v0.1/levels)
+[![The SLSA Level 3 badge](https://slsa.dev/images/gh-badge-level3.svg)](https://slsa.dev/spec/v1.0/levels)
 [![The Apache 2.0 license badge](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Follow us on Twitter](https://img.shields.io/static/v1?label=Twitter&message=Follow&color=1DA1F2)](https://twitter.com/kadrasIO)
 
@@ -29,7 +29,7 @@ This repository contains the following Carvel packages.
 | [kpack](https://github.com/kadras-io/package-for-kpack) | A Kubernetes-native implementation of Cloud Native Buildpacks to build source code into OCI images from within your cluster. |
 | [kyverno](https://github.com/kadras-io/package-for-kyverno) | A policy engine designed for Kubernetes. It can validate, mutate, and generate configurations using admission controls and background scans. |
 | [metrics-server](https://github.com/kadras-io/package-for-metrics-server) | A scalable and efficient source of container resource metrics for Kubernetes built-in autoscaling pipelines. |
-| [secretgen-controller](https://github.com/carvel-dev/secretgen-controller) | Generates various types of Secrets in-cluster as well as export and import Secrets across namespaces. Maintained by [Carvel](https://github.com/carvel-dev). |
+| [secretgen-controller](https://github.com/carvel-dev/secretgen-controller) | Generates various types of Secrets in-cluster as well as export and import Secrets across namespaces. |
 | [spring-boot-conventions](https://github.com/kadras-io/package-for-spring-boot-conventions) | Defines conventions for Spring Boot workloads that will be applied by the Cartographer Convention Controller. |
 | [tekton-catalog](https://github.com/kadras-io/tekton-catalog) | A set of Tekton pipelines and tasks used by the Kadras platform to support testing, scanning, delivering and deploying applications. |
 | [tekton-pipelines](https://github.com/kadras-io/package-for-tekton-pipelines) | A cloud-native solution for building CI/CD systems. |
@@ -39,7 +39,7 @@ This repository contains the following Carvel packages.
 
 ### Prerequisites
 
-* Kubernetes 1.24+
+* Kubernetes 1.25+
 * Carvel [`kctrl`](https://carvel.dev/kapp-controller/docs/latest/install/#installing-kapp-controller-cli-kctrl) CLI.
 * Carvel [kapp-controller](https://carvel.dev/kapp-controller) deployed in your Kubernetes cluster. You can install it with Carvel [`kapp`](https://carvel.dev/kapp/docs/latest/install) (recommended choice) or `kubectl`.
 
@@ -53,10 +53,9 @@ This repository contains the following Carvel packages.
 Install the Kadras package repository in a dedicated namespace using `kctrl`:
 
   ```shell
-  kubectl create namespace kadras-packages
-  kctrl package repository add -r kadras-repo \
+  kctrl package repository add -r kadras-packages \
     --url ghcr.io/kadras-io/kadras-packages \
-    -n kadras-packages
+    -n kadras-packages --create-namespace
   ```
 
 <details><summary>Installation via CRDs</summary>
