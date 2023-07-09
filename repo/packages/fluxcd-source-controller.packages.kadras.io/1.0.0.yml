@@ -1,0 +1,89 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: fluxcd-source-controller.packages.kadras.io.1.0.0
+spec:
+  licenses:
+  - Apache 2.0
+  refName: fluxcd-source-controller.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-fluxcd-source-controller/releases
+  releasedAt: "2023-07-09T16:34:48Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-fluxcd-source-controller@sha256:531fd243b5f9b0174781fd975a8c934538a2dce66b8c8a9dda5e009b71d20ed4
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        namespace:
+          default: flux-source-system
+          description: The namespace where to install FluxCD Source Controller.
+          type: string
+        policies:
+          additionalProperties: false
+          description: Settings for the Kyverno policies.
+          properties:
+            include:
+              default: false
+              description: Whether to include the out-of-the-box Kyverno policies
+                to validate and secure the package installation.
+              type: boolean
+          type: object
+        proxy:
+          additionalProperties: false
+          description: Settings for the corporate proxy.
+          properties:
+            http_proxy:
+              default: ""
+              description: The HTTP proxy to use for network traffic.
+              type: string
+            https_proxy:
+              default: ""
+              description: The HTTPS proxy to use for network traffic.
+              type: string
+            no_proxy:
+              default: ""
+              description: A comma-separated list of hostnames, IP addresses, or IP
+                ranges in CIDR format that should not use the proxy.
+              type: string
+          type: object
+        resources:
+          additionalProperties: false
+          description: Resource configuration for the source-controller Deployment.
+          properties:
+            limits:
+              additionalProperties: false
+              description: Resource limits configuration for the `source-controller`
+                Deployment.
+              properties:
+                cpu:
+                  default: 1000m
+                  description: CPU limits configuration for the `source-controller`
+                    Deployment.
+                  type: string
+                memory:
+                  default: 1Gi
+                  description: Memory limits configuration for the `source-controller`
+                    Deployment.
+                  type: string
+              type: object
+          type: object
+        service_port:
+          default: 80
+          description: Port configuration for the `source-controller` Service.
+          type: integer
+      type: object
+  version: 1.0.0
