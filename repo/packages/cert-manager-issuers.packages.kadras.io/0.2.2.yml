@@ -1,0 +1,59 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: cert-manager-issuers.packages.kadras.io.0.2.2
+spec:
+  licenses:
+  - Apache 2.0
+  refName: cert-manager-issuers.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/cert-manager-issuers/releases
+  releasedAt: "2023-08-12T12:43:20Z"
+  template:
+    spec:
+      deploy:
+      - kapp:
+          rawOptions:
+          - --wait-timeout=5m
+          - --kube-api-qps=25
+          - --kube-api-burst=50
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/cert-manager-issuers@sha256:3f1181c087d2d68984d6bf73122b3a77a6a8185bbedc4bacd609e2a84af3b50b
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        letsencrypt:
+          additionalProperties: false
+          description: Settings for Let's Encrypt.
+          properties:
+            email:
+              default: ""
+              description: The email address that Let's Encrypt will use to send info
+                on expiring certificates or other issues.
+              type: string
+            include:
+              default: false
+              description: Whether to include a ClusterIssuer for Let's Encrypt.
+              type: boolean
+            staging:
+              default: true
+              description: Whether to use Let's Encrypt staging, recommended for non-production
+                environments.
+              type: boolean
+          type: object
+        namespace:
+          default: cert-manager
+          description: The namespace where cert-manager is deployed.
+          type: string
+      type: object
+  version: 0.2.2
