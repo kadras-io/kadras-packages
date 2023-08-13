@@ -1,0 +1,36 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: tekton-catalog.packages.kadras.io.0.2.1
+spec:
+  licenses:
+  - Apache 2.0
+  refName: tekton-catalog.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/tekton-catalog/releases
+  releasedAt: "2023-08-13T14:04:09Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/tekton-catalog@sha256:01d79cb39f7f341a6932406f513b2b6a126a9b7e97b83c2277c75b26f703fea9
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        namespace:
+          default: tekton-catalog
+          description: The namespace where to deploy the Tekton Catalog.
+          type: string
+      type: object
+  version: 0.2.1
