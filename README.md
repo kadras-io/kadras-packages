@@ -15,7 +15,7 @@ This repository contains the following Carvel packages.
 |---------|-------------|
 | [argo-cd](https://github.com/kadras-io/package-for-argo-cd) | A declarative and GitOps continuous delivery tool for Kubernetes. |
 | [buildpacks-catalog](https://github.com/kadras-io/buildpacks-catalog) | A curated set of buildpacks, stacks, and builders to use with kpack, a Kubernetes-native implementation of Cloud Native Buildpacks. |
-| [cartographer](https://github.com/vmware-tanzu/package-for-cartographer) | A framework to build paved paths to production using your favourite cloud-native tools. Maintained by [VMware Tanzu](https://github.com/vmware-tanzu). |
+| [cartographer](https://github.com/vmware-tanzu/package-for-cartographer) | A framework to build paved paths to production using your favourite cloud-native tools. |
 | [cartographer-blueprints](https://github.com/kadras-io/cartographer-blueprints) | Cartographer reusable blueprints to build Kubernetes-native paved paths to production. |
 | [cartographer-delivery](https://github.com/kadras-io/cartographer-delivery) | Cartographer delivery chains to deploy workloads to a Kubernetes cluster based on GitOps or RegistryOps. |
 | [cartographer-supply-chains](https://github.com/kadras-io/cartographer-supply-chains) | Cartographer supply chains to build golden paths to production for applications and functions, from source code to delivery in a Kubernetes cluster. |
