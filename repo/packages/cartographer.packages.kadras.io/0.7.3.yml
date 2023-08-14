@@ -1,0 +1,82 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: cartographer.packages.kadras.io.0.7.3
+spec:
+  licenses:
+  - Apache 2.0
+  refName: cartographer.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-cartographer/releases
+  releasedAt: "2023-08-14T13:40:27Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-cartographer@sha256:c121c2ed1e36f0d9ac774a1c0289135a0f262412d8125bbb3c7c14ecbd35e60a
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        ca_cert_data:
+          default: ""
+          description: PEM-encoded certificate data to trust TLS connections with
+            a custom CA.
+          type: string
+        cartographer:
+          additionalProperties: false
+          description: Settings for the Cartographer component.
+          properties:
+            concurrency:
+              additionalProperties: false
+              description: Concurrency configuration for the Cartographer controller.
+              properties:
+                max_deliveries:
+                  default: 2
+                  description: Maximum concurrent Deliveries processed by the Cartographer
+                    controller.
+                  type: integer
+                max_runnables:
+                  default: 2
+                  description: Maximum concurrent Runnables processed by the Cartographer
+                    controller.
+                  type: integer
+                max_workloads:
+                  default: 2
+                  description: Maximum concurrent Workloads processed by the Cartographer
+                    controller.
+                  type: integer
+              type: object
+            resources:
+              default: {}
+              description: CPU and memory configuration for the Cartographer controller.
+              nullable: true
+          type: object
+        conventions:
+          additionalProperties: false
+          description: Settings for the Cartographer Conventions component.
+          properties:
+            aws_iam_role_arn:
+              default: null
+              description: IAM credentials to authenticate the Cartographer Conventions
+                controller when deployed on AWS.
+              nullable: true
+              type: string
+            resources:
+              default: {}
+              description: CPU and memory configuration for the Cartographer Conventions
+                controller.
+              nullable: true
+          type: object
+      type: object
+  version: 0.7.3
