@@ -9,7 +9,7 @@ spec:
   - golden paths
   - developer experience
   displayName: cartographer-supply-chains
-  longDescription: Cartographer supply chains to build golden paths to production
+  longDescription: Cartographer supply chains defining golden paths to production
     for applications and functions, from source code to deployment in a Kubernetes
     cluster.
   maintainers:
