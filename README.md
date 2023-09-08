@@ -17,7 +17,6 @@ This repository contains the following Carvel packages.
 | [buildpacks-catalog](https://github.com/kadras-io/buildpacks-catalog) | A curated set of buildpacks, stacks, and builders to use with kpack, a Kubernetes-native implementation of Cloud Native Buildpacks. |
 | [cartographer](https://github.com/vmware-tanzu/package-for-cartographer) | A framework to build paved paths to production using your favourite cloud-native tools. |
 | [cartographer-blueprints](https://github.com/kadras-io/cartographer-blueprints) | Cartographer reusable blueprints to build Kubernetes-native paved paths to production. |
-| [cartographer-delivery](https://github.com/kadras-io/cartographer-delivery) | Cartographer delivery chains to deploy workloads to a Kubernetes cluster based on GitOps or RegistryOps. |
 | [cartographer-supply-chains](https://github.com/kadras-io/cartographer-supply-chains) | Cartographer supply chains to build golden paths to production for applications and functions, from source code to delivery in a Kubernetes cluster. |
 | [cert-manager](https://github.com/kadras-io/package-for-cert-manager) | A cloud-native solution to automatically provision and manage X.509 certificates. |
 | [cert-manager-issuers](https://github.com/kadras-io/cert-manager-issuers) | A collection of issuers for Cert Manager, used by the Kadras platform to support TLS via a private CA or Let's Encrypt. |
@@ -29,6 +28,7 @@ This repository contains the following Carvel packages.
 | [kpack](https://github.com/kadras-io/package-for-kpack) | A Kubernetes-native implementation of Cloud Native Buildpacks to build source code into OCI images from within your cluster. |
 | [kyverno](https://github.com/kadras-io/package-for-kyverno) | A policy engine designed for Kubernetes. It can validate, mutate, and generate configurations using admission controls and background scans. |
 | [metrics-server](https://github.com/kadras-io/package-for-metrics-server) | A scalable and efficient source of container resource metrics for Kubernetes built-in autoscaling pipelines. |
+| [rbac-configurer](https://github.com/kadras-io/rbac-configurer) | Provides default roles and RBAC configuration for the Kadras Engineering Platform. |
 | [secretgen-controller](https://github.com/carvel-dev/secretgen-controller) | Generates various types of Secrets in-cluster as well as export and import Secrets across namespaces. |
 | [spring-boot-conventions](https://github.com/kadras-io/package-for-spring-boot-conventions) | Defines conventions for Spring Boot workloads that will be applied by the Cartographer Convention Controller. |
 | [tekton-catalog](https://github.com/kadras-io/tekton-catalog) | A set of Tekton pipelines and tasks used by the Kadras platform to support testing, scanning, delivering and deploying applications. |
@@ -39,7 +39,7 @@ This repository contains the following Carvel packages.
 
 ### Prerequisites
 
-* Kubernetes 1.25+
+* Kubernetes 1.26+
 * Carvel [`kctrl`](https://carvel.dev/kapp-controller/docs/latest/install/#installing-kapp-controller-cli-kctrl) CLI.
 * Carvel [kapp-controller](https://carvel.dev/kapp-controller) deployed in your Kubernetes cluster. You can install it with Carvel [`kapp`](https://carvel.dev/kapp/docs/latest/install) (recommended choice) or `kubectl`.
 
@@ -91,7 +91,3 @@ The security process for reporting vulnerabilities is described in [SECURITY.md]
 ## 🖊️&nbsp; License
 
 This project is licensed under the **Apache License 2.0**. See [LICENSE](LICENSE) for more information.
-
-## 🙏&nbsp; Acknowledgments
-
-This package repository is inspired by the one used in the [Tanzu Community Edition](https://github.com/vmware-tanzu/community-edition) project before its retirement.

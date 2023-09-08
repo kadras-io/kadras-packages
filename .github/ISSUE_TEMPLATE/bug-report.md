@@ -24,3 +24,4 @@ assignees: ''
 * Kubernetes version (execute `kubectl version`):
 * kctrl version (execute `kctrl version`):
 * kapp-controller version (execute `kubectl get deployment -n kapp-controller kapp-controller -o yaml` and the annotation is `kbld.k14s.io/images`):
+* package repo version (execute `kctrl package repo get -r kadras-packages -n <namespace>`):
