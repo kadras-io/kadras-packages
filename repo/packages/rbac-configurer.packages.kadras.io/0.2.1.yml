@@ -1,0 +1,31 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: rbac-configurer.packages.kadras.io.0.2.1
+spec:
+  licenses:
+  - Apache 2.0
+  refName: rbac-configurer.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/rbac-configurer/releases
+  releasedAt: "2023-09-08T16:07:10Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/rbac-configurer@sha256:3421d6fb80f732536d46401ef5e43e1e476b332f94660fb04d59ef4021df3f7d
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      default: null
+      nullable: true
+  version: 0.2.1
