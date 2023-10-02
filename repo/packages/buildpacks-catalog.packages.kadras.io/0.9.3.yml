@@ -1,0 +1,47 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: buildpacks-catalog.packages.kadras.io.0.9.3
+spec:
+  capacityRequirementsDescription: Container registry with at least 1GB available
+    space used by kpack to create builder images.
+  licenses:
+  - Apache 2.0
+  refName: buildpacks-catalog.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/buildpacks-catalog/releases
+  releasedAt: "2023-10-02T07:16:57Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/buildpacks-catalog@sha256:687a8e3ccb32bcb1d622c5ad745dd78265ef49095eb70d6e3f4781f699cf42a9
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        kp_default_repository:
+          additionalProperties: false
+          description: Settings for the default container repository used by kpack.
+            Same as configured in the kpack package.
+          properties:
+            name:
+              default: ""
+              description: The default repository where to publish builder images
+                and dependencies.
+              example: ghcr.io/thomasvitale/buildpacks
+              type: string
+              x-example-description: Repository on GitHub Container Registry
+          type: object
+      type: object
+  version: 0.9.3
