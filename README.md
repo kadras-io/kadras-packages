@@ -16,7 +16,6 @@ This repository contains the following Carvel packages.
 | [argo-cd](https://github.com/kadras-io/package-for-argo-cd) | A declarative and GitOps continuous delivery tool for Kubernetes. |
 | [buildpacks-catalog](https://github.com/kadras-io/buildpacks-catalog) | A curated set of buildpacks, stacks, and builders to use with kpack, a Kubernetes-native implementation of Cloud Native Buildpacks. |
 | [cartographer](https://github.com/vmware-tanzu/package-for-cartographer) | A framework to build paved paths to production using your favourite cloud-native tools. |
-| [cartographer-blueprints](https://github.com/kadras-io/cartographer-blueprints) | Cartographer reusable blueprints to build Kubernetes-native paved paths to production. |
 | [cartographer-supply-chains](https://github.com/kadras-io/cartographer-supply-chains) | Cartographer supply chains to build golden paths to production for applications and functions, from source code to delivery in a Kubernetes cluster. |
 | [cert-manager](https://github.com/kadras-io/package-for-cert-manager) | A cloud-native solution to automatically provision and manage X.509 certificates. |
 | [cert-manager-issuers](https://github.com/kadras-io/cert-manager-issuers) | A collection of issuers for Cert Manager, used by the Kadras platform to support TLS via a private CA or Let's Encrypt. |
