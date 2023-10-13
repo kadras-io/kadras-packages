@@ -1,0 +1,294 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: engineering-platform.packages.kadras.io.0.12.0
+spec:
+  licenses:
+  - Apache 2.0
+  refName: engineering-platform.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/engineering-platform/releases
+  releasedAt: "2023-10-13T21:01:50Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/engineering-platform@sha256:24fd52ebe4ee769198d8db07595aa9967fb5dca8f22cad2a1146625994eecf29
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        buildpacks:
+          additionalProperties: false
+          description: Configuration for Buildpacks related packages.
+          properties:
+            catalog:
+              default: {}
+              description: Configuration for the Buildpacks Catalog package.
+              nullable: true
+            kpack:
+              default: {}
+              description: Configuration for the Kpack package.
+              nullable: true
+          type: object
+        cartographer:
+          additionalProperties: false
+          description: Configuration for Cartographer related packages.
+          properties:
+            core:
+              default: {}
+              description: Configuration for the Cartographer Core package including
+                Cartographer and Cartographer Conventions.
+              nullable: true
+            supply_chains:
+              default: {}
+              description: Configuration for the Cartographer Supply Chains package.
+              nullable: true
+          type: object
+        cert_manager:
+          additionalProperties: false
+          description: Configuration for the Cert Manager related packages.
+          properties:
+            core:
+              default: {}
+              description: Configuration for the Cert Manager package.
+              nullable: true
+            issuers:
+              default: {}
+              description: Configuration for the Cert Manager Issuers package.
+              nullable: true
+          type: object
+        contour:
+          default: {}
+          description: Configuration for the Contour package.
+          nullable: true
+        conventions:
+          additionalProperties: false
+          description: Configuration for Cartographer Conventions related packages.
+          properties:
+            spring_boot:
+              default: {}
+              description: Configuration for the Spring Boot Conventions package.
+              nullable: true
+          type: object
+        flux:
+          default: {}
+          description: Configuration for the Flux package.
+          nullable: true
+        knative:
+          additionalProperties: false
+          description: Configuration for Knative related packages.
+          properties:
+            serving:
+              default: {}
+              description: Configuration for the Knative Serving package.
+              nullable: true
+          type: object
+        kyverno:
+          additionalProperties: false
+          description: Configuration for the Kyverno related packages.
+          properties:
+            core:
+              default: {}
+              description: Configuration for the Kyverno package.
+              nullable: true
+          type: object
+        metrics_server:
+          default: {}
+          description: Configuration for the Metrics Server package.
+          nullable: true
+        platform:
+          additionalProperties: false
+          description: Configuration for the platform packages.
+          properties:
+            ca_cert_data:
+              default: ""
+              description: PEM-encoded certificate data to trust TLS connections with
+                a custom CA.
+              type: string
+            cosign:
+              additionalProperties: false
+              description: Settings for Cosign, used for signing and verifying OCI
+                artifacts.
+              properties:
+                secret:
+                  additionalProperties: false
+                  description: Configuration for the Secret holding the Cosign key
+                    pair.
+                  properties:
+                    name:
+                      default: ""
+                      description: The name of the Secret holding the Cosign key pair.
+                      type: string
+                    namespace:
+                      default: kadras-packages
+                      description: The namespace of the Secret holding the Cosign
+                        key pair.
+                      type: string
+                  type: object
+              type: object
+            excluded_packages:
+              default: []
+              description: A list of packages to exclude from being installed.
+              items:
+                default: ""
+                type: string
+              type: array
+            git:
+              additionalProperties: false
+              description: Settings for the Git server that the platform will use.
+              properties:
+                secret:
+                  additionalProperties: false
+                  description: Configuration for the Secret holding the credentials
+                    to access the Git server.
+                  properties:
+                    name:
+                      default: ""
+                      description: 'The name of the Secret holding the credentials
+                        to access the Git server. The credentials should provide read-only
+                        access to the Git server except when installing the platform
+                        with one of these profiles: `standalone`, `build`.'
+                      type: string
+                    namespace:
+                      default: kadras-packages
+                      description: The namespace of the Secret holding the credentials
+                        to access the Git server.
+                      type: string
+                  type: object
+                server:
+                  default: https://github.com
+                  description: The server hosting the Git repositories used by the
+                    plaform.
+                  example: https://github.com
+                  type: string
+                  x-example-description: GitHub
+              type: object
+            infrastructure_provider:
+              default: null
+              description: The underlying infrastructure provider. Options are `local`
+                and `vsphere`. This field is not required, but it enables better validation
+                and defaulting if provided.
+              nullable: true
+              type: string
+            ingress:
+              additionalProperties: false
+              description: Setting for the Ingress controller that the platform will
+                use.
+              properties:
+                domain:
+                  default: ""
+                  description: The base domain name the platform will use to configure
+                    the Ingress controller. It must be a valid DNS name.
+                  type: string
+                issuer:
+                  additionalProperties: false
+                  description: A reference to the ClusterIssuer the platform will
+                    use to enable TLS communications.
+                  properties:
+                    email:
+                      default: ""
+                      description: The email address that Let's Encrypt will use to
+                        send info on expiring certificates or other issues. Required
+                        when the type is `letsencrypt_staging` or `letsencrypt`.
+                      type: string
+                    name:
+                      default: ""
+                      description: A reference to a custom ClusterIssuer previously
+                        created on the cluster where the platform will be installed.
+                        Required when the type is `custom`.
+                      type: string
+                    type:
+                      default: private
+                      description: 'The type of ClusterIssuer the platform will use
+                        to enable TLS communications. Options: `private`, `letsencrypt_staging`,
+                        `letsencrypt`, `custom`.'
+                      type: string
+                  type: object
+              type: object
+            namespace:
+              default: kadras-packages
+              description: The namespace where to install the platform.
+              type: string
+            oci_registry:
+              additionalProperties: false
+              description: Settings for the OCI registry that the platform will use.
+              properties:
+                repository:
+                  default: ""
+                  description: The repository in the OCI Registry where the platform
+                    will publish OCI images.
+                  example: my-org
+                  type: string
+                  x-example-description: Repository on GitHub Container Registry
+                secret:
+                  additionalProperties: false
+                  description: Configuration for the Secret holding the credentials
+                    to access the OCI registry.
+                  properties:
+                    name:
+                      default: ""
+                      description: 'The name of the Secret holding the credentials
+                        to access the OCI registry. The credentials should provide
+                        read-only access to the OCI registry except when installing
+                        the platform with one of these profiles: `standalone`, `dev`,
+                        `build`.'
+                      type: string
+                    namespace:
+                      default: kadras-packages
+                      description: The namespace of the Secret holding the credentials
+                        to access the OCI registry.
+                      type: string
+                  type: object
+                server:
+                  default: ""
+                  description: The server of the OCI Registry where the platform will
+                    publish OCI images.
+                  example: ghcr.io
+                  type: string
+                  x-example-description: GitHub Container Registry
+              type: object
+            profile:
+              default: run
+              description: 'The platform profile to install. Options: `standalone`,
+                `dev`, `build`, `run`.'
+              type: string
+            supply_chain:
+              default: basic
+              description: 'The type of supply chain to deploy. Options: `basic`,
+                `advanced`.'
+              type: string
+          type: object
+        secretgen_controller:
+          default: {}
+          description: Configuration for the Secretgen Controller package.
+          nullable: true
+        tekton:
+          additionalProperties: false
+          description: Configuration for Tekton related packages.
+          properties:
+            catalog:
+              default: {}
+              description: Configuration for the Tekton Catalog package.
+              nullable: true
+            pipelines:
+              default: {}
+              description: Configuration for the Tekton Pipelines package.
+              nullable: true
+          type: object
+        workspace_provisioner:
+          default: {}
+          description: Configuration for the Workspace Provisioner package.
+          nullable: true
+      type: object
+  version: 0.12.0
