@@ -1,0 +1,151 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: cartographer.packages.kadras.io.0.8.5
+spec:
+  licenses:
+  - Apache 2.0
+  refName: cartographer.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-cartographer/releases
+  releasedAt: "2023-11-11T14:41:05Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-cartographer@sha256:287c3086e4fc8b7f213e4b1b4f70568298a4967c98f880a0fac9c51c2eab4df3
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        ca_cert_data:
+          default: ""
+          description: PEM-encoded certificate data to trust TLS connections with
+            a custom CA.
+          type: string
+        cartographer:
+          additionalProperties: false
+          description: Settings for the Cartographer component.
+          properties:
+            concurrency:
+              additionalProperties: false
+              description: Concurrency configuration for the Cartographer controller.
+              properties:
+                max_deliveries:
+                  default: 2
+                  description: Maximum concurrent Deliveries processed by the Cartographer
+                    controller.
+                  type: integer
+                max_runnables:
+                  default: 2
+                  description: Maximum concurrent Runnables processed by the Cartographer
+                    controller.
+                  type: integer
+                max_workloads:
+                  default: 2
+                  description: Maximum concurrent Workloads processed by the Cartographer
+                    controller.
+                  type: integer
+              type: object
+            resources:
+              additionalProperties: false
+              description: CPU and memory configuration for the Cartographer controller.
+              properties:
+                limits:
+                  additionalProperties: false
+                  properties:
+                    cpu:
+                      default: "1"
+                      description: CPU limits configuration for the Cartographer controller.
+                      type: string
+                    memory:
+                      default: 1Gi
+                      description: Memory limits configuration for the Cartographer
+                        controller.
+                      type: string
+                  type: object
+                requests:
+                  additionalProperties: false
+                  properties:
+                    cpu:
+                      default: 500m
+                      description: CPU requests configuration for the Cartographer
+                        controller.
+                      type: string
+                    memory:
+                      default: 512Mi
+                      description: Memory requests configuration for the Cartographer
+                        controller.
+                      type: string
+                  type: object
+              type: object
+          type: object
+        conventions:
+          additionalProperties: false
+          description: Settings for the Cartographer Conventions component.
+          properties:
+            resources:
+              additionalProperties: false
+              description: CPU and memory configuration for the Cartographer Conventions
+                controller.
+              properties:
+                limits:
+                  additionalProperties: false
+                  properties:
+                    cpu:
+                      default: 100m
+                      description: CPU limits configuration for the Cartographer Conventions
+                        controller.
+                      type: string
+                    memory:
+                      default: 256Mi
+                      description: Memory limits configuration for the Cartographer
+                        Conventions controller.
+                      type: string
+                  type: object
+                requests:
+                  additionalProperties: false
+                  properties:
+                    cpu:
+                      default: 100m
+                      description: CPU requests configuration for the Cartographer
+                        Conventions controller.
+                      type: string
+                    memory:
+                      default: 20Mi
+                      description: Memory requests configuration for the Cartographer
+                        Conventions controller.
+                      type: string
+                  type: object
+              type: object
+          type: object
+        logging:
+          additionalProperties: false
+          description: Settings for logging.
+          properties:
+            level:
+              default: info
+              description: 'Log verbosity level. Options: `debug`, `info`, `error`.'
+              type: string
+          type: object
+        optional_components:
+          additionalProperties: false
+          description: Settings for which Cartographer optional components to deploy.
+          properties:
+            cartographer_conventions:
+              default: true
+              description: Whether to deploy the Cartographer Conventions component.
+              type: boolean
+          type: object
+      type: object
+  version: 0.8.5
