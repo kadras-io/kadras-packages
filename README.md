@@ -30,7 +30,6 @@ This repository contains the following Carvel packages.
 | [rbac-configurer](https://github.com/kadras-io/rbac-configurer) | Provides default roles and RBAC configuration for the Kadras Engineering Platform. |
 | [secretgen-controller](https://github.com/carvel-dev/secretgen-controller) | Generates various types of Secrets in-cluster as well as export and import Secrets across namespaces. |
 | [spring-boot-conventions](https://github.com/kadras-io/package-for-spring-boot-conventions) | Defines conventions for Spring Boot workloads that will be applied by the Cartographer Convention Controller. |
-| [tekton-catalog](https://github.com/kadras-io/tekton-catalog) | A set of Tekton pipelines and tasks used by the Kadras platform to support testing, scanning, delivering and deploying applications. |
 | [tekton-pipelines](https://github.com/kadras-io/package-for-tekton-pipelines) | A cloud-native solution for building CI/CD systems. |
 | [workspace-provisioner](https://github.com/kadras-io/workspace-provisioner) | Provisions and configures workspaces (namespaces or virtual clusters) to work with the Kadras Engineering Platform. |
 
