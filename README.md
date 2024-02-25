@@ -21,6 +21,7 @@ This repository contains the following Carvel packages.
 | [cert-manager-issuers](https://github.com/kadras-io/cert-manager-issuers) | A collection of issuers for Cert Manager, used by the Kadras platform to support TLS via a private CA or Let's Encrypt. |
 | [contour](https://github.com/kadras-io/package-for-contour) | An Envoy-based ingress controller that supports dynamic configuration updates and multi-team ingress delegation. |
 | [crossplane](https://github.com/kadras-io/package-for-crossplane) | A Kubernetes extension that transforms your Kubernetes cluster into a universal control plane. |
+| [dapr](https://github.com/kadras-io/package-for-dapr) | A Kubernetes extension that provides integrated APIs for communication, state, and workflow. |
 | [engineering-platform](https://github.com/kadras-io/engineering-platform) | A curated set of Carvel packages to build an engineering platform supporting application developers with paved paths to production on Kubernetes. |
 | [flux](https://github.com/kadras-io/package-for-flux) | A continuous deployment solution for Kubernetes, powered by the GitOps Toolkit. |
 | [knative-eventing](https://github.com/kadras-io/package-for-knative-eventing) | A solution for routing events from event producers to sinks, enabling developers to use an event-driven architecture with their applications. |
@@ -38,7 +39,7 @@ This repository contains the following Carvel packages.
 
 ### Prerequisites
 
-* Kubernetes 1.26+
+* Kubernetes 1.27+
 * Carvel [`kctrl`](https://carvel.dev/kapp-controller/docs/latest/install/#installing-kapp-controller-cli-kctrl) CLI.
 * Carvel [kapp-controller](https://carvel.dev/kapp-controller) deployed in your Kubernetes cluster. You can install it with Carvel [`kapp`](https://carvel.dev/kapp/docs/latest/install) (recommended choice) or `kubectl`.
 
