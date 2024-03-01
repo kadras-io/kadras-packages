@@ -1,0 +1,22 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  creationTimestamp: null
+  name: weaviate.packages.kadras.io
+spec:
+  categories:
+  - vector store
+  - ai
+  displayName: weaviate
+  iconSVGBase64: PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0ODAgMjU1LjYwODc5Ij48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6IzBkMjE5Mjt9LmNscy0ye2ZpbGw6I2ZmZjtpc29sYXRpb246aXNvbGF0ZTtvcGFjaXR5OjAuMDg7fTwvc3R5bGU+PC9kZWZzPjxyZWN0IGlkPSJSZWN0YW5nbGUtNCIgY2xhc3M9ImNscy0xIiB4PSI5OS43ODA0MiIgeT0iMTEuMTg5MzgiIHdpZHRoPSIyODIuMTUxNjgiIGhlaWdodD0iMTk4LjU3Mjc0IiByeD0iNS40OTM0NyIvPjxyZWN0IGlkPSJSZWN0YW5nbGUtNC0yIiBkYXRhLW5hbWU9IlJlY3RhbmdsZS00IiBjbGFzcz0iY2xzLTIiIHg9Ijk5Ljc4MDQyIiB5PSIxMS4xODkzOCIgd2lkdGg9IjEwNC4zNjkzNiIgaGVpZ2h0PSIxOTguNTcyNzQiLz48cmVjdCBpZD0iUmVjdGFuZ2xlLTMiIGNsYXNzPSJjbHMtMSIgeD0iMTAuNjc5ODciIHk9IjE5Ni45NTA5MyIgd2lkdGg9IjQ1Ni42NDAyNyIgaGVpZ2h0PSI0Ny42NTk1MiIgcng9IjEwLjIxODI3Ii8+PHJlY3QgaWQ9IlJlY3RhbmdsZS00LTMiIGRhdGEtbmFtZT0iUmVjdGFuZ2xlLTQiIGNsYXNzPSJjbHMtMiIgeD0iMTAuNjc5ODciIHk9IjE5Ni45NTA5MyIgd2lkdGg9IjE0MS4yODUyMSIgaGVpZ2h0PSI1OC42NTc4NiIvPjwvc3ZnPg==
+  longDescription: Weaviate is an open source, AI-native vector database that helps
+    developers create intuitive and reliable AI-powered applications. Store and retrieve
+    data objects and vector embeddings. Seamlessly connect to your favorite ML models.
+    And build intuitive, reliable AI applications that scale.
+  maintainers:
+  - name: Thomas Vitale
+  providerName: Kadras
+  shortDescription: AI-native vector database that helps developers create intuitive
+    and reliable AI-powered applications.
+  supportDescription: Go to https://kadras.io for documentation and https://github.com/kadras-io/package-for-weaviate
+    for community support.
