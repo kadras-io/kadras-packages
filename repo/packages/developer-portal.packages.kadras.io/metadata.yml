@@ -1,0 +1,17 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  creationTimestamp: null
+  name: developer-portal.packages.kadras.io
+spec:
+  categories:
+  - control plane
+  displayName: developer-portal
+  longDescription: Kadras Developer Portal is based on Backstage and supports application
+    developers with paved paths to production on Kubernetes.
+  maintainers:
+  - name: Thomas Vitale
+  providerName: Kadras
+  shortDescription: Internal developer portal.
+  supportDescription: Go to https://kadras.io for documentation and https://github.com/kadras-io/package-for-developer-portal
+    for community support.
