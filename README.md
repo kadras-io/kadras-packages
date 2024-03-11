@@ -55,15 +55,15 @@ Install the Kadras package repository in a dedicated namespace using `kctrl`:
   ```shell
   kctrl package repository add -r kadras-packages \
     --url ghcr.io/kadras-io/kadras-packages \
-    -n kadras-packages --create-namespace
+    -n kadras-system --create-namespace
   ```
 
 <details><summary>Installation via CRDs</summary>
 Instead of installing the Kadras package repository with `kctrl`, you can apply the necessary Carvel CRDs directly using [`kapp`](https://carvel.dev/kapp/docs/latest/install), `kubectl` or a GitOps operator.
 
   ```shell
-  kubectl create namespace kadras-packages
-  kapp deploy -a kadras-repo -n kadras-packages -y \
+  kubectl create namespace kadras-system
+  kapp deploy -a kadras-repo -n kadras-system -y \
     -f https://github.com/kadras-io/kadras-packages/releases/latest/download/package-repository.yml
   ```
 </details>
@@ -71,13 +71,13 @@ Instead of installing the Kadras package repository with `kctrl`, you can apply 
 Verify the list of available Carvel package repositories and their status.
 
   ```shell
-  kctrl package repository list -n kadras-packages
+  kctrl package repository list -n kadras-system
   ```
 
 List all the Carvel packages available in the Kadras package repository.
 
   ```shell
-  kctrl package available list -n kadras-packages
+  kctrl package available list -n kadras-system
   ```
 
 ## 📙&nbsp; Documentation
