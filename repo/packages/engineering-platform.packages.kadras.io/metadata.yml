@@ -8,11 +8,11 @@ spec:
   - internal developer platform
   - application platform
   displayName: engineering-platform
-  longDescription: A curated set of Carvel packages to build an engineering platform
-    supporting application developers with paved paths to production on Kubernetes.
+  longDescription: A cloud native platform aimed at supporting application developers
+    with paved paths to production on Kubernetes and shipped as a Carvel package.
   maintainers:
   - name: Thomas Vitale
   providerName: Kadras
   shortDescription: Cloud native engineering platform on Kubernetes.
-  supportDescription: Go to https://kadras.io for documentation and https://github.com/kadras-io/engineering-platform
+  supportDescription: Go to https://kadras.io for documentation and https://github.com/kadras-io/kadras-engineering-platform
     for community support.
