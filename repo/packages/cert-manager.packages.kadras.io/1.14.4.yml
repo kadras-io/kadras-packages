@@ -1,0 +1,133 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: cert-manager.packages.kadras.io.1.14.4
+spec:
+  licenses:
+  - Apache 2.0
+  refName: cert-manager.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-cert-manager/releases
+  releasedAt: "2024-03-11T16:20:10Z"
+  template:
+    spec:
+      deploy:
+      - kapp:
+          rawOptions:
+          - --wait-timeout=5m
+          - --kube-api-qps=25
+          - --kube-api-burst=50
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-cert-manager@sha256:d71e3e3afac1ec3d66fd086f8d201778bac0e5ddfc1d12b8a4356e4a0090a00c
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        controller:
+          additionalProperties: false
+          description: Settings for the cert-manager controller.
+          properties:
+            loglevel:
+              default: 2
+              description: Number of the log level verbosity.
+              type: integer
+          type: object
+        leader_election:
+          additionalProperties: false
+          description: Leader election configuration for the cert-manager and cert-manager-cainjector
+            Deployments.
+          properties:
+            lease_duration:
+              default: 60s
+              description: The duration that non-leader candidates will wait after
+                observing a leadership renewal until attempting to acquire leadership
+                of a led but unrenewed leader slot. This is effectively the maximum
+                duration that a leader can be stopped before it is replaced by another
+                candidate.
+              type: string
+            namespace:
+              default: kube-system
+              description: 'Namespace used to perform leader election. The default
+                namespace needs changing in environments like GKE. More information:
+                https://cert-manager.io/docs/installation/compatibility/#gke.'
+              type: string
+            renew_deadline:
+              default: 40s
+              description: The interval between attempts by the acting leader to renew
+                a leadership slot before it stops leading.
+              type: string
+            retry_period:
+              default: 15s
+              description: The duration the clients should wait between attempting
+                acquisition and renewal of a leadership.
+              type: string
+          type: object
+        namespace:
+          default: cert-manager
+          description: The namespace in which to deploy cert-manager.
+          type: string
+        policies:
+          additionalProperties: false
+          description: Settings for the Kyverno policies.
+          properties:
+            include:
+              default: false
+              description: Whether to include the out-of-the-box Kyverno policies
+                to validate and secure the package installation.
+              type: boolean
+          type: object
+        proxy:
+          additionalProperties: false
+          description: Settings for the corporate proxy.
+          properties:
+            http_proxy:
+              default: ""
+              description: The HTTP proxy to use for network traffic.
+              type: string
+            https_proxy:
+              default: ""
+              description: The HTTPS proxy to use for network traffic.
+              type: string
+            no_proxy:
+              default: ""
+              description: A comma-separated list of hostnames, IP addresses, or IP
+                ranges in CIDR format that should not use the proxy.
+              type: string
+          type: object
+        webhook:
+          additionalProperties: false
+          description: Settings for the cert-manager webhook.
+          properties:
+            host_network:
+              default: false
+              description: 'Whether to run the webhook in the host network so that
+                it can be reached by the cert-manager controller in environments like
+                AWS EKS. More information: https://cert-manager.io/docs/installation/compatibility/#aws-eks.'
+              type: boolean
+            loglevel:
+              default: 2
+              description: Number of the log level verbosity.
+              type: integer
+            replicas:
+              default: 1
+              description: The number of replicas. In order to enable high availability,
+                it should be greater than 1.
+              type: integer
+            secure_port:
+              default: 10250
+              description: 'The port where the webhook is exposed. The default port
+                needs changing in environments like AWS EKS and AWS Fargate. More
+                information: https://cert-manager.io/docs/installation/compatibility/#aws-eks.'
+              type: integer
+          type: object
+      type: object
+  version: 1.14.4
