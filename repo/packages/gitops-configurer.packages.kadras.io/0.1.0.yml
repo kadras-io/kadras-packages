@@ -1,0 +1,79 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: gitops-configurer.packages.kadras.io.0.1.0
+spec:
+  licenses:
+  - Apache 2.0
+  refName: gitops-configurer.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/gitops-configurer/releases
+  releasedAt: "2024-03-11T17:43:26Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/gitops-configurer@sha256:e60a1a8e9cb7f856acc9078f3cdbc9354ab6b18328de9b64155ccd37cb75c224
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        git:
+          additionalProperties: false
+          description: Configuration for synchronizing changes from Git.
+          properties:
+            branch:
+              default: main
+              description: The Git branch to check out and synchronize.
+              type: string
+            path:
+              default: ""
+              description: The path within the Git repository containing the manifests
+                to reconcile with the cluster.
+              type: string
+            secret_name:
+              default: ""
+              description: The name of the Secret in the same namespace holding the
+                credentials to access the Git server. The credentials should provide
+                read-only access to the Git server.
+              type: string
+            url:
+              default: ""
+              description: The URL of the Git repository to synchronize in the cluster.
+              type: string
+          type: object
+        name:
+          default: gitops-configurer
+          description: The name of the GitOps resource.
+          type: string
+        namespace:
+          default: kadras-system
+          description: The namespace where the GitOps resource should be installed.
+          type: string
+        service_account:
+          default: ""
+          description: The `ServiceAccount` used by the GitOps controller to reconcile
+            changes to the cluster.
+          type: string
+        sync_period:
+          default: 1m0s
+          description: 'The interval at which the GitOps controller should synchronize
+            changes from Git. The format is a Go duration string. Example: `1m0s`.'
+          type: string
+        type:
+          default: carvel-app
+          description: 'The type of GitOps controller to use. Options: `carvel-app`,
+            `flux-kustomization`.'
+          type: string
+      type: object
+  version: 0.1.0
