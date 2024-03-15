@@ -1,0 +1,19 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  creationTimestamp: null
+  name: postgresql-operator.packages.kadras.io
+spec:
+  categories:
+  - database
+  displayName: postgresql-operator
+  longDescription: CloudNativePG is a Kubernetes operator that covers the full lifecycle
+    of a PostgreSQL database cluster with a primary/standby architecture, using native
+    streaming replication.
+  maintainers:
+  - name: Thomas Vitale
+  providerName: Kadras
+  shortDescription: CloudNativePG is a Kubernetes operator that covers the full lifecycle
+    of a PostgreSQL database cluster.
+  supportDescription: Go to https://kadras.io for documentation and https://github.com/kadras-io/package-for-postgresql-operator
+    for community support.
