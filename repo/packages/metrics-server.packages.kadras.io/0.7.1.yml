@@ -1,0 +1,148 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: metrics-server.packages.kadras.io.0.7.1
+spec:
+  licenses:
+  - Apache 2.0
+  refName: metrics-server.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-metrics-server/releases
+  releasedAt: "2024-05-17T19:13:15Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-metrics-server@sha256:624ad610270ef4c1aa7db39bc77ce154071ab8b3be692eabf66f6a47bdc39700
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        daemonset:
+          additionalProperties: false
+          properties:
+            updateStrategy:
+              default: null
+              description: Update strategy of daemonsets
+              nullable: true
+              type: string
+          type: object
+        deployment:
+          additionalProperties: false
+          properties:
+            rollingUpdate:
+              additionalProperties: false
+              properties:
+                maxSurge:
+                  default: null
+                  description: The maxSurge of rollingUpdate. Applied only if RollingUpdate
+                    is used as updateStrategy
+                  nullable: true
+                  type: integer
+                maxUnavailable:
+                  default: null
+                  description: The maxUnavailable of rollingUpdate. Applied only if
+                    RollingUpdate is used as updateStrategy
+                  nullable: true
+                  type: integer
+              type: object
+            updateStrategy:
+              default: null
+              description: Update strategy of deployments
+              nullable: true
+              type: string
+          type: object
+        metricsServer:
+          additionalProperties: false
+          properties:
+            config:
+              additionalProperties: false
+              properties:
+                apiServiceInsecureTLS:
+                  default: true
+                  description: Whether to enable insecure TLS for metrics-server api
+                    service
+                  type: boolean
+                args:
+                  default: []
+                  description: Arguments passed into metrics-server container
+                  items:
+                    default: ""
+                    type: string
+                  type: array
+                probe:
+                  additionalProperties: false
+                  properties:
+                    failureThreshold:
+                      default: 3
+                      description: Probe failureThreshold of metrics-server deployment
+                      type: integer
+                    periodSeconds:
+                      default: 10
+                      description: Probe period of metrics-server deployment
+                      type: integer
+                  type: object
+                securePort:
+                  default: 4443
+                  description: The HTTPS secure port used by metrics-server
+                  type: integer
+                tolerations:
+                  default: []
+                  description: Metrics-server deployment tolerations
+                  nullable: true
+                updateStrategy:
+                  default: RollingUpdate
+                  description: The update strategy of the metrics-server deployment
+                  type: string
+              type: object
+            createNamespace:
+              default: true
+              description: Whether to create namespace specified for metrics-server
+              type: boolean
+            image:
+              additionalProperties: false
+              properties:
+                name:
+                  default: ""
+                  description: The path of image
+                  type: string
+                pullPolicy:
+                  default: IfNotPresent
+                  description: The pull policy of image
+                  type: string
+                repository:
+                  default: ""
+                  description: The repository of metrics-server image
+                  type: string
+                tag:
+                  default: ""
+                  description: The image tag
+                  type: string
+              type: object
+            namespace:
+              default: null
+              description: The namespace value used by older templates, will be overwriten
+                if top level namespace is present, kept for backward compatibility
+              nullable: true
+              type: string
+          type: object
+        namespace:
+          default: kube-system
+          description: The namespace in which metrics-server is deployed
+          type: string
+        nodeSelector:
+          default: null
+          description: NodeSelector configuration applied to all the deployments
+          nullable: true
+      type: object
+  version: 0.7.1
