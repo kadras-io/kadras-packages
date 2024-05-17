@@ -1,0 +1,44 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: rabbitmq-operator.packages.kadras.io.2.9.0
+spec:
+  licenses:
+  - Apache 2.0
+  refName: rabbitmq-operator.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-rabbitmq-operator/releases
+  releasedAt: "2024-05-17T20:24:16Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-rabbitmq-operator@sha256:00f0e8a73570f541d48cdb7ccb5dce7fd1d83c6cc443fe44181192c84d386f6d
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        logging:
+          additionalProperties: false
+          description: Logging configuration.
+          properties:
+            level:
+              default: info
+              description: The Operator log level. Valid options are `info` and `debug`.
+              enum:
+              - info
+              - debug
+              type: string
+          type: object
+      type: object
+  version: 2.9.0
