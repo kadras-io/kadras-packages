@@ -19,7 +19,7 @@ jobs:
       image-digest: ${{ steps.image-info.outputs.image_digest }}
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.6
 
       - name: Set up Carvel
         uses: carvel-dev/setup-action@v2.0.0
@@ -27,7 +27,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Log into container registry
-        uses: redhat-actions/podman-login@v1.6
+        uses: redhat-actions/podman-login@v1.7
         with:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -87,10 +87,10 @@ jobs:
       IMAGE_DIGEST: ${{ needs.build.outputs.image-digest }}
     steps:
       - name: Install Cosign
-        uses: sigstore/cosign-installer@v3.4.0
+        uses: sigstore/cosign-installer@v3.5.0
 
       - name: Log into container registry
-        uses: redhat-actions/podman-login@v1.6
+        uses: redhat-actions/podman-login@v1.7
         with:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -106,7 +106,7 @@ jobs:
       actions: read
       id-token: write
       packages: write
-    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.9.0
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
     with:
       image: ${{ needs.build.outputs.image-name }}
       digest: ${{ needs.build.outputs.image-digest }}
