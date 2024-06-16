@@ -1,0 +1,169 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: cert-manager.packages.kadras.io.1.15.0
+spec:
+  licenses:
+  - Apache 2.0
+  refName: cert-manager.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-cert-manager/releases
+  releasedAt: "2024-06-16T18:33:28Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-cert-manager@sha256:e785bd074801ee2712eb132db3611edf659289a656aa95ba693c30dac301f819
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        cainjector:
+          additionalProperties: false
+          description: Settings for the cainjector controller.
+          properties:
+            loglevel:
+              default: 2
+              description: Number of the log level verbosity.
+              maximum: 5
+              minimum: 1
+              type: integer
+            replicas:
+              default: 1
+              description: The number of replicas. In order to enable high availability,
+                2 replicas are recommended.
+              minimum: 1
+              type: integer
+          type: object
+        controller:
+          additionalProperties: false
+          description: Settings for the cert-manager controller.
+          properties:
+            loglevel:
+              default: 2
+              description: Number of the log level verbosity.
+              maximum: 5
+              minimum: 1
+              type: integer
+            replicas:
+              default: 1
+              description: The number of replicas. In order to enable high availability,
+                2 replicas are recommended.
+              minimum: 1
+              type: integer
+          type: object
+        leader_election:
+          additionalProperties: false
+          description: Leader election configuration for the cert-manager and cert-manager-cainjector
+            Deployments.
+          properties:
+            namespace:
+              default: kube-system
+              description: 'Namespace used to perform leader election. The default
+                namespace needs changing in environments like GKE. More information:
+                https://cert-manager.io/docs/installation/compatibility.'
+              minLength: 1
+              type: string
+          type: object
+        letsencrypt:
+          additionalProperties: false
+          description: Settings for Let's Encrypt.
+          properties:
+            email:
+              default: ""
+              description: The email address that Let's Encrypt will use to send info
+                on expiring certificates or other issues.
+              type: string
+            include:
+              default: false
+              description: Whether to include a ClusterIssuer for Let's Encrypt.
+              type: boolean
+            production:
+              default: false
+              description: Whether to use Let's Encrypt staging (recommended for non-production
+                environments) or production.
+              type: boolean
+          type: object
+        namespace:
+          default: cert-manager
+          description: The namespace in which to deploy cert-manager.
+          minLength: 1
+          type: string
+        policies:
+          additionalProperties: false
+          description: Settings for the Kyverno policies.
+          properties:
+            include:
+              default: false
+              description: Whether to include the out-of-the-box Kyverno policies
+                to validate and secure the package installation.
+              type: boolean
+          type: object
+        private_pki:
+          additionalProperties: false
+          description: Settings for the built-in, private PKI
+          properties:
+            include:
+              default: true
+              description: Whether to include a ClusterIssuer for a private PKI.
+              type: boolean
+          type: object
+        proxy:
+          additionalProperties: false
+          description: Settings for the corporate proxy.
+          properties:
+            http_proxy:
+              default: ""
+              description: The HTTP proxy to use for network traffic.
+              type: string
+            https_proxy:
+              default: ""
+              description: The HTTPS proxy to use for network traffic.
+              type: string
+            no_proxy:
+              default: ""
+              description: A comma-separated list of hostnames, IP addresses, or IP
+                ranges in CIDR format that should not use the proxy.
+              type: string
+          type: object
+        webhook:
+          additionalProperties: false
+          description: Settings for the cert-manager webhook.
+          properties:
+            host_network:
+              default: false
+              description: 'Whether to run the webhook in the host network so that
+                it can be reached by the cert-manager controller in environments like
+                AWS EKS. More information: https://cert-manager.io/docs/installation/compatibility.'
+              type: boolean
+            loglevel:
+              default: 2
+              description: Number of the log level verbosity.
+              maximum: 5
+              minimum: 1
+              type: integer
+            replicas:
+              default: 1
+              description: The number of replicas. In order to enable high availability,
+                at least 3 replicas are recommended.
+              minimum: 1
+              type: integer
+            secure_port:
+              default: 6443
+              description: 'The port where the webhook is exposed. The default port
+                needs changing in environments like AWS EKS and AWS Fargate. More
+                information: https://cert-manager.io/docs/installation/compatibility.'
+              type: integer
+          type: object
+      type: object
+  version: 1.15.0
