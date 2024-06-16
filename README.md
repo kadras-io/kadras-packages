@@ -15,7 +15,6 @@ This repository contains the following Carvel packages.
 |---------|-------------|
 | [buildpacks-catalog](https://github.com/kadras-io/buildpacks-catalog) | A curated set of buildpacks, stacks, and builders to use with kpack, a Kubernetes-native implementation of Cloud Native Buildpacks. |
 | [cert-manager](https://github.com/kadras-io/package-for-cert-manager) | A cloud-native solution to automatically provision and manage X.509 certificates. |
-| [cert-manager-issuers](https://github.com/kadras-io/cert-manager-issuers) | A collection of issuers for Cert Manager, used by the Kadras platform to support TLS via a private CA or Let's Encrypt. |
 | [contour](https://github.com/kadras-io/package-for-contour) | An Envoy-based ingress controller that supports dynamic configuration updates and multi-team ingress delegation. |
 | [crossplane](https://github.com/kadras-io/package-for-crossplane) | A Kubernetes extension that transforms your Kubernetes cluster into a universal control plane. |
 | [dapr](https://github.com/kadras-io/package-for-dapr) | A Kubernetes extension that provides integrated APIs for communication, state, and workflow. |
