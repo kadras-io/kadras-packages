@@ -32,6 +32,7 @@ This repository contains the following Carvel packages.
 | [secretgen-controller](https://github.com/kadras-io/package-for-secretgen-controller) | Generates various types of Secrets in-cluster as well as export and import Secrets across namespaces. |
 | [service-binding](https://github.com/kadras-io/package-for-service-binding) | A standard and automated way for communicating service secrets to workloads. |
 | [tekton-pipelines](https://github.com/kadras-io/package-for-tekton-pipelines) | A cloud-native solution for building CI/CD systems. |
+| [tempo-operator](https://github.com/kadras-io/package-for-tempo-operator) | A solution to manage Grafana Tempo on Kubernetes and OpenShift clusters. |
 | [weaviate](https://github.com/kadras-io/package-for-weaviate) | An AI-native vector database that helps developers create intuitive and reliable AI-powered applications. |
 | [workspace-provisioner](https://github.com/kadras-io/workspace-provisioner) | Provisions and configures workspaces (namespaces or virtual clusters) to work with the Kadras Engineering Platform. |
 
