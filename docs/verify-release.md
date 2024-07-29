@@ -12,10 +12,10 @@ The result:
 
 ```shell
 📦 Supply Chain Security Related artifacts for an image: ghcr.io/kadras-io/kadras-packages
-└── 💾 Attestations for an image tag: ghcr.io/kadras-io/kadras-packages:sha256-046c6f16def6fa8ea562c84169725a4a7ef8c16dd7180137dc729f555af4a151.att
-   └── 🍒 sha256:23f10f5d24941657ddaa5ff25117373a243abbeb51f2f81065e562e3b292ee2d
-└── 🔐 Signatures for an image tag: ghcr.io/kadras-io/kadras-packages:sha256-046c6f16def6fa8ea562c84169725a4a7ef8c16dd7180137dc729f555af4a151.sig
-   └── 🍒 sha256:2e765ddc539ac475fa5275d0709e62699ebc2b47d054be5d5eb05b3d958310e6
+└── 💾 Attestations for an image tag: ghcr.io/kadras-io/kadras-packages:sha256-3b5321df10e6b30cd30b4dc8b8c8f0f4b3ccd9605eb9d25af03108d6e148012c.att
+   └── 🍒 sha256:8e6fc2f6005fb56c588700579cbeecabce064cf604b3cabe6294154cfe69b919
+└── 🔐 Signatures for an image tag: ghcr.io/kadras-io/kadras-packages:sha256-3b5321df10e6b30cd30b4dc8b8c8f0f4b3ccd9605eb9d25af03108d6e148012c.sig
+   └── 🍒 sha256:74c7b24859642cce47b205f0c9be06164b4d182a2c73d1c435dc4ad7af924691
 ```
 
 You can verify the signature and its claims:
