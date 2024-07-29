@@ -1,0 +1,31 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: service-binding.packages.kadras.io.1.0.0
+spec:
+  licenses:
+  - Apache 2.0
+  refName: service-binding.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-service-binding/releases
+  releasedAt: "2024-07-29T20:35:04Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-service-binding@sha256:09ffb5fb4f9851305af3155be23d2831a25a9c3f41455333d6d14cb7f7badc0d
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      default: null
+      nullable: true
+  version: 1.0.0
