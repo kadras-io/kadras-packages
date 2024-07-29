@@ -8,14 +8,14 @@ spec:
   - Apache 2.0
   refName: cert-manager.packages.kadras.io
   releaseNotes: https://github.com/kadras-io/package-for-cert-manager/releases
-  releasedAt: "2024-07-29T19:49:30Z"
+  releasedAt: "2024-07-29T20:02:32Z"
   template:
     spec:
       deploy:
       - kapp: {}
       fetch:
       - imgpkgBundle:
-          image: ghcr.io/kadras-io/package-for-cert-manager@sha256:4887904a0ad15d4af8e1723568539e9be58f801a13119145f5322bbc2a98cb68
+          image: ghcr.io/kadras-io/package-for-cert-manager@sha256:3e1679be54b9c1f3687e10eb122d0cff94406d3d568eb191e5e76ad122b28a4c
       template:
       - ytt:
           paths:
