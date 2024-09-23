@@ -1,0 +1,25 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  creationTimestamp: null
+  name: dependency-track.packages.kadras.io
+spec:
+  categories:
+  - supply-chain
+  - security
+  displayName: dependency-track
+  longDescription: Dependency-Track is an intelligent Component Analysis platform
+    that allows organizations to identify and reduce risk in the software supply chain.
+    Dependency-Track takes a unique and highly beneficial approach by leveraging the
+    capabilities of Software Bill of Materials (SBOM). This approach provides capabilities
+    that traditional Software Composition Analysis (SCA) solutions cannot achieve.
+    Dependency-Track monitors component usage across all versions of every application
+    in its portfolio in order to proactively identify risk across an organization.
+    The platform has an API-first design and is ideal for use in CI/CD environments.
+  maintainers:
+  - name: Thomas Vitale
+  providerName: Kadras
+  shortDescription: Dependency Track is a continuous SBOM Analysis Platform for managing
+    software supply chain security risks.
+  supportDescription: Go to https://kadras.io for documentation and https://github.com/kadras-io/package-for-dependency-track
+    for community support.
