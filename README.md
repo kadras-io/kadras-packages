@@ -13,7 +13,6 @@ This repository contains the following Carvel packages.
 
 | Package | Description |
 |---------|-------------|
-| [buildpacks-catalog](https://github.com/kadras-io/buildpacks-catalog) | A curated set of buildpacks, stacks, and builders to use with kpack, a Kubernetes-native implementation of Cloud Native Buildpacks. |
 | [cert-manager](https://github.com/kadras-io/package-for-cert-manager) | A cloud-native solution to automatically provision and manage X.509 certificates. |
 | [contour](https://github.com/kadras-io/package-for-contour) | An Envoy-based ingress controller that supports dynamic configuration updates and multi-team ingress delegation. |
 | [crossplane](https://github.com/kadras-io/package-for-crossplane) | A Kubernetes extension that transforms your Kubernetes cluster into a universal control plane. |
@@ -24,7 +23,6 @@ This repository contains the following Carvel packages.
 | [flux](https://github.com/kadras-io/package-for-flux) | A continuous deployment solution for Kubernetes, powered by the GitOps Toolkit. |
 | [gitops-configurer](https://github.com/kadras-io/gitops-configurer) | Provides GitOps configuration for the Kadras Engineering Platform. |
 | [knative-serving](https://github.com/kadras-io/package-for-knative-serving) | A solution built on Kubernetes to support deploying and serving of applications and functions as serverless containers. |
-| [kpack](https://github.com/kadras-io/package-for-kpack) | A Kubernetes-native implementation of Cloud Native Buildpacks to build source code into OCI images from within your cluster. |
 | [kyverno](https://github.com/kadras-io/package-for-kyverno) | A policy engine designed for Kubernetes. It can validate, mutate, and generate configurations using admission controls and background scans. |
 | [metrics-server](https://github.com/kadras-io/package-for-metrics-server) | A scalable and efficient source of container resource metrics for Kubernetes built-in autoscaling pipelines. |
 | [postgresql-operator](https://github.com/kadras-io/package-for-postgresql-operator) | CloudNativePG, a Kubernetes operator that covers the full lifecycle of a PostgreSQL database cluster with a primary/standby architecture, using native streaming replication. |
@@ -32,7 +30,6 @@ This repository contains the following Carvel packages.
 | [rbac-configurer](https://github.com/kadras-io/rbac-configurer) | Provides default roles and RBAC configuration for the Kadras Engineering Platform. |
 | [secretgen-controller](https://github.com/kadras-io/package-for-secretgen-controller) | Generates various types of Secrets in-cluster as well as export and import Secrets across namespaces. |
 | [service-binding](https://github.com/kadras-io/package-for-service-binding) | A standard and automated way for communicating service secrets to workloads. |
-| [tekton-pipelines](https://github.com/kadras-io/package-for-tekton-pipelines) | A cloud-native solution for building CI/CD systems. |
 | [tempo-operator](https://github.com/kadras-io/package-for-tempo-operator) | A solution to manage Grafana Tempo on Kubernetes and OpenShift clusters. |
 | [workspace-provisioner](https://github.com/kadras-io/workspace-provisioner) | Provisions and configures workspaces (namespaces or virtual clusters) to work with the Kadras Engineering Platform. |
 
