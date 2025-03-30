@@ -1,0 +1,634 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: developer-portal.packages.kadras.io.0.6.0
+spec:
+  refName: developer-portal.packages.kadras.io
+  releasedAt: "2025-03-30T16:31:00Z"
+  template:
+    spec:
+      deploy:
+      - kapp:
+          intoNs: backstage
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-developer-portal@sha256:42b7e0dc1d8f81019aa748e84c1b6745991628e41f1a944f5b2eb498334c7887
+      template:
+      - helmTemplate:
+          name: backstage
+          namespace: backstage
+          path: config/helm/upstream/backstage
+          valuesFrom:
+          - path: config/helm/values.yml
+      - ytt:
+          ignoreUnknownComments: true
+          paths:
+          - '-'
+          - config/carvel
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      properties:
+        backstage:
+          description: Backstage parameters @default -- See below
+          properties:
+            affinity:
+              default: {}
+              description: 'Affinity for pod assignment <br /> Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity'
+              type: object
+            annotations:
+              default: {}
+              description: Additional custom annotations for the `Deployment` resource
+              type: object
+            appConfig:
+              default: {}
+              description: 'Allows to define the appConfig as a multiline string that
+                generates a ConfigMap automatically, not requiring to have it pre
+                provisioned as with the extraAppConfig key. DO NOT USE if you need
+                to put sensitive data in the appConfig. E.g: appConfig:   app:     baseUrl:
+                https://somedomain.tld -- Generates ConfigMap and configures it in
+                the Backstage pods'
+              type: object
+            args:
+              default: []
+              description: Backstage container command arguments
+              items: {}
+              type: array
+            command:
+              default: []
+              description: Backstage container command
+              items:
+                default: node
+                type: string
+              type: array
+            containerPorts:
+              description: Container ports on the Deployment
+              properties:
+                backend:
+                  default: 7007
+                  type: integer
+              type: object
+            containerSecurityContext:
+              default: {}
+              description: 'Security settings for a Container. <br /> Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container'
+              type: object
+            extraAppConfig:
+              default: []
+              description: Extra app configuration files to inline into command arguments
+              items: {}
+              type: array
+            extraContainers:
+              default: []
+              description: Deployment sidecars
+              items: {}
+              type: array
+            extraEnvVars:
+              default: []
+              description: Backstage container environment variables
+              items: {}
+              type: array
+            extraEnvVarsCM:
+              default: []
+              description: Backstage container environment variables from existing
+                ConfigMaps
+              items: {}
+              type: array
+            extraEnvVarsSecrets:
+              default: []
+              description: Backstage container environment variables from existing
+                Secrets
+              items: {}
+              type: array
+            extraPorts:
+              default: []
+              description: Backstage container additional ports
+              items: {}
+              type: array
+            extraVolumeMounts:
+              default: []
+              description: Backstage container additional volume mounts
+              items: {}
+              type: array
+            extraVolumes:
+              default: []
+              description: Backstage container additional volumes
+              items: {}
+              type: array
+            hostAliases:
+              default: []
+              description: 'Host Aliases for the pod <br /> Ref: https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/'
+              items: {}
+              type: array
+            image:
+              properties:
+                digest:
+                  default: ""
+                  description: Backstage image digest (digest takes precedence over
+                    image tag)
+                  type: string
+                pullPolicy:
+                  default: Always
+                  description: 'Specify a imagePullPolicy. Defaults to ''Always''
+                    if image tag is ''latest'', else set to ''IfNotPresent'' <br />
+                    Ref: https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy'
+                  type: string
+                pullSecrets:
+                  default: []
+                  description: 'Optionally specify an array of imagePullSecrets.  Secrets
+                    must be manually created in the namespace. <br /> Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+                    <br /> E.g: `pullSecrets: [myRegistryKeySecretName]`'
+                  items: {}
+                  type: array
+                registry:
+                  default: ghcr.io
+                  description: Backstage image registry
+                  type: string
+                repository:
+                  default: backstage/backstage
+                  description: Backstage image repository
+                  type: string
+                tag:
+                  default: latest
+                  description: Backstage image tag (immutable tags are recommended)
+                  type: string
+              type: object
+            initContainers:
+              default: []
+              description: Backstage container init containers
+              items: {}
+              type: array
+            installDir:
+              default: /app
+              description: Directory containing the backstage installation
+              type: string
+            livenessProbe:
+              description: 'Liveness Probe Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes
+                <!-- E.g. livenessProbe:   failureThreshold: 3   httpGet:     path:
+                /.backstage/health/v1/liveness     port: 7007     scheme: HTTP   initialDelaySeconds:
+                60   periodSeconds: 10   successThreshold: 1   timeoutSeconds: 2'
+              properties:
+                httpGet:
+                  properties:
+                    path:
+                      default: /.backstage/health/v1/liveness
+                      type: string
+                    port:
+                      default: 7007
+                      type: integer
+                    scheme:
+                      default: HTTP
+                      type: string
+                  type: object
+              type: object
+            nodeSelector:
+              default: {}
+              description: 'Node labels for pod assignment <br /> Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector'
+              type: object
+            podAnnotations:
+              default: {}
+              description: Annotations to add to the backend deployment pods
+              type: object
+            podLabels:
+              default: {}
+              description: Labels to add to the backend deployment pods
+              type: object
+            podSecurityContext:
+              default: {}
+              description: 'Security settings for a Pod.  The security settings that
+                you specify for a Pod apply to all Containers in the Pod. <br /> Ref:
+                https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod'
+              type: object
+            readinessProbe:
+              description: 'Readiness Probe Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes
+                <!-- E.g. readinessProbe:   failureThreshold: 3   httpGet:     path:
+                /.backstage/health/v1/readiness     port: 7007     scheme: HTTP   initialDelaySeconds:
+                30   periodSeconds: 10   successThreshold: 2   timeoutSeconds: 2'
+              properties:
+                httpGet:
+                  properties:
+                    path:
+                      default: /.backstage/health/v1/readiness
+                      type: string
+                    port:
+                      default: 7007
+                      type: integer
+                    scheme:
+                      default: HTTP
+                      type: string
+                  type: object
+              type: object
+            replicas:
+              default: 1
+              description: Number of deployment replicas
+              type: integer
+            resources:
+              default: {}
+              description: 'Resource requests/limits <br /> Ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#resource-requests-and-limits-of-pod-and-container
+                <!-- E.g. resources:   limits:     memory: 1Gi     cpu: 1000m   requests:     memory:
+                250Mi     cpu: 100m -->'
+              type: object
+            revisionHistoryLimit:
+              default: 10
+              description: Define the [count of deployment revisions](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)
+                to be kept. May be set to 0 in case of GitOps deployment approach.
+              type: integer
+            startupProbe:
+              description: 'Startup Probe Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes
+                <!-- E.g. startupProbe:   failureThreshold: 3   httpGet:     path:
+                /.backstage/health/v1/liveness     port: 7007     scheme: HTTP   initialDelaySeconds:
+                60   periodSeconds: 10   successThreshold: 1   timeoutSeconds: 2'
+              properties:
+                httpGet:
+                  properties:
+                    path:
+                      default: /.backstage/health/v1/liveness
+                      type: string
+                    port:
+                      default: 7007
+                      type: integer
+                    scheme:
+                      default: HTTP
+                      type: string
+                  type: object
+              type: object
+            tolerations:
+              default: []
+              description: 'Node tolerations for server scheduling to nodes with taints
+                <br /> Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/'
+              items: {}
+              type: array
+            topologySpreadConstraints:
+              default: []
+              description: 'Topology Spread Constraints for pod assignment <br />
+                Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#pod-topology-spread-constraints'
+              items: {}
+              type: array
+          type: object
+        clusterDomain:
+          default: cluster.local
+          description: Default Kubernetes cluster domain
+          type: string
+        commonAnnotations:
+          default: {}
+          description: Annotations to add to all deployed objects
+          type: object
+        commonLabels:
+          default: {}
+          description: Labels to add to all deployed objects
+          type: object
+        diagnosticMode:
+          description: Enable diagnostic mode in the Deployment
+          properties:
+            args:
+              default: []
+              description: Args to override all containers in the Deployment
+              items:
+                default: infinity
+                type: string
+              type: array
+            command:
+              default: []
+              description: Command to override all containers in the Deployment
+              items:
+                default: sleep
+                type: string
+              type: array
+            enabled:
+              default: false
+              description: Enable diagnostic mode (all probes will be disabled and
+                the command will be overridden)
+              type: boolean
+          type: object
+        extraDeploy:
+          default: []
+          description: Array of extra objects to deploy with the release
+          items: {}
+          type: array
+        fullnameOverride:
+          default: ""
+          description: String to fully override common.names.fullname
+          type: string
+        global:
+          description: 'Global parameters Global Docker image parameters Please, note
+            that this will override the image parameters, including dependencies,
+            configured to use the global value Current available global Docker image
+            parameters: imageRegistry, imagePullSecrets and storageClass @default
+            -- See below'
+          properties:
+            imagePullSecrets:
+              default: []
+              description: 'Global Docker registry secret names as an array </br>
+                E.g. `imagePullSecrets: [myRegistryKeySecretName]`'
+              items: {}
+              type: array
+            imageRegistry:
+              default: ""
+              description: Global Docker image registry
+              type: string
+          type: object
+        ingress:
+          description: Ingress parameters
+          properties:
+            annotations:
+              default: {}
+              description: Additional annotations for the Ingress resource
+              type: object
+            className:
+              default: ""
+              description: Name of the IngressClass cluster resource which defines
+                which controller will implement the resource (e.g nginx)
+              type: string
+            enabled:
+              default: false
+              description: Enable the creation of the ingress resource
+              type: boolean
+            extraHosts:
+              default: []
+              description: 'List of additional hostnames to be covered with this ingress
+                record (e.g. a CNAME) <!-- E.g. extraHosts:   - name: backstage.env.example.com     path:
+                / (Optional)     pathType: Prefix (Optional)     port: 7007 (Optional)
+                -->'
+              items: {}
+              type: array
+            extraTls:
+              default: []
+              description: 'The TLS configuration for additional hostnames to be covered
+                with this ingress record. <br /> Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+                <!-- E.g. extraTls:   - hosts:     - backstage.env.example.com     secretName:
+                backstage-env -->'
+              items: {}
+              type: array
+            host:
+              default: ""
+              description: 'Hostname to be used to expose the route to access the
+                backstage application (e.g: backstage.IP.nip.io)'
+              type: string
+            path:
+              default: /
+              description: 'Path to be used to expose the full route to access the
+                backstage application (e.g: IP.nip.io/backstage)'
+              type: string
+            tls:
+              description: Ingress TLS parameters
+              properties:
+                enabled:
+                  default: false
+                  description: Enable TLS configuration for the host defined at `ingress.host`
+                    parameter
+                  type: boolean
+                secretName:
+                  default: ""
+                  description: The name to which the TLS Secret will be called
+                  type: string
+              type: object
+          type: object
+        kubeVersion:
+          default: ""
+          description: |-
+            Common parameters
+             -- Override Kubernetes version
+          type: string
+        metrics:
+          description: Metrics configuration
+          properties:
+            serviceMonitor:
+              description: ServiceMonitor configuration <br /> Allows configuring
+                your backstage instance as a scrape target for [Prometheus](https://github.com/prometheus/prometheus)
+                using a ServiceMonitor custom resource that [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator)
+                can understand.
+              properties:
+                annotations:
+                  default: {}
+                  description: ServiceMonitor annotations
+                  type: object
+                enabled:
+                  default: false
+                  description: If enabled, a ServiceMonitor resource for Prometheus
+                    Operator is created <br /> Prometheus Operator must be installed
+                    in your cluster prior to enabling.
+                  type: boolean
+                interval:
+                  default: "null"
+                  description: ServiceMonitor scrape interval
+                  type: "null"
+                labels:
+                  default: {}
+                  description: Additional ServiceMonitor labels
+                  type: object
+                path:
+                  default: /metrics
+                  description: ServiceMonitor endpoint path <br /> Note that the /metrics
+                    endpoint is NOT present in a freshly scaffolded Backstage app.
+                    To setup, follow the [Prometheus metrics tutorial](https://github.com/backstage/backstage/blob/master/contrib/docs/tutorials/prometheus-metrics.md).
+                  type: string
+                port:
+                  default: http-backend
+                  description: ServiceMonitor endpoint port <br /> The port where
+                    the metrics are exposed. If using OpenTelemetry as [documented
+                    here](https://backstage.io/docs/tutorials/setup-opentelemetry/),
+                    then the port needs to be explicitely specificed. OpenTelemetry's
+                    default port is 9464.
+                  type: string
+              type: object
+          type: object
+        nameOverride:
+          default: ""
+          description: String to partially override common.names.fullname
+          type: string
+        networkPolicy:
+          description: '@section NetworkPolicy parameters'
+          properties:
+            egressRules:
+              description: Egress Rules
+              properties:
+                customRules:
+                  default: []
+                  description: Additional custom egress rules
+                  items: {}
+                  type: array
+                denyConnectionsToExternal:
+                  default: false
+                  description: Deny external connections. Should not be enabled when
+                    working with an external database.
+                  type: boolean
+              type: object
+            enabled:
+              default: false
+              description: Specifies whether a NetworkPolicy should be created
+              type: boolean
+            ingressRules:
+              description: Ingress Rules
+              properties:
+                customRules:
+                  default: []
+                  description: Additional custom ingress rules
+                  items: {}
+                  type: array
+                namespaceSelector:
+                  default: {}
+                  description: Namespace selector label allowed to access the Backstage
+                    instance
+                  type: object
+                podSelector:
+                  default: {}
+                  description: Pod selector label allowed to access the Backstage
+                    instance
+                  type: object
+              type: object
+          type: object
+        postgresql:
+          description: PostgreSQL [chart configuration](https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml)
+            @default -- See below
+          properties:
+            architecture:
+              default: standalone
+              description: PostgreSQL architecture (`standalone` or `replication`)
+              type: string
+            auth:
+              description: The authentication details of the Postgres database
+              properties:
+                existingSecret:
+                  default: ""
+                  description: Name of existing secret to use for PostgreSQL credentials
+                  type: string
+                password:
+                  default: ""
+                  description: Password for the custom user to create
+                  type: string
+                secretKeys:
+                  description: The secret keys Postgres will look for to retrieve
+                    the relevant password
+                  properties:
+                    adminPasswordKey:
+                      default: admin-password
+                      description: The key in which Postgres will look for, for the
+                        admin password, in the existing Secret
+                      type: string
+                    replicationPasswordKey:
+                      default: replication-password
+                      description: The key in which Postgres will look for, for the
+                        replication password, in the existing Secret
+                      type: string
+                    userPasswordKey:
+                      default: user-password
+                      description: The key in which Postgres will look for, for the
+                        user password, in the existing Secret
+                      type: string
+                  type: object
+                username:
+                  default: bn_backstage
+                  description: Name for a custom user to create
+                  type: string
+              type: object
+            enabled:
+              default: false
+              description: Switch to enable or disable the PostgreSQL helm chart
+              type: boolean
+          type: object
+        service:
+          description: |-
+            @section Traffic Exposure parameters
+             Service parameters -- Service parameters @default -- See below
+          properties:
+            annotations:
+              default: {}
+              description: Additional custom annotations for Backstage service
+              type: object
+            clusterIP:
+              default: ""
+              description: 'Backstage service Cluster IP <br /> E.g `clusterIP: None`'
+              type: string
+            externalTrafficPolicy:
+              default: Cluster
+              description: 'Backstage service external traffic policy Ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip'
+              type: string
+            extraPorts:
+              default: []
+              description: Extra ports to expose in the Backstage service (normally
+                used with the `sidecar` value)
+              items: {}
+              type: array
+            ipFamilies:
+              default: []
+              description: 'IP Families <br /> Ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack'
+              items: {}
+              type: array
+            ipFamilyPolicy:
+              default: ""
+              description: 'IP Family Policy <br /> Ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack'
+              type: string
+            loadBalancerIP:
+              default: ""
+              description: 'Backstage service Load Balancer IP <br /> Ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer'
+              type: string
+            loadBalancerSourceRanges:
+              default: []
+              description: 'Load Balancer sources <br /> Ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
+                <br /> E.g `loadBalancerSourceRanges: [10.10.10.0/24]`'
+              items: {}
+              type: array
+            nodePorts:
+              description: Node port for the Backstage client connections Choose port
+                between `30000-32767`
+              properties:
+                backend:
+                  default: ""
+                  type: string
+              type: object
+            ports:
+              description: Backstage svc port for client connections
+              properties:
+                backend:
+                  default: 7007
+                  type: integer
+                name:
+                  default: http-backend
+                  description: Backstage svc port name
+                  type: string
+                targetPort:
+                  default: backend
+                  description: Backstage svc target port referencing receiving pod
+                    container port
+                  type: string
+              type: object
+            sessionAffinity:
+              default: None
+              description: 'Control where client requests go, to the same pod or round-robin
+                (values: `ClientIP` or `None`) <br /> Ref: https://kubernetes.io/docs/concepts/services-networking/service/#session-stickiness'
+              type: string
+            type:
+              default: ClusterIP
+              description: Kubernetes Service type
+              type: string
+          type: object
+        serviceAccount:
+          description: Service Account Configuration @default -- See below
+          properties:
+            annotations:
+              default: {}
+              description: Additional custom annotations for the ServiceAccount.
+              type: object
+            automountServiceAccountToken:
+              default: true
+              description: Auto-mount the service account token in the pod
+              type: boolean
+            create:
+              default: false
+              description: Enable the creation of a ServiceAccount for Backstage pods
+              type: boolean
+            labels:
+              default: {}
+              description: Additional custom labels to the service ServiceAccount.
+              type: object
+            name:
+              default: ""
+              description: Name of the ServiceAccount to use If not set and `serviceAccount.create`
+                is true, a name is generated
+              type: string
+          type: object
+      type: object
+  version: 0.6.0
