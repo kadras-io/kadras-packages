@@ -87,7 +87,7 @@ jobs:
       IMAGE_DIGEST: ${{ needs.build.outputs.image-digest }}
     steps:
       - name: Install Cosign
-        uses: sigstore/cosign-installer@v3.8.1
+        uses: sigstore/cosign-installer@v3.8.2
 
       - name: Log into container registry
         uses: redhat-actions/podman-login@v1.7
