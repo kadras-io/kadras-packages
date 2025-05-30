@@ -1,0 +1,211 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: dependency-track.packages.kadras.io.4.13.2
+spec:
+  licenses:
+  - Apache 2.0
+  refName: dependency-track.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-dependency-track/releases
+  releasedAt: "2025-05-30T20:13:17Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-dependency-track@sha256:82ef90789ee3eec8ed5fa36b149175c8f782d3774487ab905c4c0d35c07ce397
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        api_server:
+          additionalProperties: false
+          description: Settings for the API Server component.
+          properties:
+            logging:
+              additionalProperties: false
+              description: Settings for logging.
+              properties:
+                format:
+                  default: console
+                  description: 'Log encoding format. Options: `console`, `json`.'
+                  enum:
+                  - console
+                  - json
+                  type: string
+                level:
+                  default: info
+                  description: 'Log verbosity level. Options: `trace`, `debug`, `info`,
+                    `warn`, `error`.'
+                  enum:
+                  - trace
+                  - debug
+                  - info
+                  - warn
+                  - error
+                  type: string
+              type: object
+            metrics:
+              additionalProperties: false
+              description: Settings for metrics.
+              properties:
+                enabled:
+                  default: true
+                  description: Whether to enable the generation of Prometheus metrics.
+                  type: boolean
+              type: object
+            resources:
+              additionalProperties: false
+              description: Resource configuration for the API Server component.
+              properties:
+                limits:
+                  additionalProperties: false
+                  properties:
+                    cpu:
+                      default: "4"
+                      description: CPU limits configuration for the API Server component.
+                      type: string
+                    memory:
+                      default: 5Gi
+                      description: Memory limits configuration for the API Server
+                        component.
+                      type: string
+                  type: object
+                requests:
+                  additionalProperties: false
+                  properties:
+                    cpu:
+                      default: "0.5"
+                      description: CPU requests configuration for the API Server component.
+                      type: string
+                    memory:
+                      default: 5Gi
+                      description: Memory requests configuration for the API Server
+                        component.
+                      type: string
+                  type: object
+              type: object
+            storage:
+              additionalProperties: false
+              description: Storage configuration for the API Server component.
+              properties:
+                class_name:
+                  default: ""
+                  description: Class name for the PersistenceVolume to create.
+                  type: string
+                size:
+                  default: 1Gi
+                  description: Size of the PersistenceVolume to create.
+                  type: string
+              type: object
+          type: object
+        domain_name:
+          default: ""
+          description: Domain name for Dependency Track. It must be a valid DNS name.
+          minLength: 4
+          type: string
+        frontend:
+          additionalProperties: false
+          description: Settings for the Frontend component.
+          properties:
+            replicas:
+              default: 1
+              description: The number of Frontend replicas. In order to enable high
+                availability, it should be greater than 1.
+              minimum: 1
+              type: integer
+            resources:
+              additionalProperties: false
+              description: Resource configuration for the Frontend component.
+              properties:
+                limits:
+                  additionalProperties: false
+                  properties:
+                    cpu:
+                      default: 500m
+                      description: CPU limits configuration for the Frontend component.
+                      type: string
+                    memory:
+                      default: 128Mi
+                      description: Memory limits configuration for the Frontend component.
+                      type: string
+                  type: object
+                requests:
+                  additionalProperties: false
+                  properties:
+                    cpu:
+                      default: 150m
+                      description: CPU requests configuration for the Frontend component.
+                      type: string
+                    memory:
+                      default: 64Mi
+                      description: Memory requests configuration for the Frontend
+                        component.
+                      type: string
+                  type: object
+              type: object
+          type: object
+        ingress_issuer:
+          default: ""
+          description: A reference to the ClusterIssuer to use for enabling TLS in
+            Dependency Track.
+          example: kadras-ca-issuer
+          minLength: 4
+          type: string
+          x-example-description: Kadras private CA
+        postgresql:
+          additionalProperties: false
+          description: Settings for the PostgreSQL database.
+          properties:
+            instances:
+              default: 1
+              description: Number of instances for the PostgreSQL database cluster.
+                Define at least 3 for production scenarios.
+              minimum: 1
+              type: integer
+            storage:
+              additionalProperties: false
+              description: Storage configuration for each PostgreSQL instance.
+              properties:
+                size:
+                  default: 1Gi
+                  description: Size of the PersistenceVolume to create for each PostgreSQL
+                    instance.
+                  type: string
+              type: object
+          type: object
+        proxy:
+          additionalProperties: false
+          description: Settings for the corporate proxy.
+          properties:
+            http_proxy:
+              default: ""
+              description: The HTTP proxy to use for network traffic.
+              type: string
+            https_proxy:
+              default: ""
+              description: The HTTPS proxy to use for network traffic.
+              type: string
+            no_proxy:
+              default: ""
+              description: A comma-separated list of hostnames, IP addresses, or IP
+                ranges in CIDR format that should not use the proxy.
+              type: string
+          type: object
+        system_requirement_check:
+          default: true
+          description: Whether Dependency Track will check for memory and CPU requirements
+            at startup time.
+          type: boolean
+      type: object
+  version: 4.13.2
