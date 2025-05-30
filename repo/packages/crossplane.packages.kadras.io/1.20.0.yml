@@ -1,0 +1,468 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: crossplane.packages.kadras.io.1.20.0
+spec:
+  refName: crossplane.packages.kadras.io
+  releasedAt: "2025-05-30T20:10:40Z"
+  template:
+    spec:
+      deploy:
+      - kapp:
+          intoNs: crossplane-system
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-crossplane@sha256:e50bcaa46d5bbe691ed6cb9cefe2940113840334b0079951634e4b4541be05cf
+      template:
+      - helmTemplate:
+          name: crossplane
+          namespace: crossplane-system
+          path: config/helm/upstream/crossplane
+          valuesFrom:
+          - path: config/helm/values.yml
+      - ytt:
+          ignoreUnknownComments: true
+          paths:
+          - '-'
+          - config/carvel
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      properties:
+        affinity:
+          default: {}
+          description: Add `affinities` to the Crossplane pod deployment.
+          type: object
+        args:
+          default: []
+          description: Add custom arguments to the Crossplane pod.
+          items: {}
+          type: array
+        configuration:
+          properties:
+            packages:
+              default: []
+              description: A list of Configuration packages to install.
+              items: {}
+              type: array
+          type: object
+        customAnnotations:
+          default: {}
+          description: Add custom `annotations` to the Crossplane pod deployment.
+          type: object
+        customLabels:
+          default: {}
+          description: Add custom `labels` to the Crossplane pod deployment.
+          type: object
+        deploymentStrategy:
+          default: RollingUpdate
+          description: The deployment strategy for the Crossplane and RBAC Manager
+            pods.
+          type: string
+        dnsPolicy:
+          default: ""
+          description: Specify the `dnsPolicy` to be used by the Crossplane pod.
+          type: string
+        extraEnvVarsCrossplane:
+          default: {}
+          description: Add custom environmental variables to the Crossplane pod deployment.
+            Replaces any `.` in a variable name with `_`. For example, `SAMPLE.KEY=value1`
+            becomes `SAMPLE_KEY=value1`.
+          type: object
+        extraEnvVarsRBACManager:
+          default: {}
+          description: Add custom environmental variables to the RBAC Manager pod
+            deployment. Replaces any `.` in a variable name with `_`. For example,
+            `SAMPLE.KEY=value1` becomes `SAMPLE_KEY=value1`.
+          type: object
+        extraObjects:
+          default: []
+          description: To add arbitrary Kubernetes Objects during a Helm Install
+          items: {}
+          type: array
+        extraVolumeMountsCrossplane:
+          default: {}
+          description: Add custom `volumeMounts` to the Crossplane pod.
+          type: object
+        extraVolumesCrossplane:
+          default: {}
+          description: Add custom `volumes` to the Crossplane pod.
+          type: object
+        function:
+          properties:
+            packages:
+              default: []
+              description: A list of Function packages to install
+              items: {}
+              type: array
+          type: object
+        functionCache:
+          properties:
+            medium:
+              default: ""
+              description: Set to `Memory` to hold the function cache in a RAM backed
+                file system. Useful for Crossplane development.
+              type: string
+            pvc:
+              default: ""
+              description: The name of a PersistentVolumeClaim to use as the function
+                cache. Disables the default function cache `emptyDir` Volume.
+              type: string
+            sizeLimit:
+              default: 512Mi
+              description: The size limit for the function cache. If medium is `Memory`
+                the `sizeLimit` can't exceed Node memory.
+              type: string
+          type: object
+        hostNetwork:
+          default: false
+          description: 'Enable `hostNetwork` for the Crossplane deployment. Caution:
+            enabling `hostNetwork` grants the Crossplane Pod access to the host network
+            namespace. Consider setting `dnsPolicy` to `ClusterFirstWithHostNet`.'
+          type: boolean
+        image:
+          properties:
+            pullPolicy:
+              default: IfNotPresent
+              description: The image pull policy used for Crossplane and RBAC Manager
+                pods.
+              type: string
+            repository:
+              default: xpkg.crossplane.io/crossplane/crossplane
+              description: Repository for the Crossplane pod image.
+              type: string
+            tag:
+              default: ""
+              description: The Crossplane image tag. Defaults to the value of `appVersion`
+                in `Chart.yaml`.
+              type: string
+          type: object
+        imagePullSecrets:
+          default: []
+          description: The imagePullSecret names to add to the Crossplane ServiceAccount.
+          items: {}
+          type: array
+        leaderElection:
+          default: true
+          description: Enable [leader election](https://docs.crossplane.io/latest/concepts/pods/#leader-election)
+            for the Crossplane pod.
+          type: boolean
+        metrics:
+          properties:
+            enabled:
+              default: false
+              description: Enable Prometheus path, port and scrape annotations and
+                expose port 8080 for both the Crossplane and RBAC Manager pods.
+              type: boolean
+            port:
+              default: ""
+              description: The port the metrics server listens on.
+              type: string
+          type: object
+        nodeSelector:
+          default: {}
+          description: Add `nodeSelectors` to the Crossplane pod deployment.
+          type: object
+        packageCache:
+          properties:
+            configMap:
+              default: ""
+              description: The name of a ConfigMap to use as the package cache. Disables
+                the default package cache `emptyDir` Volume.
+              type: string
+            medium:
+              default: ""
+              description: Set to `Memory` to hold the package cache in a RAM backed
+                file system. Useful for Crossplane development.
+              type: string
+            pvc:
+              default: ""
+              description: The name of a PersistentVolumeClaim to use as the package
+                cache. Disables the default package cache `emptyDir` Volume.
+              type: string
+            sizeLimit:
+              default: 20Mi
+              description: The size limit for the package cache. If medium is `Memory`
+                the `sizeLimit` can't exceed Node memory.
+              type: string
+          type: object
+        podSecurityContextCrossplane:
+          default: {}
+          description: Add a custom `securityContext` to the Crossplane pod.
+          type: object
+        podSecurityContextRBACManager:
+          default: {}
+          description: Add a custom `securityContext` to the RBAC Manager pod.
+          type: object
+        priorityClassName:
+          default: ""
+          description: The PriorityClass name to apply to the Crossplane and RBAC
+            Manager pods.
+          type: string
+        provider:
+          properties:
+            packages:
+              default: []
+              description: A list of Provider packages to install.
+              items: {}
+              type: array
+          type: object
+        rbacManager:
+          properties:
+            affinity:
+              default: {}
+              description: Add `affinities` to the RBAC Manager pod deployment.
+              type: object
+            args:
+              default: []
+              description: Add custom arguments to the RBAC Manager pod.
+              items: {}
+              type: array
+            deploy:
+              default: true
+              description: Deploy the RBAC Manager pod and its required roles.
+              type: boolean
+            leaderElection:
+              default: true
+              description: Enable [leader election](https://docs.crossplane.io/latest/concepts/pods/#leader-election)
+                for the RBAC Manager pod.
+              type: boolean
+            nodeSelector:
+              default: {}
+              description: Add `nodeSelectors` to the RBAC Manager pod deployment.
+              type: object
+            replicas:
+              default: 1
+              description: The number of RBAC Manager pod `replicas` to deploy.
+              type: integer
+            revisionHistoryLimit:
+              description: The number of RBAC Manager ReplicaSets to retain.
+              oneOf:
+              - default: null
+                nullable: true
+                type: integer
+              - default: null
+                nullable: true
+                type: number
+              - default: null
+                nullable: true
+                type: boolean
+              - default: null
+                nullable: true
+                type: string
+              - default: null
+                nullable: true
+                type: object
+              - default: null
+                items: {}
+                nullable: true
+                type: array
+            skipAggregatedClusterRoles:
+              default: false
+              description: Don't install aggregated Crossplane ClusterRoles.
+              type: boolean
+            tolerations:
+              default: []
+              description: Add `tolerations` to the RBAC Manager pod deployment.
+              items: {}
+              type: array
+            topologySpreadConstraints:
+              default: []
+              description: Add `topologySpreadConstraints` to the RBAC Manager pod
+                deployment.
+              items: {}
+              type: array
+          type: object
+        readiness:
+          properties:
+            port:
+              default: ""
+              description: The port the readyz server listens on.
+              type: string
+          type: object
+        registryCaBundleConfig:
+          properties:
+            key:
+              default: ""
+              description: The ConfigMap key containing a custom CA bundle to enable
+                fetching packages from registries with unknown or untrusted certificates.
+              type: string
+            name:
+              default: ""
+              description: The ConfigMap name containing a custom CA bundle to enable
+                fetching packages from registries with unknown or untrusted certificates.
+              type: string
+          type: object
+        replicas:
+          default: 1
+          description: helm-docs renders these comments into markdown. Use markdown
+            formatting where appropiate. -- The number of Crossplane pod `replicas`
+            to deploy.
+          type: integer
+        resourcesCrossplane:
+          properties:
+            limits:
+              properties:
+                cpu:
+                  default: 500m
+                  description: CPU resource limits for the Crossplane pod.
+                  type: string
+                memory:
+                  default: 1024Mi
+                  description: Memory resource limits for the Crossplane pod.
+                  type: string
+              type: object
+            requests:
+              properties:
+                cpu:
+                  default: 100m
+                  description: CPU resource requests for the Crossplane pod.
+                  type: string
+                memory:
+                  default: 256Mi
+                  description: Memory resource requests for the Crossplane pod.
+                  type: string
+              type: object
+          type: object
+        resourcesRBACManager:
+          properties:
+            limits:
+              properties:
+                cpu:
+                  default: 100m
+                  description: CPU resource limits for the RBAC Manager pod.
+                  type: string
+                memory:
+                  default: 512Mi
+                  description: Memory resource limits for the RBAC Manager pod.
+                  type: string
+              type: object
+            requests:
+              properties:
+                cpu:
+                  default: 100m
+                  description: CPU resource requests for the RBAC Manager pod.
+                  type: string
+                memory:
+                  default: 256Mi
+                  description: Memory resource requests for the RBAC Manager pod.
+                  type: string
+              type: object
+          type: object
+        revisionHistoryLimit:
+          description: The number of Crossplane ReplicaSets to retain.
+          oneOf:
+          - default: null
+            nullable: true
+            type: integer
+          - default: null
+            nullable: true
+            type: number
+          - default: null
+            nullable: true
+            type: boolean
+          - default: null
+            nullable: true
+            type: string
+          - default: null
+            nullable: true
+            type: object
+          - default: null
+            items: {}
+            nullable: true
+            type: array
+        runtimeClassName:
+          default: ""
+          description: The runtimeClassName name to apply to the Crossplane and RBAC
+            Manager pods.
+          type: string
+        securityContextCrossplane:
+          properties:
+            allowPrivilegeEscalation:
+              default: false
+              description: Enable `allowPrivilegeEscalation` for the Crossplane pod.
+              type: boolean
+            readOnlyRootFilesystem:
+              default: true
+              description: Set the Crossplane pod root file system as read-only.
+              type: boolean
+            runAsGroup:
+              default: 65532
+              description: The group ID used by the Crossplane pod.
+              type: integer
+            runAsUser:
+              default: 65532
+              description: The user ID used by the Crossplane pod.
+              type: integer
+          type: object
+        securityContextRBACManager:
+          properties:
+            allowPrivilegeEscalation:
+              default: false
+              description: Enable `allowPrivilegeEscalation` for the RBAC Manager
+                pod.
+              type: boolean
+            readOnlyRootFilesystem:
+              default: true
+              description: Set the RBAC Manager pod root file system as read-only.
+              type: boolean
+            runAsGroup:
+              default: 65532
+              description: The group ID used by the RBAC Manager pod.
+              type: integer
+            runAsUser:
+              default: 65532
+              description: The user ID used by the RBAC Manager pod.
+              type: integer
+          type: object
+        service:
+          properties:
+            customAnnotations:
+              default: {}
+              description: Configure annotations on the service object. Only enabled
+                when webhooks.enabled = true
+              type: object
+          type: object
+        serviceAccount:
+          properties:
+            create:
+              default: true
+              description: Specifies whether Crossplane ServiceAccount should be created
+              type: boolean
+            customAnnotations:
+              default: {}
+              description: Add custom `annotations` to the Crossplane ServiceAccount.
+              type: object
+            name:
+              default: ""
+              description: Provide the name of an already created Crossplane ServiceAccount.
+                Required when `serviceAccount.create` is `false`
+              type: string
+          type: object
+        tolerations:
+          default: []
+          description: Add `tolerations` to the Crossplane pod deployment.
+          items: {}
+          type: array
+        topologySpreadConstraints:
+          default: []
+          description: Add `topologySpreadConstraints` to the Crossplane pod deployment.
+          items: {}
+          type: array
+        webhooks:
+          properties:
+            enabled:
+              default: true
+              description: Enable webhooks for Crossplane and installed Provider packages.
+              type: boolean
+            port:
+              default: ""
+              description: The port the webhook server listens on.
+              type: string
+          type: object
+      type: object
+  version: 1.20.0
