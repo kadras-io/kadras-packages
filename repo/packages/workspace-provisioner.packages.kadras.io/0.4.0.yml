@@ -1,0 +1,115 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: workspace-provisioner.packages.kadras.io.0.4.0
+spec:
+  licenses:
+  - Apache 2.0
+  refName: workspace-provisioner.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/workspace-provisioner/releases
+  releasedAt: "2025-08-14T17:24:09Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/workspace-provisioner@sha256:9efab8fd3c86a7e8cfd5f1cff17ab5a881a0d37b13af5e971f2e1b23ac6c2dde
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        cosign:
+          additionalProperties: false
+          description: Settings for Cosign, used for signing and verifying OCI artifacts.
+          properties:
+            secret:
+              additionalProperties: false
+              description: Configuration for the Secret holding the Cosign key pair.
+              properties:
+                name:
+                  default: ""
+                  description: The name of the Secret holding the Cosign key pair.
+                  type: string
+                namespace:
+                  default: ""
+                  description: The namespace of the Secret holding the Cosign key
+                    pair.
+                  type: string
+              type: object
+          type: object
+        git:
+          additionalProperties: false
+          description: Configuration to access the Git repositories used in the GitOps
+            workflows.
+          properties:
+            secret:
+              additionalProperties: false
+              description: Configuration for the Secret holding the Git credentials.
+              properties:
+                name:
+                  default: ""
+                  description: The name of the Secret holding the Git credentials.
+                  type: string
+                namespace:
+                  default: ""
+                  description: The namespace of the Secret holding the Git credentials.
+                  type: string
+              type: object
+            server:
+              default: https://github.com
+              description: The Git server hosting the Git repositories used in the
+                GitOps workflows.
+              type: string
+          type: object
+        namespaces:
+          default: []
+          description: Configuration for the namespaces the platform will provision
+            and manage.
+          items:
+            additionalProperties: false
+            description: Details about the namespace to configure.
+            properties:
+              name:
+                default: ""
+                type: string
+            type: object
+          type: array
+        oci:
+          additionalProperties: false
+          description: Settings for accessing the OCI registry that the workspace
+            will use.
+          properties:
+            pull_secret:
+              additionalProperties: false
+              description: Configuration for the Secret holding the credentials to
+                pull images from the OCI registry.
+              properties:
+                name:
+                  default: ""
+                  description: The name of the Secret holding the credentials to pull
+                    images from the OCI registry.
+                  type: string
+                namespace:
+                  default: ""
+                  description: The namespace of the Secret holding the credentials
+                    to pull images from the OCI registry.
+                  type: string
+              type: object
+          type: object
+        service_account:
+          default: supply-chain
+          description: The `ServiceAccount` to be configured with credentials and
+            roles in each workspace.
+          type: string
+      type: object
+  version: 0.4.0
