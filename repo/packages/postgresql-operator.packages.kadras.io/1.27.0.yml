@@ -1,0 +1,31 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: postgresql-operator.packages.kadras.io.1.27.0
+spec:
+  licenses:
+  - Apache 2.0
+  refName: postgresql-operator.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-postgresql-operator/releases
+  releasedAt: "2025-08-14T17:53:47Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-postgresql-operator@sha256:7ba0b9f3ab4414eecd25540f29d5176abd8290c2850c3c85115c78ea2d9b25b8
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      default: null
+      nullable: true
+  version: 1.27.0
