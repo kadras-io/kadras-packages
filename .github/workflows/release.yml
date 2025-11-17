@@ -19,7 +19,7 @@ jobs:
       image-digest: ${{ steps.image-info.outputs.image_digest }}
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v5.0.1
 
       - name: Set up Carvel
         uses: carvel-dev/setup-action@v2.0.1
