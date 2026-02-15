@@ -14,6 +14,7 @@ This repository contains the following Carvel packages.
 | Package | Description |
 |---------|-------------|
 | [cert-manager](https://github.com/kadras-io/package-for-cert-manager) | A cloud-native solution to automatically provision and manage X.509 certificates. |
+| [cert-manager-webhook-hetzner](https://github.com/kadras-io/package-for-cert-manager-webhook-hetzner | A webhook that creates the necessary DNS entries in the Hetzner DNS API to solve a DNS01 challenge for a cert-manager Issuer of the ACME type. |
 | [contour](https://github.com/kadras-io/package-for-contour) | An Envoy-based ingress controller that supports dynamic configuration updates and multi-team ingress delegation. |
 | [crossplane](https://github.com/kadras-io/package-for-crossplane) | A Kubernetes extension that transforms your Kubernetes cluster into a universal control plane. |
 | [dependency-track](https://github.com/kadras-io/package-for-dependency-track) | OWASP Dependency Track is a continuous SBOM Analysis Platform for managing software supply chain security risks. |
@@ -28,7 +29,6 @@ This repository contains the following Carvel packages.
 | [rabbitmq-operator](https://github.com/kadras-io/package-for-rabbitmq-operator) | A message broker supporting multiple messaging protocols and streaming. |
 | [rbac-configurer](https://github.com/kadras-io/rbac-configurer) | Provides default roles and RBAC configuration for the Kadras Engineering Platform. |
 | [secretgen-controller](https://github.com/kadras-io/package-for-secretgen-controller) | Generates various types of Secrets in-cluster as well as export and import Secrets across namespaces. |
-| [service-binding](https://github.com/kadras-io/package-for-service-binding) | A standard and automated way for communicating service secrets to workloads. |
 | [tempo-operator](https://github.com/kadras-io/package-for-tempo-operator) | A solution to manage Grafana Tempo on Kubernetes and OpenShift clusters. |
 | [workspace-provisioner](https://github.com/kadras-io/workspace-provisioner) | Provisions and configures workspaces (namespaces or virtual clusters) to work with the Kadras Engineering Platform. |
 
@@ -36,7 +36,7 @@ This repository contains the following Carvel packages.
 
 ### Prerequisites
 
-* Kubernetes 1.32+
+* Kubernetes 1.33+
 * Carvel [`kctrl`](https://carvel.dev/kapp-controller/docs/latest/install/#installing-kapp-controller-cli-kctrl) CLI.
 * Carvel [kapp-controller](https://carvel.dev/kapp-controller) deployed in your Kubernetes cluster. You can install it with Carvel [`kapp`](https://carvel.dev/kapp/docs/latest/install) (recommended choice) or `kubectl`.
 
