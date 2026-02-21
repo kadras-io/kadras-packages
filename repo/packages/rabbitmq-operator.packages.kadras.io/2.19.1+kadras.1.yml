@@ -1,0 +1,54 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: rabbitmq-operator.packages.kadras.io.2.19.1+kadras.1
+spec:
+  licenses:
+  - Apache 2.0
+  refName: rabbitmq-operator.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-rabbitmq-operator/releases
+  releasedAt: "2026-02-21T12:33:57Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-rabbitmq-operator@sha256:00f533bd0ba3d928176be14980d937218a28b0c12ebf116ff28c9368f714e66e
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        logging:
+          additionalProperties: false
+          description: Logging configuration.
+          properties:
+            level:
+              default: info
+              description: The Operator log level. Valid options are `info` and `debug`.
+              enum:
+              - info
+              - debug
+              type: string
+          type: object
+        prometheus:
+          additionalProperties: false
+          description: Settings for Prometheus metrics.
+          properties:
+            enabled:
+              default: true
+              description: Whether to enable Prometheus annotations for automatic
+                scraping of RabbitMQ Operator metrics.
+              type: boolean
+          type: object
+      type: object
+  version: 2.19.1+kadras.1
