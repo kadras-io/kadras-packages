@@ -1,0 +1,337 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: knative-serving.packages.kadras.io.1.21.0+kadras.2
+spec:
+  capacityRequirementsDescription: For prototyping purposes, one-node cluster that
+    has at least 3 CPUs and 4 GB of memory. For production purposes, if you have only
+    one node, at least 6 CPUs, 6 GB of memory, and 30 GB of disk storage. If you have
+    multiple nodes, for each node at least 2 CPUs, 4 GB of memory, and 20 GB of disk
+    storage.
+  licenses:
+  - Apache 2.0
+  refName: knative-serving.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-knative-serving/releases
+  releasedAt: "2026-02-21T11:24:01Z"
+  template:
+    spec:
+      deploy:
+      - kapp:
+          rawOptions:
+          - --wait-timeout=5m
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-knative-serving@sha256:b9cc239e6cab80a1f912dae759260a2ee55569f60c1613f4e275d86afcd3797d
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        ca_cert_data:
+          default: ""
+          description: PEM-encoded certificate data to trust TLS connections with
+            a custom CA.
+          type: string
+        config:
+          additionalProperties: false
+          description: Settings for the Knative Serving ConfigMaps.
+          properties:
+            deployment:
+              additionalProperties: false
+              description: Deployment configuration stored in the `config-deployment`
+                ConfigMap.
+              properties:
+                progress-deadline:
+                  default: 600s
+                  description: The duration to wait for the deployment to be ready
+                    before considering it failed.
+                  type: string
+                queue-sidecar-cpu-limit:
+                  default: 1000m
+                  description: The queue proxy's CPU limit. If omitted, a default
+                    value (currently `1000m`), is used when `queueproxy.resource-defaults`
+                    is set to `Enabled`.
+                  type: string
+                queue-sidecar-cpu-request:
+                  default: 25m
+                  description: The queue proxy's CPU request. If omitted, a default
+                    value (currently '25m'), is used.
+                  type: string
+                queue-sidecar-memory-limit:
+                  default: 200Mi
+                  description: The queue proxy's memory limit. If omitted, a default
+                    value (currently `800Mi`), is used when `queueproxy.resource-defaults`
+                    is set to `Enabled`.
+                  type: string
+                queue-sidecar-memory-request:
+                  default: 50Mi
+                  description: The queue proxy's memory request. If omitted, a default
+                    value (currently `400Mi`), is used when `queueproxy.resource-defaults`
+                    is set to `Enabled`.
+                  type: string
+              type: object
+            network:
+              additionalProperties: false
+              description: Network configuration stored in the `config-network` ConfigMap.
+              properties:
+                default-external-scheme:
+                  default: http
+                  description: Defines the scheme used for external URLs if autoTLS
+                    is not enabled. This can be used for making Knative report all
+                    URLs as `https`, for example, if you're fronting Knative with
+                    an external loadbalancer that deals with TLS termination and Knative
+                    doesn't know about that otherwise.
+                  enum:
+                  - http
+                  - https
+                  type: string
+                domain-template:
+                  default: '{{.Name}}.{{.Namespace}}.{{.Domain}}'
+                  description: The golang text template string to use when constructing
+                    the Knative Service's DNS name.
+                  type: string
+                http-protocol:
+                  default: Redirected
+                  description: 'Controls the behavior of the HTTP endpoint for the
+                    Knative ingress. `Enabled`: The Knative ingress will be able to
+                    serve HTTP connection. `Redirected`: The Knative ingress will
+                    send a 301 redirect for all http connections, asking the clients
+                    to use HTTPS.'
+                  enum:
+                  - Enabled
+                  - Redirected
+                  type: string
+                namespace-wildcard-cert-selector:
+                  default: ""
+                  description: A LabelSelector which determines which namespaces should
+                    have a wildcard certificate provisioned.
+                  type: string
+                rollout-duration:
+                  default: 0
+                  description: The minimal duration in seconds over which the Configuration
+                    traffic targets are rolled out to the newest revision.
+                  minimum: 0
+                  type: integer
+              type: object
+            observability:
+              additionalProperties: false
+              description: Observability configuration stored in the `config-observability`
+                ConfigMap.
+              properties:
+                metrics-endpoint:
+                  default: ""
+                  description: The destination metrics should be exporter to.
+                  type: string
+                metrics-protocol:
+                  default: none
+                  description: the protocol used when exporting metrics.
+                  enum:
+                  - none
+                  - http/protobuf
+                  - grpc
+                  - prometheus
+                  type: string
+                request-metrics-endpoint:
+                  default: ""
+                  description: The destination queue-proxy metrics should be exporter
+                    to.
+                  type: string
+                request-metrics-export-interval:
+                  default: 60s
+                  description: the global metrics reporting period for the queue-proxy.
+                  type: string
+                request-metrics-protocol:
+                  default: none
+                  description: the protocol used when exporting queue-proxy metrics.
+                  enum:
+                  - none
+                  - http/protobuf
+                  - grpc
+                  - prometheus
+                  type: string
+                tracing-endpoint:
+                  default: ""
+                  description: The destination traces should be exporter to.
+                  type: string
+                tracing-protocol:
+                  default: none
+                  description: The protocol used when exporting traces.
+                  enum:
+                  - none
+                  - http/protobuf
+                  - grpc
+                  - stdout
+                  type: string
+                tracing-sampling-rate:
+                  default: "1"
+                  description: The percentage of requests to trace. The value should
+                    be between 0 (never sample) to 1 (always sample).
+                  maxLength: 3
+                  minLength: 1
+                  type: string
+              type: object
+          type: object
+        domain_name:
+          default: ""
+          description: Domain name for Knative Services. It must be a valid DNS name.
+            Stored in the `config-domain` ConfigMap.
+          minLength: 4
+          type: string
+        ingress:
+          additionalProperties: false
+          description: Settings for the Ingress controller.
+          properties:
+            contour:
+              additionalProperties: false
+              description: Ingress configuration stored in the `config-contour` ConfigMap.
+              properties:
+                default-tls-secret:
+                  default: ""
+                  description: If auto-TLS is disabled, fallback to this certificate.
+                    An operator is required to setup a TLSCertificateDelegation for
+                    this Secret to be used.
+                  type: string
+                external:
+                  additionalProperties: false
+                  description: Configuration for the external Ingress controller
+                  properties:
+                    namespace:
+                      default: projectcontour
+                      description: The namespace where the external Ingress controller
+                        is installed.
+                      minLength: 1
+                      type: string
+                  type: object
+                internal:
+                  additionalProperties: false
+                  description: Configuration for the internal Ingress controller
+                  properties:
+                    namespace:
+                      default: projectcontour
+                      description: The namespace where the internal Ingress controller
+                        is installed.
+                      minLength: 1
+                      type: string
+                  type: object
+              type: object
+          type: object
+        ingress_issuer:
+          default: ""
+          description: A reference to the ClusterIssuer to use if you want to enable
+            autoTLS. Stored in the `config-certmanager` ConfigMap.
+          example: kadras-ca-issuer
+          type: string
+          x-example-description: Kadras private CA
+        min_kubernetes_version:
+          default: ""
+          description: The minimum Kubernetes version that this package will accept
+            as valid. If not set, Knative Serving will accept the last 3 minor versions
+            of Kubernetes.
+          type: string
+        policies:
+          additionalProperties: false
+          description: Settings for the Kyverno policies.
+          properties:
+            include:
+              default: false
+              description: Whether to include the out-of-the-box Kyverno policies
+                to validate and secure the package installation.
+              type: boolean
+          type: object
+        proxy:
+          additionalProperties: false
+          description: Settings for the corporate proxy.
+          properties:
+            http_proxy:
+              default: ""
+              description: The HTTP proxy to use for network traffic.
+              type: string
+            https_proxy:
+              default: ""
+              description: The HTTPS proxy to use for network traffic.
+              type: string
+            no_proxy:
+              default: ""
+              description: A comma-separated list of hostnames, IP addresses, or IP
+                ranges in CIDR format that should not use a proxy.
+              type: string
+          type: object
+        workloads:
+          additionalProperties: false
+          description: Settings for the Knative Serving workloads.
+          properties:
+            activator:
+              additionalProperties: false
+              properties:
+                minReplicas:
+                  default: 1
+                  description: The minimum number of replicas as controlled by a HorizontalPodAutoscaler.
+                    In order to enable high availability, it should be greater than
+                    1.
+                  maximum: 20
+                  minimum: 1
+                  type: integer
+              type: object
+            autoscaler:
+              additionalProperties: false
+              properties:
+                replicas:
+                  default: 1
+                  description: The number of replicas for this Deployment. In order
+                    to enable high availability, it should be greater than 1.
+                  minimum: 1
+                  type: integer
+              type: object
+            controller:
+              additionalProperties: false
+              properties:
+                replicas:
+                  default: 1
+                  description: The number of replicas for this Deployment. In order
+                    to enable high availability, it should be greater than 1.
+                  minimum: 1
+                  type: integer
+              type: object
+            domain_mapping:
+              additionalProperties: false
+              properties:
+                replicas:
+                  default: 1
+                  description: The number of replicas for this Deployment. In order
+                    to enable high availability, it should be greater than 1.
+                  minimum: 1
+                  type: integer
+              type: object
+            domain_mapping_webhook:
+              additionalProperties: false
+              properties:
+                replicas:
+                  default: 1
+                  description: The number of replicas for this Deployment. In order
+                    to enable high availability, it should be greater than 1.
+                  minimum: 1
+                  type: integer
+              type: object
+            webhook:
+              additionalProperties: false
+              properties:
+                minReplicas:
+                  default: 1
+                  description: The minimum number of replicas as controlled by a HorizontalPodAutoscaler.
+                    In order to enable high availability, it should be greater than
+                    1.
+                  maximum: 5
+                  minimum: 1
+                  type: integer
+              type: object
+          type: object
+      type: object
+  version: 1.21.0+kadras.2
