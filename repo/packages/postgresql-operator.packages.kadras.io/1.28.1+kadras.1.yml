@@ -1,0 +1,42 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: postgresql-operator.packages.kadras.io.1.28.1+kadras.1
+spec:
+  licenses:
+  - Apache 2.0
+  refName: postgresql-operator.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-postgresql-operator/releases
+  releasedAt: "2026-02-21T12:13:14Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-postgresql-operator@sha256:24bcd3866cc1745f8c0f327018ec4fdd19135b89adb54e947efc5ab3b4f349d4
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        prometheus:
+          additionalProperties: false
+          description: Settings for Prometheus metrics.
+          properties:
+            enabled:
+              default: true
+              description: Whether to enable Prometheus annotations for automatic
+                scraping of PostgreSQL Operator metrics.
+              type: boolean
+          type: object
+      type: object
+  version: 1.28.1+kadras.1
