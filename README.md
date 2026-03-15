@@ -14,7 +14,7 @@ This repository contains the following Carvel packages.
 | Package | Description |
 |---------|-------------|
 | [cert-manager](https://github.com/kadras-io/package-for-cert-manager) | A cloud-native solution to automatically provision and manage X.509 certificates. |
-| [cert-manager-webhook-hetzner](https://github.com/kadras-io/package-for-cert-manager-webhook-hetzner | A webhook that creates the necessary DNS entries in the Hetzner DNS API to solve a DNS01 challenge for a cert-manager Issuer of the ACME type. |
+| [cert-manager-webhook-hetzner](https://github.com/kadras-io/package-for-cert-manager-webhook-hetzner) | A webhook that creates the necessary DNS entries in the Hetzner DNS API to solve a DNS01 challenge for a cert-manager Issuer of the ACME type. |
 | [contour](https://github.com/kadras-io/package-for-contour) | An Envoy-based ingress controller that supports dynamic configuration updates and multi-team ingress delegation. |
 | [crossplane](https://github.com/kadras-io/package-for-crossplane) | A Kubernetes extension that transforms your Kubernetes cluster into a universal control plane. |
 | [dependency-track](https://github.com/kadras-io/package-for-dependency-track) | OWASP Dependency Track is a continuous SBOM Analysis Platform for managing software supply chain security risks. |
