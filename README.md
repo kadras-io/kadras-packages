@@ -20,11 +20,13 @@ This repository contains the following Carvel packages.
 | [dependency-track](https://github.com/kadras-io/package-for-dependency-track) | OWASP Dependency Track is a continuous SBOM Analysis Platform for managing software supply chain security risks. |
 | [developer-portal](https://github.com/kadras-io/package-for-developer-portal) | Kadras Developer Portal, based on Backstage. It supports application developers with paved paths to production on Kubernetes. |
 | [engineering-platform](https://github.com/kadras-io/engineering-platform) | A curated set of Carvel packages to build an engineering platform supporting application developers with paved paths to production on Kubernetes. |
+| [flagger](https://github.com/kadras-io/package-for-flagger) | A progressive delivery tool that automates the release process for applications running on Kubernetes. |
 | [flux](https://github.com/kadras-io/package-for-flux) | A continuous deployment solution for Kubernetes, powered by the GitOps Toolkit. |
 | [gitops-configurer](https://github.com/kadras-io/gitops-configurer) | Provides GitOps configuration for the Kadras Engineering Platform. |
 | [knative-serving](https://github.com/kadras-io/package-for-knative-serving) | A solution built on Kubernetes to support deploying and serving of applications and functions as serverless containers. |
 | [kyverno](https://github.com/kadras-io/package-for-kyverno) | A policy engine designed for Kubernetes. It can validate, mutate, and generate configurations using admission controls and background scans. |
 | [metrics-server](https://github.com/kadras-io/package-for-metrics-server) | A scalable and efficient source of container resource metrics for Kubernetes built-in autoscaling pipelines. |
+| [opentelemetry-operator](https://github.com/kadras-io/package-for-opentelemetry-operator) | An operator that manages collectors and auto-instrumentation of the workload using OpenTelemetry instrumentation libraries. |
 | [postgresql-operator](https://github.com/kadras-io/package-for-postgresql-operator) | CloudNativePG, a Kubernetes operator that covers the full lifecycle of a PostgreSQL database cluster with a primary/standby architecture, using native streaming replication. |
 | [rabbitmq-operator](https://github.com/kadras-io/package-for-rabbitmq-operator) | A message broker supporting multiple messaging protocols and streaming. |
 | [rbac-configurer](https://github.com/kadras-io/rbac-configurer) | Provides default roles and RBAC configuration for the Kadras Engineering Platform. |
