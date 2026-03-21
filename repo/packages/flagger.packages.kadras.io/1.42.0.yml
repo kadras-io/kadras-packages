@@ -1,0 +1,528 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: flagger.packages.kadras.io.1.42.0
+spec:
+  refName: flagger.packages.kadras.io
+  releasedAt: "2026-03-21T07:29:34Z"
+  template:
+    spec:
+      deploy:
+      - kapp:
+          intoNs: flagger-system
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-flagger@sha256:c96a452d6acf25260293e385cf016d82f4e3c546d9c314c4b9e154903237e3f1
+      template:
+      - helmTemplate:
+          name: flagger
+          namespace: flagger-system
+          path: config/helm/upstream/flagger
+          valuesFrom:
+          - path: config/helm/values.yml
+      - ytt:
+          ignoreUnknownComments: true
+          paths:
+          - '-'
+          - config/carvel
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      properties:
+        additionalVolumes:
+          default: {}
+          description: Placeholder to supply additional volumes to the flagger pod
+          type: object
+        affinity:
+          properties:
+            podAntiAffinity:
+              properties:
+                preferredDuringSchedulingIgnoredDuringExecution:
+                  default: []
+                  items:
+                    properties:
+                      podAffinityTerm:
+                        properties:
+                          labelSelector:
+                            properties:
+                              matchLabels:
+                                properties:
+                                  app.kubernetes.io/instance:
+                                    default: '{{ .Release.Name }}'
+                                    type: string
+                                  app.kubernetes.io/name:
+                                    default: '{{ template "flagger.name" . }}'
+                                    type: string
+                                type: object
+                            type: object
+                          topologyKey:
+                            default: kubernetes.io/hostname
+                            type: string
+                        type: object
+                      weight:
+                        default: 100
+                        type: integer
+                    type: object
+                  type: array
+              type: object
+          type: object
+        clusterName:
+          default: ""
+          description: when specified, flagger will add the cluster name to alerts
+          type: string
+        configTracking:
+          description: when enabled, flagger will track changes in Secrets and ConfigMaps
+            referenced in the target deployment (enabled by default)
+          properties:
+            enabled:
+              default: true
+              type: boolean
+          type: object
+        controlplane:
+          description: Multi-cluster service mesh (shared control plane single-network)
+          properties:
+            kubeconfig:
+              properties:
+                key:
+                  default: kubeconfig
+                  description: 'controlplane.kubeconfig.key: The name of secret data
+                    key that contains the mesh control plane kubeconfig'
+                  type: string
+                secretName:
+                  default: ""
+                  description: 'controlplane.kubeconfig.secretName: The name of the
+                    secret containing the mesh control plane kubeconfig'
+                  type: string
+              type: object
+          type: object
+        crd:
+          properties:
+            create:
+              default: false
+              description: 'crd.create: `true` if custom resource definitions should
+                be created'
+              type: boolean
+          type: object
+        deploymentLabels:
+          default: {}
+          description: Additional labels to be added to deployments
+          type: object
+        env:
+          default: []
+          description: 'env:- name: SLACK_URL  valueFrom:    secretKeyRef:      name:
+            slack      key: url- name: SLACK_PROXY_URL  valueFrom:    secretKeyRef:      name:
+            slack      key: proxy-url- name: MSTEAMS_URL  valueFrom:    secretKeyRef:      name:
+            msteams      key: url- name: MSTEAMS_PROXY_URL  valueFrom:    secretKeyRef:      name:
+            msteams      key: proxy-url- name: EVENT_WEBHOOK_URL  valueFrom:    secretKeyRef:      name:
+            eventwebhook      key: url'
+          items: {}
+          type: array
+        eventWebhook:
+          default: ""
+          description: when specified, flagger will publish events to the provided
+            webhook
+          type: string
+        fullnameOverride:
+          default: ""
+          type: string
+        image:
+          properties:
+            pullPolicy:
+              default: IfNotPresent
+              type: string
+            pullSecret:
+              oneOf:
+              - default: null
+                nullable: true
+                type: integer
+              - default: null
+                nullable: true
+                type: number
+              - default: null
+                nullable: true
+                type: boolean
+              - default: null
+                nullable: true
+                type: string
+              - default: null
+                nullable: true
+                type: object
+              - default: null
+                items: {}
+                nullable: true
+                type: array
+            repository:
+              default: ghcr.io/fluxcd/flagger
+              type: string
+            tag:
+              default: 1.42.0
+              type: string
+          type: object
+        ingressAnnotationsPrefix:
+          default: ""
+          description: annotations prefix for NGINX ingresses
+          type: string
+        ingressClass:
+          default: ""
+          description: ingress class used for annotating HTTPProxy objects
+          type: string
+        kubeconfigBurst:
+          default: ""
+          type: string
+        kubeconfigQPS:
+          default: ""
+          type: string
+        leaderElection:
+          properties:
+            enabled:
+              default: false
+              type: boolean
+            replicaCount:
+              default: 1
+              type: integer
+          type: object
+        linkerdAuthPolicy:
+          properties:
+            create:
+              default: false
+              description: 'linkerdAuthPolicy.create: Whether to create an AuthorizationPolicy
+                in linkerd viz'' namespace to allow flagger to reach viz'' prometheus
+                service'
+              type: boolean
+            namespace:
+              default: linkerd-viz
+              description: 'linkerdAuthPolicy.namespace: linkerd-viz'' namespace'
+              type: string
+          type: object
+        logLevel:
+          default: info
+          description: accepted values are debug, info, warning, error (defaults to
+            info)
+          type: string
+        meshProvider:
+          default: ""
+          description: accepted values are kubernetes, istio, linkerd, appmesh, contour,
+            nginx, gloo, skipper, traefik, apisix
+          type: string
+        metricsServer:
+          default: http://prometheus:9090
+          type: string
+        msteams:
+          properties:
+            url:
+              description: MS Teams incoming webhook URL
+              oneOf:
+              - default: null
+                nullable: true
+                type: integer
+              - default: null
+                nullable: true
+                type: number
+              - default: null
+                nullable: true
+                type: boolean
+              - default: null
+                nullable: true
+                type: string
+              - default: null
+                nullable: true
+                type: object
+              - default: null
+                items: {}
+                nullable: true
+                type: array
+          type: object
+        nameOverride:
+          default: ""
+          type: string
+        namespace:
+          default: ""
+          description: single namespace restriction
+          type: string
+        noCrossNamespaceRefs:
+          default: false
+          type: boolean
+        nodeSelector:
+          default: {}
+          type: object
+        podAnnotations:
+          properties:
+            appmesh.k8s.aws/sidecarInjectorWebhook:
+              default: disabled
+              type: string
+            linkerd.io/inject:
+              default: enabled
+              type: string
+            prometheus.io/port:
+              default: "8080"
+              type: string
+            prometheus.io/scrape:
+              default: "true"
+              type: string
+          type: object
+        podDisruptionBudget:
+          properties:
+            enabled:
+              default: false
+              type: boolean
+            minAvailable:
+              default: 1
+              type: integer
+          type: object
+        podLabels:
+          default: {}
+          description: Additional labels to be added to pods
+          type: object
+        podMonitor:
+          properties:
+            additionalLabels:
+              default: {}
+              type: object
+            enabled:
+              default: false
+              type: boolean
+            honorLabels:
+              default: false
+              type: boolean
+            interval:
+              default: 15s
+              type: string
+            namespace:
+              oneOf:
+              - default: null
+                nullable: true
+                type: integer
+              - default: null
+                nullable: true
+                type: number
+              - default: null
+                nullable: true
+                type: boolean
+              - default: null
+                nullable: true
+                type: string
+              - default: null
+                nullable: true
+                type: object
+              - default: null
+                items: {}
+                nullable: true
+                type: array
+          type: object
+        podPriorityClassName:
+          default: ""
+          description: priority class name for pod priority configuration
+          type: string
+        prometheus:
+          properties:
+            image:
+              default: docker.io/prom/prometheus:v2.41.0
+              type: string
+            install:
+              default: false
+              description: to be used with ingress controllers
+              type: boolean
+            pullSecret:
+              oneOf:
+              - default: null
+                nullable: true
+                type: integer
+              - default: null
+                nullable: true
+                type: number
+              - default: null
+                nullable: true
+                type: boolean
+              - default: null
+                nullable: true
+                type: string
+              - default: null
+                nullable: true
+                type: object
+              - default: null
+                items: {}
+                nullable: true
+                type: array
+            retention:
+              default: 2h
+              type: string
+            securityContext:
+              description: when enabled, it will add a security context for the prometheus
+                pod
+              properties:
+                context:
+                  properties:
+                    readOnlyRootFilesystem:
+                      default: true
+                      type: boolean
+                    runAsUser:
+                      default: 10001
+                      type: integer
+                  type: object
+                enabled:
+                  default: false
+                  type: boolean
+              type: object
+          type: object
+        rbac:
+          properties:
+            create:
+              default: true
+              description: 'rbac.create: `true` if rbac resources should be created'
+              type: boolean
+            pspEnabled:
+              default: false
+              description: 'rbac.pspEnabled: `true` if PodSecurityPolicy resources
+                should be created'
+              type: boolean
+          type: object
+        resources:
+          properties:
+            limits:
+              properties:
+                cpu:
+                  default: 1000m
+                  type: string
+                memory:
+                  default: 512Mi
+                  type: string
+              type: object
+            requests:
+              properties:
+                cpu:
+                  default: 10m
+                  type: string
+                memory:
+                  default: 32Mi
+                  type: string
+              type: object
+          type: object
+        securityContext:
+          description: when enabled, it will add a security context for the flagger
+            pod. You may need to disable this if you are running flagger on OpenShift
+          properties:
+            context:
+              properties:
+                readOnlyRootFilesystem:
+                  default: true
+                  type: boolean
+                runAsUser:
+                  default: 10001
+                  type: integer
+              type: object
+            enabled:
+              default: true
+              type: boolean
+          type: object
+        selectorLabels:
+          default: ""
+          description: 'list of pod labels that Flagger uses to create pod selectors
+            defaults to: app,name,app.kubernetes.io/name'
+          type: string
+        serviceAccount:
+          properties:
+            annotations:
+              default: {}
+              description: 'serviceAccount.annotations: Annotations for service account'
+              type: object
+            create:
+              default: true
+              description: 'serviceAccount.create: Whether to create a service account
+                or not'
+              type: boolean
+            name:
+              default: ""
+              description: 'serviceAccount.name: The name of the service account to
+                create or use'
+              type: string
+          type: object
+        serviceMonitor:
+          description: creates serviceMonitor for monitoring Flagger metrics
+          properties:
+            enabled:
+              default: false
+              type: boolean
+            honorLabels:
+              default: false
+              type: boolean
+          type: object
+        slack:
+          properties:
+            channel:
+              oneOf:
+              - default: null
+                nullable: true
+                type: integer
+              - default: null
+                nullable: true
+                type: number
+              - default: null
+                nullable: true
+                type: boolean
+              - default: null
+                nullable: true
+                type: string
+              - default: null
+                nullable: true
+                type: object
+              - default: null
+                items: {}
+                nullable: true
+                type: array
+            proxy:
+              oneOf:
+              - default: null
+                nullable: true
+                type: integer
+              - default: null
+                nullable: true
+                type: number
+              - default: null
+                nullable: true
+                type: boolean
+              - default: null
+                nullable: true
+                type: string
+              - default: null
+                nullable: true
+                type: object
+              - default: null
+                items: {}
+                nullable: true
+                type: array
+            url:
+              description: incoming webhook https://api.slack.com/incoming-webhooks
+              oneOf:
+              - default: null
+                nullable: true
+                type: integer
+              - default: null
+                nullable: true
+                type: number
+              - default: null
+                nullable: true
+                type: boolean
+              - default: null
+                nullable: true
+                type: string
+              - default: null
+                nullable: true
+                type: object
+              - default: null
+                items: {}
+                nullable: true
+                type: array
+            user:
+              default: flagger
+              type: string
+          type: object
+        tolerations:
+          default: []
+          items: {}
+          type: array
+      type: object
+  version: 1.42.0
