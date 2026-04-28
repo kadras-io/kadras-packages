@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v6.0.2
 
       - name: Set up Carvel
-        uses: carvel-dev/setup-action@v2.0.1
+        uses: carvel-dev/setup-action@v2.2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
