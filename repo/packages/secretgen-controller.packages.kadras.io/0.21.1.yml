@@ -1,0 +1,34 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: secretgen-controller.packages.kadras.io.0.21.1
+spec:
+  licenses:
+  - Apache 2.0
+  refName: secretgen-controller.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-secretgen-controller/releases
+  releasedAt: "2026-06-12T15:39:24Z"
+  template:
+    spec:
+      deploy:
+      - kapp:
+          rawOptions:
+          - --wait-timeout=5m
+          - --kube-api-qps=50
+          - --kube-api-burst=100
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-secretgen-controller@sha256:88a7c245d00a5b951031a0cde55bb6bb2163d11375a67acd6836778565d1f665
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      default: null
+      nullable: true
+  version: 0.21.1
