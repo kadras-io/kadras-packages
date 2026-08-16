@@ -1,0 +1,41 @@
+schema-version = "1.14.0"
+
+[install]
+kapp.pkg-path = "kapp"
+ytt.pkg-path = "ytt"
+kbld.pkg-path = "kbld"
+imgpkg.pkg-path = "imgpkg"
+vendir.pkg-path = "vendir"
+kubectl.pkg-path = "kubectl"
+kubectl.outputs = "all"
+kyverno-chainsaw.pkg-path = "kyverno-chainsaw"
+go-task.pkg-path = "go-task"
+kubeconform.pkg-path = "kubeconform"
+kubernetes-helm.pkg-path = "kubernetes-helm"
+jq.pkg-path = "jq"
+jq.outputs = "all"
+yq.pkg-path = "yq"
+yq.outputs = "all"
+yamllint.pkg-path = "yamllint"
+yamllint.outputs = "all"
+k3d.pkg-path = "k3d"
+go.pkg-path = "go"
+kind.pkg-path = "kind"
+kuttl.pkg-path = "kuttl"
+cosign.pkg-path = "cosign"
+podman.pkg-path = "podman"
+
+[vars]
+
+[hook]
+
+[profile]
+
+[services]
+
+[include]
+
+[build]
+
+[options]
+systems = ["aarch64-darwin", "aarch64-linux", "x86_64-linux"]
