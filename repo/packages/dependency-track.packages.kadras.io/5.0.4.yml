@@ -1,0 +1,293 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: dependency-track.packages.kadras.io.5.0.4
+spec:
+  licenses:
+  - Apache 2.0
+  refName: dependency-track.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-dependency-track/releases
+  releasedAt: "2026-08-16T20:44:01Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-dependency-track@sha256:5b433ce6aa266af052c3cfc8269b78c08e821d5099a7e4a5127c7b29aeee9dda
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        api_server:
+          additionalProperties: false
+          description: Settings for the API Server component.
+          properties:
+            config:
+              default: {}
+              description: Additional configuration properties for the API Server,
+                appended to the `application.properties` file and taking precedence
+                over the ones managed by this package. See https://dependencytrack.github.io/docs/next/reference/configuration/properties
+                for the full list.
+              example:
+                dt.dex-engine.activity-worker.vuln-analysis.max-concurrency: 20
+              nullable: true
+              x-example-description: Tune the durable execution engine
+            logging:
+              additionalProperties: false
+              description: Settings for logging.
+              properties:
+                format:
+                  default: console
+                  description: 'Log encoding format. Options: `console`, `json`.'
+                  enum:
+                  - console
+                  - json
+                  type: string
+                level:
+                  default: info
+                  description: 'Log verbosity level. Options: `trace`, `debug`, `info`,
+                    `warn`, `error`.'
+                  enum:
+                  - trace
+                  - debug
+                  - info
+                  - warn
+                  - error
+                  type: string
+              type: object
+            metrics:
+              additionalProperties: false
+              description: Settings for metrics.
+              properties:
+                enabled:
+                  default: true
+                  description: Whether to enable the generation of Prometheus metrics.
+                  type: boolean
+              type: object
+            replicas:
+              default: 1
+              description: The number of API Server replicas. Values greater than
+                1 require a storage class supporting the `ReadWriteMany` access mode.
+              minimum: 1
+              type: integer
+            resources:
+              additionalProperties: false
+              description: Resource configuration for the API Server component.
+              properties:
+                limits:
+                  additionalProperties: false
+                  properties:
+                    cpu:
+                      default: "4"
+                      description: CPU limits configuration for the API Server component.
+                      type: string
+                    memory:
+                      default: 5Gi
+                      description: Memory limits configuration for the API Server
+                        component.
+                      type: string
+                  type: object
+                requests:
+                  additionalProperties: false
+                  properties:
+                    cpu:
+                      default: "0.5"
+                      description: CPU requests configuration for the API Server component.
+                      type: string
+                    memory:
+                      default: 5Gi
+                      description: Memory requests configuration for the API Server
+                        component.
+                      type: string
+                  type: object
+              type: object
+            storage:
+              additionalProperties: false
+              description: Storage configuration for the file storage used by the
+                API Server component.
+              properties:
+                access_modes:
+                  default:
+                  - ReadWriteOnce
+                  description: Access modes for the PersistenceVolume to create. `ReadWriteMany`
+                    is required when running more than one API Server replica.
+                  items:
+                    default: ""
+                    type: string
+                  type: array
+                class_name:
+                  default: ""
+                  description: Class name for the PersistenceVolume to create.
+                  type: string
+                size:
+                  default: 1Gi
+                  description: Size of the PersistenceVolume to create.
+                  type: string
+              type: object
+          type: object
+        ca_cert_data:
+          default: ""
+          description: PEM-encoded certificate data to trust TLS connections with
+            a custom CA. It's imported into the Java truststore used by the API Server.
+          type: string
+        domain_name:
+          default: ""
+          description: Domain name for Dependency Track. It must be a valid DNS name.
+          minLength: 4
+          type: string
+        frontend:
+          additionalProperties: false
+          description: Settings for the Frontend component.
+          properties:
+            config:
+              default: {}
+              description: Configuration for the Frontend, provided as environment
+                variables. Use it to enable OpenID Connect, or to point the Frontend
+                at an API Server served from a different host via `API_BASE_URL`.
+                See https://dependencytrack.github.io/docs/next/guides/administration/configuring-oidc
+                for the OpenID Connect settings.
+              example:
+                OIDC_CLIENT_ID: dependency-track
+                OIDC_ISSUER: https://idp.kadras.io
+                OIDC_SCOPE: openid profile email
+              nullable: true
+              x-example-description: Enable OpenID Connect
+            replicas:
+              default: 1
+              description: The number of Frontend replicas. In order to enable high
+                availability, it should be greater than 1.
+              minimum: 1
+              type: integer
+            resources:
+              additionalProperties: false
+              description: Resource configuration for the Frontend component.
+              properties:
+                limits:
+                  additionalProperties: false
+                  properties:
+                    cpu:
+                      default: 500m
+                      description: CPU limits configuration for the Frontend component.
+                      type: string
+                    memory:
+                      default: 128Mi
+                      description: Memory limits configuration for the Frontend component.
+                      type: string
+                  type: object
+                requests:
+                  additionalProperties: false
+                  properties:
+                    cpu:
+                      default: 150m
+                      description: CPU requests configuration for the Frontend component.
+                      type: string
+                    memory:
+                      default: 64Mi
+                      description: Memory requests configuration for the Frontend
+                        component.
+                      type: string
+                  type: object
+              type: object
+          type: object
+        image:
+          additionalProperties: false
+          description: Settings for the Dependency Track container images.
+          properties:
+            tag:
+              default: ""
+              description: The tag to use for the API Server and Frontend container
+                images, overriding the Dependency Track version bundled with this
+                package. The images must be available in a container registry reachable
+                from the cluster, since they are not part of the package bundle.
+              example: 5.0.5
+              type: string
+              x-example-description: Deploy a newer patch release
+          type: object
+        ingress_issuer:
+          default: ""
+          description: A reference to the ClusterIssuer to use for enabling TLS in
+            Dependency Track.
+          example: kadras-ca-issuer
+          minLength: 4
+          type: string
+          x-example-description: Kadras private CA
+        postgresql:
+          additionalProperties: false
+          description: Settings for the PostgreSQL database.
+          properties:
+            instances:
+              default: 1
+              description: Number of instances for the PostgreSQL database cluster.
+                Define at least 3 for production scenarios.
+              minimum: 1
+              type: integer
+            metrics:
+              additionalProperties: false
+              description: Settings for metrics.
+              properties:
+                enabled:
+                  default: true
+                  description: Whether to enable the generation of Prometheus metrics.
+                  type: boolean
+              type: object
+            parameters:
+              default: {}
+              description: Configuration parameters for the PostgreSQL server, merged
+                on top of the ones recommended by Dependency Track (`jit=off` and
+                `wal_compression=zstd`). Remember that `max_connections` must cover
+                the sum of the connection pools of all the API Server replicas, plus
+                headroom for migrations, backups, and administrator sessions.
+              example:
+                effective_cache_size: 6GB
+                max_connections: 200
+                shared_buffers: 2GB
+              nullable: true
+              x-example-description: Tune a production database
+            storage:
+              additionalProperties: false
+              description: Storage configuration for each PostgreSQL instance.
+              properties:
+                size:
+                  default: 1Gi
+                  description: Size of the PersistenceVolume to create for each PostgreSQL
+                    instance.
+                  type: string
+              type: object
+          type: object
+        proxy:
+          additionalProperties: false
+          description: Settings for the corporate proxy used by the API Server when
+            calling external services.
+          properties:
+            http_proxy:
+              default: ""
+              description: The HTTP proxy to use for network traffic. Used only when
+                `https_proxy` is not configured. It must be a plain HTTP URL in the
+                form `http://[user[:password]@]host[:port]`.
+              type: string
+            https_proxy:
+              default: ""
+              description: The HTTPS proxy to use for network traffic. It must be
+                a plain HTTP URL in the form `http://[user[:password]@]host[:port]`.
+              type: string
+            no_proxy:
+              default: ""
+              description: A comma-separated list of hostnames or IP addresses, optionally
+                with a port, that should not use the proxy. An entry matches the host
+                exactly or any of its subdomains. CIDR ranges and leading-dot notation
+                are not supported.
+              example: postgresql-dependency-track-rw,localhost
+              type: string
+              x-example-description: Skip the proxy for in-cluster traffic
+          type: object
+      type: object
+  version: 5.0.4
