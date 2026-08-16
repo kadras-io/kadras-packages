@@ -31,14 +31,13 @@ This repository contains the following Carvel packages.
 | [rabbitmq-operator](https://github.com/kadras-io/package-for-rabbitmq-operator) | A message broker supporting multiple messaging protocols and streaming. |
 | [rbac-configurer](https://github.com/kadras-io/rbac-configurer) | Provides default roles and RBAC configuration for the Kadras Engineering Platform. |
 | [secretgen-controller](https://github.com/kadras-io/package-for-secretgen-controller) | Generates various types of Secrets in-cluster as well as export and import Secrets across namespaces. |
-| [tempo-operator](https://github.com/kadras-io/package-for-tempo-operator) | A solution to manage Grafana Tempo on Kubernetes and OpenShift clusters. |
 | [workspace-provisioner](https://github.com/kadras-io/workspace-provisioner) | Provisions and configures workspaces (namespaces or virtual clusters) to work with the Kadras Engineering Platform. |
 
 ## 🚀&nbsp; Getting Started
 
 ### Prerequisites
 
-* Kubernetes 1.33+
+* Kubernetes 1.34+
 * Carvel [`kctrl`](https://carvel.dev/kapp-controller/docs/latest/install/#installing-kapp-controller-cli-kctrl) CLI.
 * Carvel [kapp-controller](https://carvel.dev/kapp-controller) deployed in your Kubernetes cluster. You can install it with Carvel [`kapp`](https://carvel.dev/kapp/docs/latest/install) (recommended choice) or `kubectl`.
 
