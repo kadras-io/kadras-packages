@@ -1,0 +1,61 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: secretgen-controller.packages.kadras.io.0.21.4
+spec:
+  licenses:
+  - Apache 2.0
+  refName: secretgen-controller.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-secretgen-controller/releases
+  releasedAt: "2026-10-25T16:58:58Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-secretgen-controller@sha256:90391841573c4889cd726b4e0eca659005bd418c40afd9b707100be8e82150a7
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        namespace:
+          default: secretgen-controller
+          description: The namespace in which to deploy secretgen-controller.
+          type: string
+        observability:
+          additionalProperties: false
+          description: Settings for the observability of secretgen-controller.
+          properties:
+            metrics:
+              additionalProperties: false
+              description: Settings for the metrics.
+              properties:
+                enabled:
+                  default: true
+                  description: Whether the controller exposes metrics in the Prometheus
+                    format on port 8080 (`/metrics`), and its Pod is annotated for
+                    Prometheus scraping. When false, the metrics server is disabled.
+                  type: boolean
+              type: object
+          type: object
+        security:
+          additionalProperties: false
+          description: Settings for the security of secretgen-controller.
+          properties:
+            network_policies:
+              default: false
+              description: Whether to deny the inbound traffic to the controller Pod,
+                except for the metrics scraping. See https://kubernetes.io/docs/concepts/services-networking/network-policies.
+              type: boolean
+          type: object
+      type: object
+  version: 0.21.4
