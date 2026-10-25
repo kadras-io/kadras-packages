@@ -1,0 +1,226 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: flux.packages.kadras.io.2.9.6
+spec:
+  licenses:
+  - Apache 2.0
+  refName: flux.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-flux/releases
+  releasedAt: "2026-10-25T19:28:30Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-flux@sha256:85d49252f54191e8f39a56066e2ca2f6abb070cdfffb426373e47eceacbf96f2
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        ca_cert_data:
+          default: ""
+          description: PEM-encoded certificates of additional certificate authorities
+            to trust, for example to reach a private Git server, OCI registry, or
+            Helm repository. The system ones are still trusted.
+          type: string
+        helm_controller:
+          additionalProperties: false
+          description: Settings for the helm controller, which reconciles HelmReleases.
+          properties:
+            args:
+              default: {}
+              description: Container flags, merged on top of the ones computed by
+                the package. Set a flag to null to remove it. See https://fluxcd.io/flux/components/helm/options/.
+              example:
+                feature-gates: OOMWatch=true
+              nullable: true
+              x-example-description: Out-of-memory detection
+            enabled:
+              default: true
+              description: Whether to deploy the helm controller.
+              type: boolean
+          type: object
+        image_automation_controller:
+          additionalProperties: false
+          description: Settings for the image automation controller, which commits
+            the images selected by ImagePolicies to Git repositories. It requires
+            the image reflector controller.
+          properties:
+            args:
+              default: {}
+              description: Container flags, merged on top of the ones computed by
+                the package. Set a flag to null to remove it. See https://fluxcd.io/flux/components/image/options/.
+              nullable: true
+            enabled:
+              default: false
+              description: Whether to deploy the image automation controller.
+              type: boolean
+          type: object
+        image_reflector_controller:
+          additionalProperties: false
+          description: Settings for the image reflector controller, which scans container
+            registries for image tags and selects them via ImagePolicies.
+          properties:
+            args:
+              default: {}
+              description: Container flags, merged on top of the ones computed by
+                the package. Set a flag to null to remove it. See https://fluxcd.io/flux/components/image/options/.
+              nullable: true
+            enabled:
+              default: false
+              description: Whether to deploy the image reflector controller.
+              type: boolean
+          type: object
+        kustomize_controller:
+          additionalProperties: false
+          description: Settings for the kustomize controller, which reconciles Kustomizations.
+          properties:
+            args:
+              default: {}
+              description: Container flags, merged on top of the ones computed by
+                the package. Set a flag to null to remove it. See https://fluxcd.io/flux/components/kustomize/options/.
+              example:
+                default-service-account: default
+                no-cross-namespace-refs: true
+                no-remote-bases: true
+              nullable: true
+              x-example-description: Multi-tenancy lockdown
+            enabled:
+              default: true
+              description: Whether to deploy the kustomize controller.
+              type: boolean
+          type: object
+        namespace:
+          default: flux-system
+          description: The namespace in which to deploy Flux.
+          maxLength: 63
+          minLength: 1
+          type: string
+        notification_controller:
+          additionalProperties: false
+          description: Settings for the notification controller, which receives the
+            events of the other controllers, forwards them via Alerts, and serves
+            the webhooks of Receivers.
+          properties:
+            args:
+              default: {}
+              description: Container flags, merged on top of the ones computed by
+                the package. Set a flag to null to remove it. See https://fluxcd.io/flux/components/notification/options/.
+              nullable: true
+            enabled:
+              default: true
+              description: Whether to deploy the notification controller. When disabled,
+                the other controllers don't send events.
+              type: boolean
+          type: object
+        observability:
+          additionalProperties: false
+          description: Settings for logs and metrics.
+          properties:
+            logging:
+              additionalProperties: false
+              properties:
+                format:
+                  default: json
+                  description: The format of the logs.
+                  enum:
+                  - text
+                  - json
+                  type: string
+                level:
+                  default: info
+                  description: The log level of the controllers.
+                  enum:
+                  - error
+                  - info
+                  - debug
+                  - trace
+                  type: string
+              type: object
+            metrics:
+              additionalProperties: false
+              properties:
+                enabled:
+                  default: true
+                  description: Whether to annotate the Pods for Prometheus scraping.
+                    The controllers always expose metrics on port 8080 (`/metrics`).
+                  type: boolean
+              type: object
+          type: object
+        policies:
+          additionalProperties: false
+          description: Settings for the Kyverno policies.
+          properties:
+            enabled:
+              default: false
+              description: Whether to include the Kyverno policies that validate and
+                secure the package installation. They require Kyverno 1.19 or later.
+              type: boolean
+          type: object
+        proxy:
+          additionalProperties: false
+          description: Settings for the corporate proxy, used to reach Git servers,
+            OCI registries, Helm repositories, and notification providers.
+          properties:
+            http_proxy:
+              default: ""
+              description: The HTTP proxy to use for network traffic.
+              type: string
+            https_proxy:
+              default: ""
+              description: The HTTPS proxy to use for network traffic.
+              type: string
+            no_proxy:
+              default: ""
+              description: A comma-separated list of hostnames, IP addresses, or IP
+                ranges in CIDR format that should not use the proxy. Include the in-cluster
+                domains, since the controllers talk to each other.
+              example: .cluster.local.,.cluster.local,.svc,10.0.0.0/8
+              type: string
+              x-example-description: Bypass the proxy for in-cluster traffic
+          type: object
+        source_controller:
+          additionalProperties: false
+          description: Settings for the source controller, which fetches artifacts
+            from Git repositories, OCI repositories, Helm repositories, and buckets.
+            It's always deployed.
+          properties:
+            args:
+              default: {}
+              description: Container flags, merged on top of the ones computed by
+                the package. Set a flag to null to remove it. See https://fluxcd.io/flux/components/source/options/.
+              example:
+                concurrent: 10
+                requeue-dependency: 5s
+              nullable: true
+              x-example-description: Vertical scaling
+          type: object
+        source_watcher:
+          additionalProperties: false
+          description: Settings for the source watcher, which composes and transforms
+            artifacts via ArtifactGenerators.
+          properties:
+            args:
+              default: {}
+              description: Container flags, merged on top of the ones computed by
+                the package. Set a flag to null to remove it. It accepts the flags
+                common to the Flux controllers, like `concurrent` and `requeue-dependency`.
+                See https://fluxcd.io/flux/components/source/artifactgenerators/.
+              nullable: true
+            enabled:
+              default: false
+              description: Whether to deploy the source watcher.
+              type: boolean
+          type: object
+      type: object
+  version: 2.9.6
