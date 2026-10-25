@@ -1,0 +1,378 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: cert-manager.packages.kadras.io.1.21.3
+spec:
+  licenses:
+  - Apache 2.0
+  refName: cert-manager.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-cert-manager/releases
+  releasedAt: "2026-10-25T17:41:42Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-cert-manager@sha256:1cf4902990024bbf48cf8b0748c9465c14f72c2bde07a3fe9fb9a17038e4f8ee
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        cainjector:
+          additionalProperties: false
+          description: Settings for the cert-manager cainjector, which injects CA
+            bundles into webhooks, APIServices, and CRDs.
+          properties:
+            config:
+              default: {}
+              description: cainjector configuration, merged on top of the one computed
+                by the package. See https://cert-manager.io/docs/reference/api-docs/#cainjector.config.cert-manager.io/v1alpha1.CAInjectorConfiguration.
+              nullable: true
+            replicas:
+              default: 1
+              description: 'The number of cainjector replicas. Additional replicas
+                are hot standby via leader election: 2 are recommended for production.
+                With more than 1 replica, a PodDisruptionBudget is created.'
+              minimum: 1
+              type: integer
+          type: object
+        controller:
+          additionalProperties: false
+          description: Settings for the cert-manager controller, which reconciles
+            Certificates and Issuers.
+          properties:
+            config:
+              default: {}
+              description: Controller configuration, merged on top of the one computed
+                by the package. See https://cert-manager.io/docs/reference/api-docs/#controller.config.cert-manager.io/v1alpha1.ControllerConfiguration.
+              nullable: true
+            replicas:
+              default: 1
+              description: 'The number of controller replicas. Additional replicas
+                are hot standby via leader election: 2 are recommended for production.
+                With more than 1 replica, a PodDisruptionBudget is created.'
+              minimum: 1
+              type: integer
+          type: object
+        gateway_api:
+          additionalProperties: false
+          description: Settings for the Kubernetes Gateway API support. See https://cert-manager.io/docs/usage/gateway.
+          properties:
+            enabled:
+              default: false
+              description: Whether to issue certificates for annotated Gateways, and
+                to solve the Let's Encrypt HTTP-01 challenges via `issuers.letsencrypt.http01.gateway`
+                instead of an Ingress. The Gateway API CRDs must be installed before
+                cert-manager starts.
+              type: boolean
+          type: object
+        issuers:
+          additionalProperties: false
+          description: Settings for the ClusterIssuers included in the package.
+          properties:
+            default_issuer:
+              default: kadras-ca-issuer
+              description: 'The ClusterIssuer used for Ingresses annotated with `kubernetes.io/tls-acme:
+                "true"` and no issuer annotation. Set it to `""` to disable it.'
+              example: letsencrypt-prod-issuer
+              type: string
+              x-example-description: Let's Encrypt
+            letsencrypt:
+              additionalProperties: false
+              description: Let's Encrypt, via the ACME protocol. The ClusterIssuer
+                is named `letsencrypt-staging-issuer` or `letsencrypt-prod-issuer`,
+                depending on `environment`.
+              properties:
+                dns01:
+                  additionalProperties: false
+                  description: Settings for the DNS-01 challenge, solved by creating
+                    a TXT record in the DNS zone of each domain.
+                  properties:
+                    credentials:
+                      additionalProperties: false
+                      description: 'The Secret with the credentials for the DNS provider:
+                        the API token for `hetzner` and `cloudflare`, the TSIG secret
+                        for `rfc2136`. When it''s not in the package namespace, it''s
+                        synced there via secretgen-controller.'
+                      properties:
+                        key:
+                          default: ""
+                          description: The key in the Secret holding the credentials.
+                          type: string
+                        namespace:
+                          default: kadras-system
+                          description: The namespace of the Secret.
+                          type: string
+                        secret:
+                          default: ""
+                          description: The name of the Secret.
+                          type: string
+                      type: object
+                    provider:
+                      default: hetzner
+                      description: The DNS provider. `hetzner` requires the Kadras
+                        cert-manager-webhook-hetzner package. `webhook` supports any
+                        provider with a cert-manager webhook. See https://cert-manager.io/docs/configuration/acme/dns01.
+                      enum:
+                      - hetzner
+                      - cloudflare
+                      - rfc2136
+                      - webhook
+                      type: string
+                    recursive_nameservers:
+                      default: []
+                      description: The recursive DNS servers used to check that the
+                        TXT records have propagated, as `<host>:<port>` or DNS-over-HTTPS
+                        URLs. If empty, the ones in the controller's `/etc/resolv.conf`
+                        are used.
+                      example:
+                      - 1.1.1.1:53
+                      - 9.9.9.9:53
+                      items:
+                        default: ""
+                        type: string
+                      type: array
+                      x-example-description: Public resolvers
+                    recursive_nameservers_only:
+                      default: false
+                      description: Whether to only query `recursive_nameservers` to
+                        check the TXT records, instead of the authoritative servers
+                        of the zone. Useful when the authoritative servers aren't
+                        reachable, at the cost of slower checks due to caching.
+                      type: boolean
+                    rfc2136:
+                      additionalProperties: false
+                      description: Settings for the `rfc2136` provider, for authoritative
+                        DNS servers supporting dynamic updates, like BIND, PowerDNS,
+                        and Knot.
+                      properties:
+                        nameserver:
+                          default: ""
+                          description: The address of the authoritative DNS server,
+                            in the form `<host>:<port>`.
+                          example: ns1.example.com:53
+                          type: string
+                          x-example-description: DNS server
+                        tsig_algorithm:
+                          default: HMACSHA512
+                          description: The algorithm of the TSIG key.
+                          enum:
+                          - HMACMD5
+                          - HMACSHA1
+                          - HMACSHA256
+                          - HMACSHA512
+                          type: string
+                        tsig_key_name:
+                          default: ""
+                          description: The name of the TSIG key used to authenticate
+                            the updates.
+                          type: string
+                      type: object
+                    webhook:
+                      additionalProperties: false
+                      description: Settings for the `webhook` provider. See https://cert-manager.io/docs/configuration/acme/dns01/webhook.
+                      properties:
+                        config:
+                          default: {}
+                          description: The configuration for the webhook solver, specific
+                            to each provider.
+                          nullable: true
+                        group_name:
+                          default: ""
+                          description: The API group of the webhook solver.
+                          example: acme.mycompany.com
+                          type: string
+                          x-example-description: OVH
+                        solver_name:
+                          default: ""
+                          description: The name of the webhook solver.
+                          example: ovh
+                          type: string
+                          x-example-description: OVH
+                      type: object
+                  type: object
+                email:
+                  default: ""
+                  description: The email address registered with the Let's Encrypt
+                    account, used as a contact for account issues. Optional.
+                  type: string
+                enabled:
+                  default: false
+                  description: Whether to include a ClusterIssuer for Let's Encrypt.
+                  type: boolean
+                environment:
+                  default: staging
+                  description: The Let's Encrypt environment. Use `staging` for testing,
+                    since `production` enforces strict rate limits.
+                  enum:
+                  - staging
+                  - production
+                  type: string
+                http01:
+                  additionalProperties: false
+                  description: Settings for the HTTP-01 challenge, solved by serving
+                    a token over HTTP on port 80 of each domain.
+                  properties:
+                    gateway:
+                      additionalProperties: false
+                      description: The Gateway to attach the HTTPRoute solving the
+                        challenge to, when `gateway_api.enabled` is true. It needs
+                        a listener for HTTP on port 80. The default is the one of
+                        the Kadras Contour package.
+                      properties:
+                        name:
+                          default: contour
+                          description: The name of the Gateway.
+                          type: string
+                        namespace:
+                          default: projectcontour
+                          description: The namespace of the Gateway.
+                          type: string
+                      type: object
+                    ingress_class:
+                      default: contour
+                      description: The IngressClass of the Ingress created to solve
+                        the challenge, when `gateway_api.enabled` is false. The default
+                        is the one of the Kadras Contour package.
+                      minLength: 1
+                      type: string
+                  type: object
+                solver:
+                  default: http01
+                  description: The challenge type used to prove control of the domains.
+                    `dns01` is required for wildcard certificates.
+                  enum:
+                  - http01
+                  - dns01
+                  type: string
+              type: object
+            private_ca:
+              additionalProperties: false
+              description: 'A private certificate authority: the `kadras-ca-issuer`
+                ClusterIssuer signs certificates with the `kadras-root-ca` self-signed
+                CA.'
+              properties:
+                duration:
+                  default: 8760h
+                  description: How long the CA certificate is valid, in hours.
+                  type: string
+                enabled:
+                  default: true
+                  description: Whether to include the private CA and its ClusterIssuer.
+                  type: boolean
+                renew_before:
+                  default: 360h
+                  description: How long before expiry the CA certificate is renewed,
+                    in hours.
+                  type: string
+              type: object
+          type: object
+        namespace:
+          default: cert-manager
+          description: The namespace in which to deploy cert-manager. It's also where
+            ClusterIssuers look for their Secrets and where leader election happens.
+          type: string
+        observability:
+          additionalProperties: false
+          description: Settings for logs and metrics.
+          properties:
+            logging:
+              additionalProperties: false
+              properties:
+                format:
+                  default: text
+                  description: The log format for all the components.
+                  enum:
+                  - text
+                  - json
+                  type: string
+                level:
+                  default: info
+                  description: The log level for all the components.
+                  enum:
+                  - info
+                  - debug
+                  - trace
+                  type: string
+              type: object
+            metrics:
+              additionalProperties: false
+              properties:
+                enabled:
+                  default: true
+                  description: Whether to annotate the Pods for Prometheus scraping.
+                    All the components expose metrics on port 9402.
+                  type: boolean
+              type: object
+          type: object
+        policies:
+          additionalProperties: false
+          description: Settings for the Kyverno policies.
+          properties:
+            enabled:
+              default: false
+              description: Whether to include Kyverno policies verifying the signatures
+                of the cert-manager images. Kyverno must be installed in the cluster.
+              type: boolean
+          type: object
+        proxy:
+          additionalProperties: false
+          description: Settings for the corporate proxy, used by the controller to
+            reach the ACME servers and the DNS providers.
+          properties:
+            http_proxy:
+              default: ""
+              description: The proxy for HTTP traffic.
+              type: string
+            https_proxy:
+              default: ""
+              description: The proxy for HTTPS traffic.
+              type: string
+            no_proxy:
+              default: ""
+              description: A comma-separated list of hostnames, IP addresses, or IP
+                ranges in CIDR format that should not use the proxy.
+              example: .svc,.cluster.local,10.0.0.0/8
+              type: string
+              x-example-description: Cluster traffic
+          type: object
+        security:
+          additionalProperties: false
+          description: Settings for the security of the package workloads.
+          properties:
+            network_policies:
+              default: false
+              description: Whether to deny the inbound traffic to the cert-manager
+                Pods, except for the webhook requests from the Kubernetes API server
+                and the metrics scraping.
+              type: boolean
+          type: object
+        webhook:
+          additionalProperties: false
+          description: Settings for the cert-manager webhook, which validates and
+            mutates cert-manager resources.
+          properties:
+            config:
+              default: {}
+              description: Webhook configuration, merged on top of the one computed
+                by the package. See https://cert-manager.io/docs/reference/api-docs/#webhook.config.cert-manager.io/v1alpha1.WebhookConfiguration.
+              nullable: true
+            replicas:
+              default: 1
+              description: 'The number of webhook replicas. All replicas serve requests:
+                3 are recommended for production. With more than 1 replica, a PodDisruptionBudget
+                is created.'
+              minimum: 1
+              type: integer
+          type: object
+      type: object
+  version: 1.21.3
