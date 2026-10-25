@@ -1,0 +1,301 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: contour.packages.kadras.io.1.33.7
+spec:
+  licenses:
+  - Apache 2.0
+  refName: contour.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-contour/releases
+  releasedAt: "2026-10-25T18:00:40Z"
+  template:
+    spec:
+      deploy:
+      - kapp:
+          rawOptions:
+          - --wait-timeout=5m
+          - --kube-api-qps=25
+          - --kube-api-burst=50
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-contour@sha256:02ed4bf1c128882254bec0e9880a0fe020146a841341f379d84769b107f6d7d6
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        contour:
+          additionalProperties: false
+          description: Settings for Contour, the control plane.
+          properties:
+            config:
+              default: {}
+              description: Contour configuration, merged on top of the one computed
+                by the package. See https://projectcontour.io/docs/latest/configuration/#configuration-file.
+              nullable: true
+            replicas:
+              default: 2
+              description: The number of Contour replicas. Additional replicas are
+                standby via leader election. With more than 1 replica, a PodDisruptionBudget
+                is created.
+              minimum: 1
+              type: integer
+          type: object
+        envoy:
+          additionalProperties: false
+          description: Settings for Envoy, the data plane.
+          properties:
+            host_ports:
+              additionalProperties: false
+              description: 'Settings for exposing Envoy directly on the ports of the
+                nodes it runs on. Requires `kind: DaemonSet`, since only one Envoy
+                can bind the ports on each node. Typically used for local clusters.'
+              properties:
+                enabled:
+                  default: false
+                  description: Whether to expose Envoy on host ports.
+                  type: boolean
+                http:
+                  default: 80
+                  description: The host port for HTTP traffic.
+                  maximum: 65535
+                  minimum: 1
+                  type: integer
+                https:
+                  default: 443
+                  description: The host port for HTTPS traffic.
+                  maximum: 65535
+                  minimum: 1
+                  type: integer
+              type: object
+            kind:
+              default: Deployment
+              description: The Kubernetes workload Envoy runs as.
+              enum:
+              - Deployment
+              - DaemonSet
+              type: string
+            proxy_protocol:
+              default: false
+              description: Whether Envoy expects the PROXY protocol on all its listeners,
+                as sent by some load balancers to preserve the client source IP.
+              type: boolean
+            replicas:
+              default: 2
+              description: The number of Envoy replicas when `kind` is `Deployment`.
+                With more than 1 replica, a PodDisruptionBudget is created.
+              type: integer
+            service:
+              additionalProperties: false
+              description: Settings for the Service exposing Envoy.
+              properties:
+                annotations:
+                  default: {}
+                  description: Annotations for the Service, for example to configure
+                    the load balancer implementation.
+                  nullable: true
+                external_traffic_policy:
+                  default: Local
+                  description: The external traffic policy of the Service, when `type`
+                    is `LoadBalancer` or `NodePort`. `Local` preserves the client
+                    source IP.
+                  enum:
+                  - Cluster
+                  - Local
+                  type: string
+                node_ports:
+                  additionalProperties: false
+                  description: The node ports of the Service, when `type` is `LoadBalancer`
+                    or `NodePort`. If 0, Kubernetes assigns one.
+                  properties:
+                    http:
+                      default: 0
+                      description: The node port for HTTP traffic.
+                      maximum: 65535
+                      minimum: 0
+                      type: integer
+                    https:
+                      default: 0
+                      description: The node port for HTTPS traffic.
+                      maximum: 65535
+                      minimum: 0
+                      type: integer
+                  type: object
+                type:
+                  default: LoadBalancer
+                  description: The type of the Service.
+                  enum:
+                  - LoadBalancer
+                  - NodePort
+                  - ClusterIP
+                  type: string
+              type: object
+            termination_grace_period_seconds:
+              default: 300
+              description: How long to wait, in seconds, for Envoy to drain open connections
+                before terminating.
+              minimum: 30
+              type: integer
+          type: object
+        gateway:
+          additionalProperties: false
+          description: The default Gateway that Contour serves via the Kubernetes
+            Gateway API. HTTPProxy and Ingress resources keep working alongside the
+            routes attached to it. See https://projectcontour.io/docs/latest/config/gateway-api.
+          properties:
+            allowed_routes:
+              default: All
+              description: The namespaces from which routes can attach to the Gateway.
+                `All` allows any namespace, `Same` only the package namespace.
+              enum:
+              - All
+              - Same
+              type: string
+            domain:
+              default: ""
+              description: The domain served over HTTPS by the Gateway via a wildcard
+                certificate (`*.<domain>`). It requires `tls.issuer`.
+              example: example.com
+              type: string
+              x-example-description: Custom domain
+            enabled:
+              default: true
+              description: Whether to create the `contour` GatewayClass and the default
+                Gateway, and configure Contour to serve it.
+              type: boolean
+            install_crds:
+              default: true
+              description: Whether to install the CRDs from the experimental channel
+                of the Gateway API, required by the Gateway. Set it to `false` if
+                the Gateway API CRDs are already managed by something else in the
+                cluster.
+              type: boolean
+            name:
+              default: contour
+              description: The name of the Gateway, created in the package namespace.
+              minLength: 1
+              type: string
+            tls:
+              additionalProperties: false
+              description: Settings for the HTTPS listener of the Gateway.
+              properties:
+                http_redirect:
+                  default: true
+                  description: Whether to redirect HTTP requests for `*.<domain>`
+                    to HTTPS.
+                  type: boolean
+                issuer:
+                  default: ""
+                  description: The name of the cert-manager ClusterIssuer that issues
+                    the wildcard certificate for `domain`. For ACME issuers, wildcard
+                    certificates require a DNS-01 challenge.
+                  example: kadras-ca-issuer
+                  type: string
+                  x-example-description: Kadras private CA
+              type: object
+          type: object
+        namespace:
+          default: projectcontour
+          description: The namespace in which to deploy Contour and Envoy.
+          maxLength: 63
+          minLength: 1
+          type: string
+        observability:
+          additionalProperties: false
+          description: Settings for logs, metrics, and traces.
+          properties:
+            logging:
+              additionalProperties: false
+              properties:
+                format:
+                  default: text
+                  description: The format of the Contour logs and of the Envoy access
+                    logs.
+                  enum:
+                  - text
+                  - json
+                  type: string
+                level:
+                  default: info
+                  description: The log level for Contour and Envoy. Contour only distinguishes
+                    between `debug` and the rest.
+                  enum:
+                  - debug
+                  - info
+                  - warn
+                  - error
+                  type: string
+              type: object
+            metrics:
+              additionalProperties: false
+              properties:
+                enabled:
+                  default: true
+                  description: Whether to annotate the Contour and Envoy Pods for
+                    Prometheus scraping.
+                  type: boolean
+              type: object
+            tracing:
+              additionalProperties: false
+              properties:
+                enabled:
+                  default: false
+                  description: Whether to export traces from Envoy.
+                  type: boolean
+                endpoint:
+                  default: ""
+                  description: The OTLP/gRPC endpoint of an in-cluster OpenTelemetry
+                    collector, in the form `[http://]<service>.<namespace>[.svc[.cluster.local]]:<port>`.
+                  example: http://otel-collector.observability.svc:4317
+                  type: string
+                  x-example-description: OpenTelemetry collector
+                sampling_rate:
+                  default: 1
+                  description: The fraction of requests to trace, from 0 (never) to
+                    1 (always).
+                  format: float
+                  maximum: 1
+                  minimum: 0
+                  type: number
+              type: object
+          type: object
+        tls:
+          additionalProperties: false
+          description: Settings for TLS. Envoy listeners only accept TLS 1.3 connections.
+            To allow TLS 1.2, set `tls.minimum-protocol-version` in `contour.config`.
+          properties:
+            internal:
+              additionalProperties: false
+              description: The certificates securing the connection between Contour
+                and Envoy.
+              properties:
+                duration:
+                  default: 8760h
+                  description: How long the certificates are valid, in hours.
+                  type: string
+                provider:
+                  default: certgen
+                  description: How the certificates are provisioned. `certgen` generates
+                    them with a Job at every installation and upgrade, and doesn't
+                    renew them in between. `cert-manager` issues and renews them via
+                    cert-manager, which must be installed in the cluster.
+                  enum:
+                  - certgen
+                  - cert-manager
+                  type: string
+                renew_before:
+                  default: 360h
+                  description: How long before expiry the certificates are renewed,
+                    in hours. Only for the `cert-manager` provider.
+                  type: string
+              type: object
+          type: object
+      type: object
+  version: 1.33.7
