@@ -1,0 +1,293 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: kyverno.packages.kadras.io.1.19.2
+spec:
+  licenses:
+  - Apache 2.0
+  refName: kyverno.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-kyverno/releases
+  releasedAt: "2026-10-25T17:14:04Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-kyverno@sha256:3eaafa469509c34182688f338da962c5eeda0738e64cdd45b02a7fed0a363d93
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        admission_controller:
+          additionalProperties: false
+          description: Settings for the admission controller, which serves the admission
+            webhooks and validates and mutates resources. It's always deployed.
+          properties:
+            args:
+              default: {}
+              description: Container flags, merged on top of the ones computed by
+                the package. Set a flag to null to remove it. See https://kyverno.io/docs/installation/customization/#container-flags.
+              example:
+                clientRateLimitBurst: 500
+                clientRateLimitQPS: 500
+              nullable: true
+              x-example-description: Kubernetes API client rate limits
+            replicas:
+              default: 1
+              description: The number of replicas. All replicas serve admission requests.
+                For high availability, Kyverno requires at least 3, and doesn't support
+                2. With more than 1 replica, a PodDisruptionBudget is created.
+              type: integer
+          type: object
+        background_controller:
+          additionalProperties: false
+          description: Settings for the background controller, which processes generate
+            and mutate-existing policies.
+          properties:
+            args:
+              default: {}
+              description: Container flags, merged on top of the ones computed by
+                the package. Set a flag to null to remove it. See https://kyverno.io/docs/installation/customization/#container-flags.
+              nullable: true
+            enabled:
+              default: true
+              description: Whether to deploy the background controller.
+              type: boolean
+            replicas:
+              default: 1
+              description: The number of replicas. Additional replicas are standby
+                via leader election. With more than 1 replica, a PodDisruptionBudget
+                is created.
+              minimum: 1
+              type: integer
+          type: object
+        ca_cert_data:
+          default: ""
+          description: PEM-encoded certificates of additional certificate authorities
+            to trust, for example to reach a private container registry. The system
+            ones are still trusted.
+          type: string
+        cleanup_controller:
+          additionalProperties: false
+          description: Settings for the cleanup controller, which processes deleting
+            policies and the `cleanup.kyverno.io/ttl` label.
+          properties:
+            args:
+              default: {}
+              description: Container flags, merged on top of the ones computed by
+                the package. Set a flag to null to remove it. See https://kyverno.io/docs/installation/customization/#container-flags.
+              nullable: true
+            enabled:
+              default: true
+              description: Whether to deploy the cleanup controller.
+              type: boolean
+            replicas:
+              default: 1
+              description: The number of replicas. With more than 1 replica, a PodDisruptionBudget
+                is created.
+              minimum: 1
+              type: integer
+          type: object
+        config:
+          default: {}
+          description: Settings merged into the `kyverno` ConfigMap, with structured
+            values encoded as JSON. See https://kyverno.io/docs/installation/customization/#configmap-keys.
+          example:
+            excludeGroups: system:nodes,system:serviceaccounts:kube-system
+          nullable: true
+          x-example-description: Exclude requests from a group
+        namespace:
+          default: kyverno
+          description: The namespace in which to deploy Kyverno.
+          maxLength: 63
+          minLength: 1
+          type: string
+        observability:
+          additionalProperties: false
+          description: Settings for logs, metrics, and traces.
+          properties:
+            logging:
+              additionalProperties: false
+              properties:
+                format:
+                  default: text
+                  description: The format of the logs.
+                  enum:
+                  - text
+                  - json
+                  type: string
+                level:
+                  default: info
+                  description: The log level of the controllers.
+                  enum:
+                  - info
+                  - debug
+                  - trace
+                  type: string
+              type: object
+            metrics:
+              additionalProperties: false
+              properties:
+                ca_secret:
+                  default: ""
+                  description: The name of a Secret in the package namespace with
+                    the CA certificate (`ca.pem`) to verify the collector, with the
+                    `otlp` exporter. If empty, the connection is insecure.
+                  type: string
+                enabled:
+                  default: true
+                  description: Whether to produce metrics.
+                  type: boolean
+                endpoint:
+                  default: ""
+                  description: The OTLP/gRPC endpoint of an in-cluster OpenTelemetry
+                    collector, in the form `[http://]<service>.<namespace>[.svc[.cluster.local]]:<port>`.
+                    Required with the `otlp` exporter.
+                  example: http://otel-collector.observability.svc:4317
+                  type: string
+                  x-example-description: OpenTelemetry collector
+                exporter:
+                  default: prometheus
+                  description: How the metrics are exported. With `prometheus`, the
+                    controllers expose them on port 8000, and their Pods are annotated
+                    for scraping. With `otlp`, they push them via OTLP/gRPC to `endpoint`.
+                  enum:
+                  - prometheus
+                  - otlp
+                  type: string
+              type: object
+            tracing:
+              additionalProperties: false
+              properties:
+                ca_secret:
+                  default: ""
+                  description: The name of a Secret in the package namespace with
+                    the CA certificate (`ca.pem`) to verify the collector. If empty,
+                    the connection is insecure.
+                  type: string
+                enabled:
+                  default: false
+                  description: Whether to export traces via OTLP/gRPC.
+                  type: boolean
+                endpoint:
+                  default: ""
+                  description: The OTLP/gRPC endpoint of an in-cluster OpenTelemetry
+                    collector, in the form `[http://]<service>.<namespace>[.svc[.cluster.local]]:<port>`.
+                  example: http://otel-collector.observability.svc:4317
+                  type: string
+                  x-example-description: OpenTelemetry collector
+              type: object
+          type: object
+        policy_exceptions:
+          additionalProperties: false
+          description: Settings for policy exceptions, which exempt resources from
+            policies. See https://kyverno.io/docs/exceptions/.
+          properties:
+            enabled:
+              default: false
+              description: Whether to accept policy exceptions.
+              type: boolean
+            namespace:
+              default: ""
+              description: The only namespace where policy exceptions are accepted.
+                Restrict who can create resources in it, since an exception can disable
+                any policy.
+              example: kyverno-exceptions
+              type: string
+              x-example-description: Dedicated namespace
+          type: object
+        proxy:
+          additionalProperties: false
+          description: Settings for the corporate proxy, used to reach container registries
+            and external services.
+          properties:
+            http_proxy:
+              default: ""
+              description: The HTTP proxy to use for network traffic.
+              type: string
+            https_proxy:
+              default: ""
+              description: The HTTPS proxy to use for network traffic.
+              type: string
+            no_proxy:
+              default: ""
+              description: A comma-separated list of hostnames, IP addresses, or IP
+                ranges in CIDR format that should not use the proxy.
+              example: .cluster.local,.svc,10.0.0.0/8
+              type: string
+              x-example-description: Bypass the proxy for in-cluster traffic
+          type: object
+        reports:
+          additionalProperties: false
+          description: Settings for policy reports.
+          properties:
+            background_scan_interval:
+              default: 1h
+              description: How often existing resources are scanned against the policies,
+                as a duration.
+              type: string
+          type: object
+        reports_controller:
+          additionalProperties: false
+          description: Settings for the reports controller, which produces policy
+            reports from admission requests and background scans.
+          properties:
+            args:
+              default: {}
+              description: Container flags, merged on top of the ones computed by
+                the package. Set a flag to null to remove it. See https://kyverno.io/docs/installation/customization/#container-flags.
+              nullable: true
+            enabled:
+              default: true
+              description: Whether to deploy the reports controller. When disabled,
+                the admission controller doesn't produce admission reports either.
+              type: boolean
+            replicas:
+              default: 1
+              description: The number of replicas. Additional replicas are standby
+                via leader election. With more than 1 replica, a PodDisruptionBudget
+                is created.
+              minimum: 1
+              type: integer
+          type: object
+        security:
+          additionalProperties: false
+          description: Settings for security.
+          properties:
+            network_policies:
+              default: false
+              description: Whether to restrict the inbound traffic to the controllers
+                via NetworkPolicies, allowing only the admission requests and the
+                metrics scraping.
+              type: boolean
+          type: object
+        webhooks:
+          additionalProperties: false
+          description: Settings for the admission webhooks that Kyverno registers
+            with the Kubernetes API server.
+          properties:
+            force_failure_policy_ignore:
+              default: false
+              description: Whether to let requests through when Kyverno doesn't respond,
+                for all policies, instead of their failure policy. It trades policy
+                enforcement for cluster availability.
+              type: boolean
+            timeout_seconds:
+              default: 10
+              description: How long the Kubernetes API server waits for Kyverno to
+                respond to an admission request, in seconds.
+              maximum: 30
+              minimum: 1
+              type: integer
+          type: object
+      type: object
+  version: 1.19.2
