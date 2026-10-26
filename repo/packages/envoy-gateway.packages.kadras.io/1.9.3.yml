@@ -1,0 +1,322 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: envoy-gateway.packages.kadras.io.1.9.3
+spec:
+  licenses:
+  - Apache 2.0
+  refName: envoy-gateway.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-envoy-gateway/releases
+  releasedAt: "2026-10-26T19:33:00Z"
+  template:
+    spec:
+      deploy:
+      - kapp:
+          rawOptions:
+          - --wait-timeout=5m
+          - --kube-api-qps=25
+          - --kube-api-burst=50
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-envoy-gateway@sha256:49064819fa1637f8ae385fe5a7389ff5f4e96fe1f33b02dff14868203c0e92e1
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        controller:
+          additionalProperties: false
+          description: Settings for Envoy Gateway, the control plane.
+          properties:
+            config:
+              default: {}
+              description: Envoy Gateway configuration, merged on top of the one computed
+                by the package. See https://gateway.envoyproxy.io/docs/api/extension_types/#envoygateway.
+              example:
+                extensionApis:
+                  enableBackend: true
+              nullable: true
+              x-example-description: Enable the Backend API
+            replicas:
+              default: 1
+              description: The number of replicas. Additional replicas are standby
+                via leader election. With more than 1 replica, a PodDisruptionBudget
+                is created.
+              minimum: 1
+              type: integer
+          type: object
+        envoy:
+          additionalProperties: false
+          description: Settings for the Envoy proxies, the data plane, applied to
+            every Gateway.
+          properties:
+            config:
+              default: {}
+              description: EnvoyProxy configuration, merged on top of the one computed
+                by the package for every Gateway. See https://gateway.envoyproxy.io/docs/api/extension_types/#envoyproxyspec.
+              example:
+                provider:
+                  kubernetes:
+                    envoyDeployment:
+                      container:
+                        resources:
+                          requests:
+                            cpu: 100m
+                            memory: 256Mi
+              nullable: true
+              x-example-description: Resources
+            drain_timeout:
+              default: 60s
+              description: How long Envoy drains the open connections before terminating,
+                as a duration.
+              type: string
+            replicas:
+              default: 1
+              description: The number of Envoy replicas for each Gateway. With more
+                than 1 replica, a PodDisruptionBudget is created.
+              minimum: 1
+              type: integer
+            service:
+              additionalProperties: false
+              description: Settings for the Service exposing the Envoy proxies of
+                the external Gateway. The internal Gateway always uses a ClusterIP
+                Service.
+              properties:
+                annotations:
+                  default: {}
+                  description: Annotations for the Service, for example to configure
+                    the load balancer implementation.
+                  nullable: true
+                external_traffic_policy:
+                  default: Local
+                  description: The external traffic policy of the Service, when `type`
+                    is `LoadBalancer` or `NodePort`. `Local` preserves the client
+                    source IP.
+                  enum:
+                  - Cluster
+                  - Local
+                  type: string
+                proxy_protocol:
+                  default: false
+                  description: Whether the load balancer in front of the Service sends
+                    the PROXY protocol, to preserve the client source IP. Envoy then
+                    rejects the connections without it. Enable it together with the
+                    load balancer setting, like the `load-balancer.hetzner.cloud/uses-proxyprotocol`
+                    annotation on Hetzner.
+                  type: boolean
+                type:
+                  default: LoadBalancer
+                  description: The type of the Service.
+                  enum:
+                  - LoadBalancer
+                  - NodePort
+                  - ClusterIP
+                  type: string
+              type: object
+          type: object
+        gateways:
+          additionalProperties: false
+          description: The Gateways served by Envoy Gateway through the `envoy` GatewayClass,
+            each with its own Envoy proxies. See https://gateway.envoyproxy.io/docs/concepts.
+          properties:
+            external:
+              additionalProperties: false
+              description: The Gateway exposing applications outside the cluster,
+                through the Envoy Service. TLS is terminated on the Gateway, with
+                certificates issued by cert-manager.
+              properties:
+                allowed_routes:
+                  default: All
+                  description: The namespaces from which routes can attach to the
+                    Gateway. `All` allows any namespace, `Same` only the package namespace.
+                  enum:
+                  - All
+                  - Same
+                  type: string
+                domain:
+                  default: ""
+                  description: The domain served over HTTPS by the Gateway via a wildcard
+                    certificate (`*.<domain>`). It requires `tls.issuer`.
+                  example: example.com
+                  type: string
+                  x-example-description: Custom domain
+                enabled:
+                  default: true
+                  description: Whether to create the external Gateway.
+                  type: boolean
+                name:
+                  default: external
+                  description: The name of the Gateway, created in the package namespace.
+                    Its Envoy Service is named `envoy-<name>`.
+                  type: string
+                tls:
+                  additionalProperties: false
+                  description: Settings for the HTTPS listeners of the Gateway.
+                  properties:
+                    hostnames:
+                      default: []
+                      description: Additional hostnames served over HTTPS, each with
+                        its own listener and certificate. Use a wildcard like `*.team-a.example.com`
+                        to serve the applications of a namespace with Knative Serving.
+                      example:
+                      - '*.team-a.example.com'
+                      items:
+                        default: ""
+                        type: string
+                      type: array
+                      x-example-description: Knative namespace
+                    http_redirect:
+                      default: true
+                      description: 'Whether to redirect all HTTP requests to HTTPS.
+                        Only applied when `issuer` is set: the HTTP listener then
+                        only serves the redirect, and the ACME HTTP-01 challenges
+                        of cert-manager.'
+                      type: boolean
+                    issuer:
+                      default: ""
+                      description: The name of the cert-manager ClusterIssuer that
+                        issues the certificates for `domain` and `hostnames`. For
+                        ACME issuers, wildcard certificates require a DNS-01 challenge.
+                      example: kadras-ca-issuer
+                      type: string
+                      x-example-description: Kadras private CA
+                    min_version:
+                      default: "1.3"
+                      description: The minimum TLS version accepted by the HTTPS listeners.
+                      enum:
+                      - "1.2"
+                      - "1.3"
+                      type: string
+                  type: object
+              type: object
+            internal:
+              additionalProperties: false
+              description: The Gateway serving traffic within the cluster over HTTP,
+                through a ClusterIP Service. For example, Knative Serving uses it
+                for cluster-local traffic, which isn't exposed by the external Gateway.
+              properties:
+                enabled:
+                  default: true
+                  description: Whether to create the internal Gateway.
+                  type: boolean
+                name:
+                  default: internal
+                  description: The name of the Gateway, created in the package namespace.
+                    Its Envoy Service is named `envoy-<name>`. Routes can attach to
+                    it from any namespace.
+                  type: string
+              type: object
+          type: object
+        namespace:
+          default: envoy-gateway-system
+          description: The namespace in which to deploy Envoy Gateway. The Envoy proxies
+            of the Gateways run in the same namespace.
+          type: string
+        observability:
+          additionalProperties: false
+          description: Settings for logs, metrics, and traces.
+          properties:
+            logging:
+              additionalProperties: false
+              properties:
+                level:
+                  default: info
+                  description: The log level for Envoy Gateway and the Envoy proxies.
+                  enum:
+                  - debug
+                  - info
+                  - warn
+                  - error
+                  type: string
+              type: object
+            metrics:
+              additionalProperties: false
+              properties:
+                enabled:
+                  default: true
+                  description: Whether to produce metrics.
+                  type: boolean
+                endpoint:
+                  default: ""
+                  description: The OTLP/gRPC endpoint of an in-cluster OpenTelemetry
+                    collector, in the form `[http://]<service>.<namespace>[.svc[.cluster.local]]:<port>`.
+                    Required with the `otlp` exporter.
+                  example: http://otel-collector.observability.svc:4317
+                  type: string
+                  x-example-description: OpenTelemetry collector
+                exporter:
+                  default: prometheus
+                  description: How the metrics are exported. With `prometheus`, Envoy
+                    Gateway and the Envoy proxies expose them on port 19001, and their
+                    Pods are annotated for scraping. With `otlp`, they push them via
+                    OTLP/gRPC to `endpoint`.
+                  enum:
+                  - prometheus
+                  - otlp
+                  type: string
+              type: object
+            tracing:
+              additionalProperties: false
+              properties:
+                enabled:
+                  default: false
+                  description: Whether to export the traces of the requests handled
+                    by the Envoy proxies via OTLP/gRPC.
+                  type: boolean
+                endpoint:
+                  default: ""
+                  description: The OTLP/gRPC endpoint of an in-cluster OpenTelemetry
+                    collector, in the form `[http://]<service>.<namespace>[.svc[.cluster.local]]:<port>`.
+                  example: http://otel-collector.observability.svc:4317
+                  type: string
+                  x-example-description: OpenTelemetry collector
+                sampling_rate:
+                  default: 1
+                  description: The fraction of requests to trace, from 0 (never) to
+                    1 (always).
+                  format: float
+                  maximum: 1
+                  minimum: 0
+                  type: number
+              type: object
+          type: object
+        tls:
+          additionalProperties: false
+          description: Settings for TLS.
+          properties:
+            internal:
+              additionalProperties: false
+              description: The certificates securing the connections between Envoy
+                Gateway and the Envoy proxies (xDS), and the Envoy Gateway webhook.
+              properties:
+                duration:
+                  default: 8760h
+                  description: How long the certificates are valid, in hours. Only
+                    for the `cert-manager` provider.
+                  type: string
+                provider:
+                  default: certgen
+                  description: How the certificates are provisioned. `certgen` generates
+                    them with a Job at installation, and doesn't renew them. `cert-manager`
+                    issues and renews them via cert-manager, which must be installed
+                    in the cluster.
+                  enum:
+                  - certgen
+                  - cert-manager
+                  type: string
+                renew_before:
+                  default: 360h
+                  description: How long before expiry the certificates are renewed,
+                    in hours. Only for the `cert-manager` provider.
+                  type: string
+              type: object
+          type: object
+      type: object
+  version: 1.9.3

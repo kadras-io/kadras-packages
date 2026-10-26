@@ -1,0 +1,21 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  name: envoy-gateway.packages.kadras.io
+spec:
+  categories:
+  - ingress
+  - envoy
+  - gateway
+  displayName: envoy-gateway
+  longDescription: Envoy Gateway manages Envoy proxies as standalone or Kubernetes-based
+    application gateways, configured via the Kubernetes Gateway API. It provides HTTPS
+    termination, traffic management, and security policies for the applications running
+    on the cluster.
+  maintainers:
+  - name: Thomas Vitale
+  providerName: Kadras
+  shortDescription: Application gateway based on Envoy and the Kubernetes Gateway
+    API.
+  supportDescription: Go to https://kadras.io for documentation and https://github.com/kadras-io/package-for-envoy-gateway
+    for community support.
