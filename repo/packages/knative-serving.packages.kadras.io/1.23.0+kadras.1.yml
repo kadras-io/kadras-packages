@@ -1,0 +1,393 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: knative-serving.packages.kadras.io.1.23.0+kadras.1
+spec:
+  capacityRequirementsDescription: For prototyping purposes, one-node cluster that
+    has at least 3 CPUs and 4 GB of memory. For production purposes, if you have only
+    one node, at least 6 CPUs, 6 GB of memory, and 30 GB of disk storage. If you have
+    multiple nodes, for each node at least 2 CPUs, 4 GB of memory, and 20 GB of disk
+    storage.
+  licenses:
+  - Apache 2.0
+  refName: knative-serving.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-knative-serving/releases
+  releasedAt: "2026-10-26T21:22:42Z"
+  template:
+    spec:
+      deploy:
+      - kapp:
+          rawOptions:
+          - --wait-timeout=5m
+          - --kube-api-qps=25
+          - --kube-api-burst=50
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-knative-serving@sha256:cef71ebcdf9d6cec8bfe437417767763d892b84d201beb26cb06089b8962d85d
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        ca_cert_data:
+          default: ""
+          description: PEM-encoded certificate data to trust TLS connections with
+            a custom CA.
+          type: string
+        config:
+          additionalProperties: false
+          description: Data for the Knative Serving ConfigMaps, keyed by ConfigMap
+            name without the `config-` prefix. Keys set here override the ones computed
+            by the package. See https://knative.dev/docs/serving/configuration/config-defaults
+            for the available options.
+          properties:
+            autoscaler:
+              default: {}
+              description: Data for the `config-autoscaler` ConfigMap.
+              nullable: true
+            certmanager:
+              default: {}
+              description: Data for the `config-certmanager` ConfigMap.
+              nullable: true
+            defaults:
+              default: {}
+              description: Data for the `config-defaults` ConfigMap.
+              nullable: true
+            deployment:
+              default:
+                queue-sidecar-cpu-limit: 1000m
+                queue-sidecar-cpu-request: 25m
+                queue-sidecar-memory-limit: 200Mi
+                queue-sidecar-memory-request: 50Mi
+              description: Data for the `config-deployment` ConfigMap.
+              nullable: true
+            domain:
+              default: {}
+              description: Data for the `config-domain` ConfigMap.
+              nullable: true
+            features:
+              default: {}
+              description: Data for the `config-features` ConfigMap.
+              nullable: true
+            gateway:
+              default: {}
+              description: Data for the `config-gateway` ConfigMap.
+              nullable: true
+            gc:
+              default: {}
+              description: Data for the `config-gc` ConfigMap.
+              nullable: true
+            leader-election:
+              default: {}
+              description: Data for the `config-leader-election` ConfigMap.
+              nullable: true
+            logging:
+              default: {}
+              description: Data for the `config-logging` ConfigMap.
+              nullable: true
+            network:
+              default: {}
+              description: Data for the `config-network` ConfigMap.
+              nullable: true
+            observability:
+              default: {}
+              description: Data for the `config-observability` ConfigMap.
+              nullable: true
+          type: object
+        ingress:
+          additionalProperties: false
+          description: Settings for exposing Knative Services via the Gateway API,
+            through the Gateways of the Kadras Envoy Gateway package (https://github.com/kadras-io/package-for-envoy-gateway).
+          properties:
+            domain:
+              default: ""
+              description: The default domain name for all Knative Services, which
+                are served as `<name>.<namespace>.<domain>`. Stored in the `config-domain`
+                ConfigMap. Additional domains with label selectors can be configured
+                via `config.domain`.
+              example: example.com
+              minLength: 1
+              type: string
+              x-example-description: Custom domain
+            gateways:
+              additionalProperties: false
+              description: The Gateways routing the traffic to Knative Services. The
+                defaults are the ones of the Kadras Envoy Gateway package. Their routes
+                must be allowed from any namespace.
+              properties:
+                external:
+                  additionalProperties: false
+                  description: The Gateway for the traffic from outside the cluster,
+                    exposed by the `envoy-<name>` Service in the same namespace.
+                  properties:
+                    name:
+                      default: external
+                      description: The name of the Gateway.
+                      type: string
+                    namespace:
+                      default: envoy-gateway-system
+                      description: The namespace of the Gateway.
+                      type: string
+                  type: object
+                internal:
+                  additionalProperties: false
+                  description: The Gateway for the cluster-local traffic, exposed
+                    by the `envoy-<name>` Service in the same namespace.
+                  properties:
+                    name:
+                      default: internal
+                      description: The name of the Gateway.
+                      type: string
+                    namespace:
+                      default: envoy-gateway-system
+                      description: The namespace of the Gateway.
+                      type: string
+                  type: object
+              type: object
+            https:
+              default: false
+              description: Whether the external Gateway serves the Knative Services
+                over HTTPS, and redirects HTTP requests to HTTPS. Knative Services
+                then get `https` URLs. TLS is terminated on the Gateway, which needs
+                a certificate for each namespace with Knative Services (`*.<namespace>.<domain>`).
+              type: boolean
+          type: object
+        observability:
+          additionalProperties: false
+          description: Settings for logs, metrics, and traces. Stored in the `config-observability`
+            and `config-logging` ConfigMaps.
+          properties:
+            logging:
+              additionalProperties: false
+              properties:
+                level:
+                  default: info
+                  description: The log level for all Knative Serving components.
+                  enum:
+                  - debug
+                  - info
+                  - warn
+                  - error
+                  type: string
+                request_logs:
+                  default: false
+                  description: Whether the queue-proxy logs the requests received
+                    by Knative Services.
+                  type: boolean
+              type: object
+            metrics:
+              additionalProperties: false
+              description: Metrics for the Knative Serving control plane.
+              properties:
+                enabled:
+                  default: true
+                  description: Whether to produce metrics.
+                  type: boolean
+                endpoint:
+                  default: ""
+                  description: The OTLP endpoint metrics are exported to. Required
+                    with the `otlp` exporter. With `http/protobuf`, include the signal
+                    path.
+                  example: http://otel-collector.observability.svc:4317
+                  type: string
+                  x-example-description: OTLP/gRPC
+                export_interval:
+                  default: 60s
+                  description: The metrics reporting period.
+                  type: string
+                exporter:
+                  default: prometheus
+                  description: How the metrics are exported. With `prometheus`, the
+                    components expose them on port 9090, and their Pods are annotated
+                    for scraping. With `otlp`, they push them via OTLP to `endpoint`.
+                  enum:
+                  - prometheus
+                  - otlp
+                  type: string
+                protocol:
+                  default: grpc
+                  description: The OTLP transport protocol, with the `otlp` exporter.
+                  enum:
+                  - grpc
+                  - http/protobuf
+                  type: string
+              type: object
+            request_metrics:
+              additionalProperties: false
+              description: Metrics for the requests handled by the queue-proxy in
+                the Pods of Knative Services.
+              properties:
+                enabled:
+                  default: false
+                  description: Whether to produce request metrics.
+                  type: boolean
+                endpoint:
+                  default: ""
+                  description: The OTLP endpoint request metrics are exported to.
+                    Required with the `otlp` exporter. With `http/protobuf`, include
+                    the signal path.
+                  example: http://otel-collector.observability.svc:4317
+                  type: string
+                  x-example-description: OTLP/gRPC
+                export_interval:
+                  default: 60s
+                  description: The request metrics reporting period.
+                  type: string
+                exporter:
+                  default: prometheus
+                  description: How the request metrics are exported. With `prometheus`,
+                    the queue-proxy exposes them on port 9091. With `otlp`, it pushes
+                    them via OTLP to `endpoint`.
+                  enum:
+                  - prometheus
+                  - otlp
+                  type: string
+                protocol:
+                  default: grpc
+                  description: The OTLP transport protocol, with the `otlp` exporter.
+                  enum:
+                  - grpc
+                  - http/protobuf
+                  type: string
+              type: object
+            tracing:
+              additionalProperties: false
+              description: Traces for the Knative Serving control plane and the requests
+                handled by the queue-proxy.
+              properties:
+                enabled:
+                  default: false
+                  description: Whether to produce traces.
+                  type: boolean
+                endpoint:
+                  default: ""
+                  description: The OTLP endpoint traces are exported to. Required
+                    with the `otlp` exporter. With `http/protobuf`, include the signal
+                    path.
+                  example: http://otel-collector.observability.svc:4317
+                  type: string
+                  x-example-description: OTLP/gRPC
+                exporter:
+                  default: otlp
+                  description: How the traces are exported. With `otlp`, they are
+                    pushed via OTLP to `endpoint`. With `console`, they are written
+                    to the standard output, for debugging.
+                  enum:
+                  - otlp
+                  - console
+                  type: string
+                protocol:
+                  default: grpc
+                  description: The OTLP transport protocol, with the `otlp` exporter.
+                  enum:
+                  - grpc
+                  - http/protobuf
+                  type: string
+                sampling_rate:
+                  default: 1
+                  description: The fraction of requests to trace, from 0 (never) to
+                    1 (always).
+                  format: float
+                  maximum: 1
+                  minimum: 0
+                  type: number
+              type: object
+          type: object
+        policies:
+          additionalProperties: false
+          description: Settings for the Kyverno policies.
+          properties:
+            enabled:
+              default: false
+              description: Whether to include Kyverno policies verifying the signatures
+                of the Knative Serving images. Kyverno 1.19 or later must be installed
+                in the cluster.
+              type: boolean
+          type: object
+        proxy:
+          additionalProperties: false
+          description: Settings for the corporate proxy.
+          properties:
+            http_proxy:
+              default: ""
+              description: The HTTP proxy to use for network traffic.
+              type: string
+            https_proxy:
+              default: ""
+              description: The HTTPS proxy to use for network traffic.
+              type: string
+            no_proxy:
+              default: ""
+              description: A comma-separated list of hostnames, IP addresses, or IP
+                ranges in CIDR format that should not use a proxy.
+              type: string
+          type: object
+        workloads:
+          additionalProperties: false
+          description: Settings for the Knative Serving workloads. Set `replicas`
+            greater than 1 to enable high availability.
+          properties:
+            activator:
+              additionalProperties: false
+              properties:
+                replicas:
+                  default: 1
+                  description: The minimum number of replicas, as controlled by a
+                    HorizontalPodAutoscaler.
+                  minimum: 1
+                  type: integer
+              type: object
+            autoscaler:
+              additionalProperties: false
+              properties:
+                replicas:
+                  default: 1
+                  description: The number of replicas. Additional replicas are standby
+                    via leader election. With more than 1 replica, a PodDisruptionBudget
+                    is created.
+                  minimum: 1
+                  type: integer
+              type: object
+            controller:
+              additionalProperties: false
+              properties:
+                replicas:
+                  default: 1
+                  description: The number of replicas. Additional replicas are standby
+                    via leader election. With more than 1 replica, a PodDisruptionBudget
+                    is created.
+                  minimum: 1
+                  type: integer
+              type: object
+            ingress_controller:
+              additionalProperties: false
+              properties:
+                replicas:
+                  default: 1
+                  description: 'The number of replicas of the networking layer: `net-gateway-api-controller`
+                    and `net-gateway-api-webhook`. Additional controller replicas
+                    are standby via leader election. With more than 1 replica, PodDisruptionBudgets
+                    are created.'
+                  minimum: 1
+                  type: integer
+              type: object
+            webhook:
+              additionalProperties: false
+              properties:
+                replicas:
+                  default: 1
+                  description: The minimum number of replicas, as controlled by a
+                    HorizontalPodAutoscaler.
+                  minimum: 1
+                  type: integer
+              type: object
+          type: object
+      type: object
+  version: 1.23.0+kadras.1
