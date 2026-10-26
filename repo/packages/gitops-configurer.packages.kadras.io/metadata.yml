@@ -6,7 +6,7 @@ spec:
   categories:
   - gitops
   displayName: gitops-configurer
-  longDescription: Simplify onboarding of GitOps workflows based on Carvel or Flux.
+  longDescription: Simplify onboarding of GitOps workflows based on Flux.
   maintainers:
   - name: Thomas Vitale
   providerName: Kadras
