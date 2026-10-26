@@ -1,0 +1,139 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: cert-manager-webhook-hetzner.packages.kadras.io.0.9.1
+spec:
+  licenses:
+  - Apache 2.0
+  refName: cert-manager-webhook-hetzner.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-cert-manager-webhook-hetzner/releases
+  releasedAt: "2026-10-26T23:07:28Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-cert-manager-webhook-hetzner@sha256:6076dc59e66a908c4ae08712d72689922786f8060c50d631ce6d988110f0b479
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        namespace:
+          default: cert-manager
+          description: The namespace where cert-manager is installed. The webhook
+            is deployed there too, and it allows the cert-manager ServiceAccount there
+            to send it the DNS-01 challenges. The namespace isn't created by the package.
+          type: string
+        observability:
+          additionalProperties: false
+          description: Settings for observing the webhook.
+          properties:
+            logging:
+              additionalProperties: false
+              description: Settings for the logs, written in the text format.
+              properties:
+                level:
+                  default: info
+                  description: The log level.
+                  enum:
+                  - debug
+                  - info
+                  - warn
+                  - error
+                  type: string
+              type: object
+            metrics:
+              additionalProperties: false
+              description: Settings for the metrics.
+              properties:
+                enabled:
+                  default: true
+                  description: Whether to annotate the Pods for Prometheus scraping.
+                    The webhook exposes metrics on port 8080.
+                  type: boolean
+              type: object
+          type: object
+        proxy:
+          additionalProperties: false
+          description: Settings for the corporate proxy used by the webhook to reach
+            the Hetzner Cloud API.
+          properties:
+            http_proxy:
+              default: ""
+              description: The proxy for HTTP traffic.
+              type: string
+            https_proxy:
+              default: ""
+              description: The proxy for HTTPS traffic.
+              type: string
+            no_proxy:
+              default: ""
+              description: A comma-separated list of hostnames, IP addresses, or IP
+                ranges in CIDR format that should not use the proxy. It should include
+                the address of the Kubernetes API server.
+              type: string
+          type: object
+        security:
+          additionalProperties: false
+          description: Settings for hardening the webhook.
+          properties:
+            network_policies:
+              default: false
+              description: Whether to deny the inbound traffic to the webhook Pods,
+                except for the requests from the Kubernetes API server and the metrics
+                scraping. Enable it when the cert-manager package has `security.network_policies`
+                enabled, since that denies all the inbound traffic in its namespace.
+              type: boolean
+            secrets_access:
+              default: cluster
+              description: 'Where the webhook can read the Secrets referenced by Issuers
+                via `tokenSecretKeyRef`: `cluster` for Issuers in any namespace; `namespace`
+                for ClusterIssuers and the Issuers in the package namespace only,
+                which is enough for the Let''s Encrypt ClusterIssuer of the cert-manager
+                package; `none` when all Issuers use `tokenFilePath`.'
+              enum:
+              - cluster
+              - namespace
+              - none
+              type: string
+          type: object
+        token:
+          additionalProperties: false
+          description: A Secret with the Hetzner Cloud API token, mounted into the
+            webhook at `/var/run/secrets/hetzner/token`, so that Issuers can reference
+            it via `tokenFilePath` instead of `tokenSecretKeyRef`. Optional.
+          properties:
+            key:
+              default: token
+              description: The key in the Secret holding the token.
+              minLength: 1
+              type: string
+            secret:
+              default: ""
+              description: The name of the Secret, in the package namespace.
+              type: string
+          type: object
+        webhook:
+          additionalProperties: false
+          description: Settings for the webhook, which solves the ACME DNS-01 challenges
+            for cert-manager by creating TXT records via the Hetzner Cloud API.
+          properties:
+            replicas:
+              default: 1
+              description: 'The number of webhook replicas. All replicas serve the
+                requests from the Kubernetes API server: 2 are recommended for production.
+                With more than 1 replica, a PodDisruptionBudget is created.'
+              minimum: 1
+              type: integer
+          type: object
+      type: object
+  version: 0.9.1
