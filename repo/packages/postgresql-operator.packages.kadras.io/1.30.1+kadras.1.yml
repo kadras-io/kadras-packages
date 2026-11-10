@@ -1,0 +1,130 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: postgresql-operator.packages.kadras.io.1.30.1+kadras.1
+spec:
+  licenses:
+  - Apache 2.0
+  refName: postgresql-operator.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-postgresql-operator/releases
+  releasedAt: "2026-11-10T23:41:47Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-postgresql-operator@sha256:d133e3f8f096f70f4ca5dd9bddb5bcf04535c8f6b781e305e7d2ddb5119149c8
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        args:
+          default: {}
+          description: Container flags, merged on top of the ones computed by the
+            package. Set a flag to null to remove it. See https://cloudnative-pg.io/docs/1.30/operator_conf.
+          example:
+            max-concurrent-reconciles: 20
+          nullable: true
+          x-example-description: Concurrency
+        config:
+          default: {}
+          description: Operator configuration, merged on top of the one computed by
+            the package. Set an option to null to remove it. See https://cloudnative-pg.io/docs/1.30/operator_conf#available-options.
+          example:
+            POSTGRES_IMAGE_NAME: ghcr.io/cloudnative-pg/postgresql:18.6-system-trixie
+          nullable: true
+          x-example-description: Default PostgreSQL image
+        inherited_annotations:
+          default: []
+          description: Names of the annotations that, when set on a Cluster, are inherited
+            by all the resources generated for it, including the Pods. Wildcards like
+            `example.com/*` are supported.
+          items:
+            default: ""
+            type: string
+          type: array
+        inherited_labels:
+          default: []
+          description: Names of the labels that, when set on a Cluster, are inherited
+            by all the resources generated for it, including the Pods. Wildcards like
+            `example.com/*` are supported.
+          items:
+            default: ""
+            type: string
+          type: array
+        namespace:
+          default: cnpg-system
+          description: The namespace in which to deploy the CloudNativePG operator.
+          maxLength: 63
+          minLength: 1
+          type: string
+        observability:
+          additionalProperties: false
+          description: Settings for logs and metrics.
+          properties:
+            logging:
+              additionalProperties: false
+              properties:
+                level:
+                  default: info
+                  description: The log level of the operator. The logs are always
+                    in JSON format.
+                  enum:
+                  - error
+                  - warn
+                  - info
+                  - debug
+                  - trace
+                  type: string
+              type: object
+            metrics:
+              additionalProperties: false
+              properties:
+                enabled:
+                  default: true
+                  description: Whether to annotate the operator Pods for Prometheus
+                    scraping. The operator always exposes metrics on port 8080 (`/metrics`).
+                  type: boolean
+              type: object
+          type: object
+        replicas:
+          default: 1
+          description: The number of operator replicas. Additional replicas are standby
+            via leader election, and all of them serve the admission webhooks. With
+            more than 1 replica, a PodDisruptionBudget is created.
+          minimum: 1
+          type: integer
+        upgrades:
+          additionalProperties: false
+          description: Settings for the rollout of the PostgreSQL clusters after an
+            operator upgrade.
+          properties:
+            clusters_rollout_delay:
+              default: 0
+              description: Seconds to wait between the rollouts of different PostgreSQL
+                clusters.
+              minimum: 0
+              type: integer
+            in_place_updates:
+              default: false
+              description: Whether to update the instance manager in place after an
+                operator upgrade, without restarting the PostgreSQL instances.
+              type: boolean
+            instances_rollout_delay:
+              default: 0
+              description: Seconds to wait between the rollouts of the instances of
+                the same PostgreSQL cluster.
+              minimum: 0
+              type: integer
+          type: object
+      type: object
+  version: 1.30.1+kadras.1
