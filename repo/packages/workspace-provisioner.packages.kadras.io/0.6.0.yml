@@ -1,0 +1,151 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: workspace-provisioner.packages.kadras.io.0.6.0
+spec:
+  licenses:
+  - Apache 2.0
+  refName: workspace-provisioner.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/workspace-provisioner/releases
+  releasedAt: "2026-11-10T23:32:59Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/workspace-provisioner@sha256:a3eff70814b741ae4cbdbadf822f4217bb70c356863d3b3d5cc1fd191f8a58a9
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        git:
+          additionalProperties: false
+          description: Settings for accessing the Git repositories from the workspaces,
+            for example by the Flux sources.
+          properties:
+            secret:
+              additionalProperties: false
+              description: The Secret holding the Git credentials, shared with the
+                workspaces.
+              properties:
+                name:
+                  default: ""
+                  description: The name of the Secret holding the Git credentials.
+                    See docs/credentials.md for the expected format.
+                  type: string
+                namespace:
+                  default: ""
+                  description: The namespace of the Secret holding the Git credentials.
+                  type: string
+              type: object
+          type: object
+        namespaces:
+          default: []
+          description: The namespaces to provision and configure as workspaces.
+          items:
+            additionalProperties: false
+            description: A namespace to provision and configure as a workspace.
+            properties:
+              members:
+                default: []
+                description: The users and groups granted access to the workspace,
+                  each bound to one of the Kubernetes default roles in the namespace.
+                items:
+                  additionalProperties: false
+                  description: A user or group granted access to the workspace.
+                  properties:
+                    kind:
+                      default: Group
+                      description: The kind of subject.
+                      enum:
+                      - User
+                      - Group
+                      type: string
+                    name:
+                      default: ""
+                      description: The name of the user or group, as authenticated
+                        by the Kubernetes API server, for example from an OIDC identity
+                        provider.
+                      minLength: 1
+                      type: string
+                    role:
+                      default: edit
+                      description: 'The Kubernetes default ClusterRole bound in the
+                        namespace: `admin` to also manage the access to the workspace,
+                        `edit` to manage the workloads, `view` for read-only access.
+                        See https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles.'
+                      enum:
+                      - admin
+                      - edit
+                      - view
+                      type: string
+                  type: object
+                type: array
+              name:
+                default: ""
+                description: The name of the namespace. It's created if it doesn't
+                  exist.
+                maxLength: 63
+                minLength: 1
+                type: string
+              pod_security:
+                default: ""
+                description: The Pod Security Standard enforced on the namespace.
+                  When empty, `pod_security.level` applies.
+                enum:
+                - ""
+                - restricted
+                - baseline
+                - privileged
+                type: string
+            type: object
+          type: array
+        oci:
+          additionalProperties: false
+          description: Settings for accessing the OCI registry from the workspaces.
+          properties:
+            pull_secret:
+              additionalProperties: false
+              description: The Secret holding the credentials to pull images from
+                the OCI registry, shared with the workspaces.
+              properties:
+                name:
+                  default: ""
+                  description: The name of the Secret holding the credentials to pull
+                    images from the OCI registry. See docs/credentials.md for the
+                    expected format.
+                  type: string
+                namespace:
+                  default: ""
+                  description: The namespace of the Secret holding the credentials
+                    to pull images from the OCI registry.
+                  type: string
+              type: object
+          type: object
+        pod_security:
+          additionalProperties: false
+          description: Settings for the Pod Security Standards of the workspaces.
+            See https://kubernetes.io/docs/concepts/security/pod-security-standards.
+          properties:
+            level:
+              default: restricted
+              description: The Pod Security Standard enforced on the workspaces by
+                default. Pods violating it are rejected. Violations of the `restricted`
+                standard are always reported as warnings and in the audit log.
+              enum:
+              - restricted
+              - baseline
+              - privileged
+              type: string
+          type: object
+      type: object
+  version: 0.6.0
