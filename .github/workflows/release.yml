@@ -21,8 +21,19 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Install Flox
-        uses: flox/install-flox-action@1128abd73431089ab9d871c893b4e72a729354e1 # v2.6.0
+      - name: Install Nix
+        uses: cachix/install-nix-action@448cde739abec1eaf0646249e3d25bb8d9bc7702 # v31.11.2
+
+      - name: Set up Cachix
+        uses: cachix/cachix-action@38b082610b782e7e93e209c35fd730d399dee866 # v17
+        with:
+          name: devenv
+
+      - name: Install devenv
+        run: nix profile add nixpkgs#devenv
+
+      - name: Build devenv shell
+        run: devenv test
 
       - name: Set up Homebrew
         id: set-up-homebrew
@@ -42,7 +53,7 @@ jobs:
           registry: ${{ env.REGISTRY }}
       
       - name: Create k3d cluster
-        shell: flox activate -- bash -e {0}
+        shell: devenv shell bash -- -e {0}
         run: |
           # Create a Kubernetes cluster
           k3d cluster create test-cluster
@@ -53,7 +64,7 @@ jobs:
           done
 
       - name: Package and publish OCI bundle
-        shell: flox activate -- bash -e {0}
+        shell: devenv shell bash -- -e {0}
         run: |
           kctrl package repo release -y --chdir repo -v ${{ env.VERSION }}
       
