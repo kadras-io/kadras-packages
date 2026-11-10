@@ -15,11 +15,11 @@ This repository contains the following Carvel packages.
 |---------|-------------|
 | [cert-manager](https://github.com/kadras-io/package-for-cert-manager) | A cloud-native solution to automatically provision and manage X.509 certificates. |
 | [cert-manager-webhook-hetzner](https://github.com/kadras-io/package-for-cert-manager-webhook-hetzner) | A webhook that creates the necessary DNS entries in the Hetzner DNS API to solve a DNS01 challenge for a cert-manager Issuer of the ACME type. |
-| [contour](https://github.com/kadras-io/package-for-contour) | An Envoy-based ingress controller that supports dynamic configuration updates and multi-team ingress delegation. |
 | [crossplane](https://github.com/kadras-io/package-for-crossplane) | A Kubernetes extension that transforms your Kubernetes cluster into a universal control plane. |
 | [dependency-track](https://github.com/kadras-io/package-for-dependency-track) | OWASP Dependency Track is a continuous SBOM Analysis Platform for managing software supply chain security risks. |
 | [developer-portal](https://github.com/kadras-io/package-for-developer-portal) | Kadras Developer Portal, based on Backstage. It supports application developers with paved paths to production on Kubernetes. |
-| [engineering-platform](https://github.com/kadras-io/engineering-platform) | A curated set of Carvel packages to build an engineering platform supporting application developers with paved paths to production on Kubernetes. |
+| [engineering-platform](https://github.com/kadras-io/kadras-engineering-platform) | A curated set of Carvel packages to build an engineering platform supporting application developers with paved paths to production on Kubernetes. |
+| [envoy-gateway](https://github.com/kadras-io/package-for-envoy-gateway) | An application gateway that manages Envoy proxies, configured via the Kubernetes Gateway API. |
 | [flagger](https://github.com/kadras-io/package-for-flagger) | A progressive delivery tool that automates the release process for applications running on Kubernetes. |
 | [flux](https://github.com/kadras-io/package-for-flux) | A continuous deployment solution for Kubernetes, powered by the GitOps Toolkit. |
 | [gitops-configurer](https://github.com/kadras-io/gitops-configurer) | Provides GitOps configuration for the Kadras Engineering Platform. |
