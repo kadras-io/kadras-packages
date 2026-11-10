@@ -22,6 +22,7 @@ This repository contains the following Carvel packages.
 | [envoy-gateway](https://github.com/kadras-io/package-for-envoy-gateway) | An application gateway that manages Envoy proxies, configured via the Kubernetes Gateway API. |
 | [flagger](https://github.com/kadras-io/package-for-flagger) | A progressive delivery tool that automates the release process for applications running on Kubernetes. |
 | [flux](https://github.com/kadras-io/package-for-flux) | A continuous deployment solution for Kubernetes, powered by the GitOps Toolkit. |
+| [gateway-api](https://github.com/kadras-io/package-for-gateway-api) | The CustomResourceDefinitions of the Kubernetes Gateway API, the API to expose and route traffic to applications on Kubernetes. |
 | [gitops-configurer](https://github.com/kadras-io/gitops-configurer) | Provides GitOps configuration for the Kadras Engineering Platform. |
 | [knative-serving](https://github.com/kadras-io/package-for-knative-serving) | A solution built on Kubernetes to support deploying and serving of applications and functions as serverless containers. |
 | [kyverno](https://github.com/kadras-io/package-for-kyverno) | A policy engine designed for Kubernetes. It can validate, mutate, and generate configurations using admission controls and background scans. |
