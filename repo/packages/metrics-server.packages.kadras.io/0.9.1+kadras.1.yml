@@ -1,0 +1,107 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: metrics-server.packages.kadras.io.0.9.1+kadras.1
+spec:
+  licenses:
+  - Apache 2.0
+  refName: metrics-server.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-metrics-server/releases
+  releasedAt: "2026-11-10T23:42:28Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-metrics-server@sha256:e8dd02d81e90679fd748b949ba0a7833da8fe2c97d5c2a7e2c14817da17a4405
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        args:
+          default: {}
+          description: Container flags, merged on top of the ones computed by the
+            package. Set a flag to null to remove it. See https://github.com/kubernetes-sigs/metrics-server/blob/master/docs/command-line-flags.txt.
+          example:
+            metric-resolution: 30s
+          nullable: true
+          x-example-description: Metric resolution
+        kubelet:
+          additionalProperties: false
+          description: Settings for the connection to the Kubelets, from which Metrics
+            Server collects the metrics.
+          properties:
+            ca_cert_data:
+              default: ""
+              description: PEM-encoded certificates of the certificate authority that
+                signed the Kubelet serving certificates, when it's not the cluster
+                one.
+              type: string
+            insecure_tls:
+              default: false
+              description: Whether to skip the verification of the Kubelet serving
+                certificates. Only for clusters where they are self-signed, like kind
+                and the default kubeadm setup.
+              type: boolean
+          type: object
+        namespace:
+          default: kube-system
+          description: The namespace in which to deploy Metrics Server. It's created
+            by the package, unless it's `kube-system`.
+          maxLength: 63
+          minLength: 1
+          type: string
+        observability:
+          additionalProperties: false
+          description: Settings for logs.
+          properties:
+            logging:
+              additionalProperties: false
+              properties:
+                format:
+                  default: json
+                  description: The format of the logs.
+                  enum:
+                  - text
+                  - json
+                  type: string
+                level:
+                  default: info
+                  description: 'The log level: `info` for the essential messages,
+                    `debug` and `trace` for increasingly detailed ones. For a specific
+                    verbosity, set the `v` flag via `args`.'
+                  enum:
+                  - info
+                  - debug
+                  - trace
+                  type: string
+              type: object
+          type: object
+        policies:
+          additionalProperties: false
+          description: Settings for the Kyverno policies.
+          properties:
+            enabled:
+              default: false
+              description: Whether to include the Kyverno policies that validate and
+                secure the package installation. They require Kyverno 1.19 or later.
+              type: boolean
+          type: object
+        replicas:
+          default: 1
+          description: The number of Metrics Server replicas. With more than one,
+            each replica runs on a different node, and a PodDisruptionBudget keeps
+            at least one available.
+          minimum: 1
+          type: integer
+      type: object
+  version: 0.9.1+kadras.1
