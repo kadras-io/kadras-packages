@@ -1,0 +1,32 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: gateway-api.packages.kadras.io.1.6.1
+spec:
+  licenses:
+  - Apache 2.0
+  refName: gateway-api.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-gateway-api/releases
+  releasedAt: "2026-11-10T22:43:08Z"
+  template:
+    spec:
+      deploy:
+      - kapp:
+          rawOptions:
+          - --dangerous-override-ownership-of-existing-resources=true
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-gateway-api@sha256:d869b8a135e1571027c0c21c68b8b06c849bc7fa4dbdebcdb751ea7a9179e35f
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      default: null
+      nullable: true
+  version: 1.6.1
