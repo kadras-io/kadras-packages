@@ -1,0 +1,115 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: rabbitmq-operator.packages.kadras.io.2.23.2+kadras.1
+spec:
+  licenses:
+  - Apache 2.0
+  refName: rabbitmq-operator.packages.kadras.io
+  releaseNotes: https://github.com/kadras-io/package-for-rabbitmq-operator/releases
+  releasedAt: "2026-11-11T23:16:27Z"
+  template:
+    spec:
+      deploy:
+      - kapp: {}
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-rabbitmq-operator@sha256:e49b482ce3030d266931cc05522af5ef20e5edd3b46d41b363857112001c7ffc
+      template:
+      - ytt:
+          paths:
+          - config
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+  valuesSchema:
+    openAPIv3:
+      additionalProperties: false
+      properties:
+        args:
+          default: {}
+          description: Container flags, merged on top of the ones computed by the
+            package. Set a flag to null to remove it.
+          example:
+            zap-encoder: console
+          nullable: true
+          x-example-description: Log format
+        defaults:
+          additionalProperties: false
+          description: Defaults for the RabbitmqClusters that don't set them, applied
+            when they are created.
+          properties:
+            image:
+              default: ""
+              description: The RabbitMQ image. By default, the one of the operator
+                release.
+              type: string
+            image_pull_secrets:
+              default: []
+              description: Names of the Secrets to pull the RabbitMQ image, in the
+                namespace of each RabbitmqCluster.
+              items:
+                default: ""
+                type: string
+              type: array
+          type: object
+        env:
+          default: {}
+          description: Operator environment variables, merged on top of the ones computed
+            by the package. Set a variable to null to remove it. See https://www.rabbitmq.com/kubernetes/operator/configure-operator-defaults.
+          example:
+            LEASE_DURATION: 30
+            RENEW_DEADLINE: 20
+          nullable: true
+          x-example-description: Leader election
+        namespace:
+          default: rabbitmq-system
+          description: The namespace in which to deploy the RabbitMQ Cluster Operator.
+          maxLength: 63
+          minLength: 1
+          type: string
+        observability:
+          additionalProperties: false
+          description: Settings for logs and metrics.
+          properties:
+            logging:
+              additionalProperties: false
+              properties:
+                level:
+                  default: info
+                  description: The log level of the operator. The logs are in JSON
+                    format.
+                  enum:
+                  - error
+                  - info
+                  - debug
+                  type: string
+              type: object
+            metrics:
+              additionalProperties: false
+              properties:
+                enabled:
+                  default: true
+                  description: Whether to annotate the operator Pods for Prometheus
+                    scraping. The operator always exposes metrics on port 8080 (`/metrics`).
+                  type: boolean
+              type: object
+          type: object
+        replicas:
+          default: 1
+          description: The number of operator replicas. Additional replicas are standby
+            via leader election, and all of them serve the admission webhooks. With
+            more than 1 replica, a PodDisruptionBudget is created.
+          minimum: 1
+          type: integer
+        watch_namespaces:
+          default: []
+          description: The namespaces where the operator watches and reconciles the
+            RabbitmqClusters. By default, all namespaces.
+          items:
+            default: ""
+            type: string
+          type: array
+      type: object
+  version: 2.23.2+kadras.1
