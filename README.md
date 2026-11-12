@@ -30,7 +30,6 @@ This repository contains the following Carvel packages.
 | [opentelemetry-operator](https://github.com/kadras-io/package-for-opentelemetry-operator) | An operator that manages collectors and auto-instrumentation of the workload using OpenTelemetry instrumentation libraries. |
 | [postgresql-operator](https://github.com/kadras-io/package-for-postgresql-operator) | CloudNativePG, a Kubernetes operator that covers the full lifecycle of a PostgreSQL database cluster with a primary/standby architecture, using native streaming replication. |
 | [rabbitmq-operator](https://github.com/kadras-io/package-for-rabbitmq-operator) | A message broker supporting multiple messaging protocols and streaming. |
-| [rbac-configurer](https://github.com/kadras-io/rbac-configurer) | Provides default roles and RBAC configuration for the Kadras Engineering Platform. |
 | [secretgen-controller](https://github.com/kadras-io/package-for-secretgen-controller) | Generates various types of Secrets in-cluster as well as export and import Secrets across namespaces. |
 | [workspace-provisioner](https://github.com/kadras-io/workspace-provisioner) | Provisions and configures workspaces (namespaces or virtual clusters) to work with the Kadras Engineering Platform. |
 
